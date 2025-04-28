@@ -11,6 +11,7 @@
   import Footer from '$lib/components/Footer.svelte';
   import Image from '$lib/components/Image.svelte';
   import NotEditable from '$lib/components/NotEditable.svelte';
+  import RunesCounter from '$lib/components/RunesCounter.svelte';
   import { currentUser, isEditing } from '$lib/stores.js';
   import WebsiteHeader from '$lib/components/WebsiteHeader.svelte';
 
@@ -323,6 +324,17 @@
     <div class="font-bold text-sm sm:text-base pt-12 sm:pt-24 -mb-6 md:-mb-12">FAQs</div>
     <div class="prose md:prose-xl pb-12 sm:pb-24">
       <RichText multiLine bind:content={faqs} />
+    </div>
+  </div>
+</div>
+
+<!-- Svelte 5 Runes Demo -->
+<div class="bg-gray-100 py-12">
+  <div class="max-w-screen-md mx-auto px-6">
+    <div class="font-bold text-sm sm:text-base mb-6">SVELTE 5 RUNES DEMO</div>
+    <RunesCounter />
+    <div class="mt-6 text-sm text-gray-600">
+      This component demonstrates Svelte 5's new runes feature for state management.
     </div>
   </div>
 </div>

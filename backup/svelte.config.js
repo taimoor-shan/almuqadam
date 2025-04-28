@@ -1,14 +1,10 @@
-
 import adapter from '@sveltejs/adapter-node';
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import { vitePreprocess } from '@sveltejs/kit/vite';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   kit: {
-    adapter: adapter({
-      // Enable if you're using the free tier
-      out: 'build'
-    }),
+    adapter: adapter(),
     csrf: {
       checkOrigin: false
     }

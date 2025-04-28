@@ -1,16 +1,32 @@
+<script context="module">
+  // Disable runes mode for this component
+  export const runes = false;
+</script>
+
 <script>
   import { isEditing } from '$lib/stores.js';
 
   export let content;
   export let multiLine = false;
+
+  // Lazy loading editor
+  let editor = null;
+
+  $: if ($isEditing) {
+    import('./RichTextEditor.svelte').then(module => {
+      editor = module.default;
+    });
+  } else {
+    editor = null;
+  }
 </script>
 
 {#if $isEditing}
-  {#await import('./RichTextEditor.svelte')}
+  {#if editor}
+    <svelte:component this={editor} {multiLine} bind:content />
+  {:else}
     {@html content}
-  {:then RichTextEditor}
-    <RichTextEditor.default {multiLine} bind:content />
-  {/await}
+  {/if}
 {:else}
   <div>
     {@html content}
