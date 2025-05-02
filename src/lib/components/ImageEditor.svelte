@@ -50,9 +50,20 @@
     // We convert all uploads to the WEBP image format
     const extension = is_safari() ? 'jpg' : 'webp';
     const path = [['images', nanoid()].join('/'), extension].join('.');
-    const croppedImage = await getCroppedImg(newSrc, cropDetail.pixels);
 
-    const resizedBlob = await resizeImage(croppedImage, maxWidth, maxHeight, quality, content_type);
+    let resizedBlob;
+
+    // Check if cropDetail exists and has pixels property
+    if (cropDetail && cropDetail.pixels) {
+      // Get cropped image as blob
+      const croppedBlob = await getCroppedImg(newSrc, cropDetail.pixels);
+      // Resize the cropped blob
+      resizedBlob = await resizeImage(croppedBlob, maxWidth, maxHeight, quality, content_type);
+    } else {
+      // If no crop data, use the original file directly
+      resizedBlob = await resizeImage(file, maxWidth, maxHeight, quality, content_type);
+    }
+
     const resizedFile = new File([resizedBlob], `${file.name.split('.')[0]}.${extension}`, {
       type: content_type
     });
@@ -105,6 +116,8 @@
       : 'hidden'
   )}
   on:dblclick={cancelCropping}
+  role="region"
+  aria-label="Image cropping overlay"
 >
   {#if is_safari()}
     <span class="text-[#EF174C]">ATTENTION:</span> Use Google Chrome, Firefox, oder Microsoft Edge for optimized image quality and size.
@@ -115,14 +128,14 @@
 
 {#if is_cropping}
   <div class="flex space-x-4 z-[60] fixed bottom-0 right-0 left-0 p-6">
-    <div class="flex-1" />
+    <div class="flex-1"></div>
     <button class="bg-[#EF174C] text-white rounded-full px-4 py-2" on:click={uploadImage}
       >Confirm</button
     >
     <button class="bg-white text-black rounded-full px-4 py-2" on:click={cancelCropping}
       >Cancel</button
     >
-    <div class="flex-1" />
+    <div class="flex-1"></div>
   </div>
 {/if}
 
@@ -130,6 +143,9 @@
   style={`aspect-ratio: ${maxWidth}/${maxHeight}; scale: ${scale}`}
   class={classNames(is_cropping ? `z-50` : '', 'relative')}
   on:dblclick={uploadImage}
+  role="button"
+  tabindex="0"
+  aria-label="Upload or confirm image"
 >
   {#if is_cropping}
     <Cropper
@@ -140,13 +156,18 @@
       aspect={maxWidth / maxHeight}
     />
   {:else}
-    <img
-      on:mousedown={() => fileInput.click()}
-      class={className + ' cursor-pointer outline-[2px] hover:outline-dashed outline-[#EF174C] -outline-offset-[2px]'}
-      {src}
-      {alt}
-      title={uploadPrompt}
-    />
+    <button
+      on:click={() => fileInput.click()}
+      class="w-full h-full p-0 m-0 border-0 bg-transparent"
+      aria-label="Select image to upload"
+    >
+      <img
+        class={className + ' cursor-pointer outline-[2px] hover:outline-dashed outline-[#EF174C] -outline-offset-[2px]'}
+        {src}
+        {alt}
+        title={uploadPrompt}
+      />
+    </button>
   {/if}
 </div>
 

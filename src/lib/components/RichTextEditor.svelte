@@ -1,3 +1,8 @@
+<script context="module">
+  // Disable runes mode for this component
+  export const runes = false;
+</script>
+
 <script>
   import { onMount, onDestroy } from 'svelte';
   import { toHTML, fromHTML } from '$lib/editor/prosemirrorUtil';
@@ -19,10 +24,15 @@
   let editorChange = false;
   let prosemirrorNode, editorView, editorState;
 
-  $: schema = multiLine ? multiLineRichTextSchema : singleLineRichTextSchema;
-  $: {
+  // Create schema based on multiLine prop
+  function createSchema() {
+    return multiLine ? multiLineRichTextSchema : singleLineRichTextSchema;
+  }
+
+  // Create editor state
+  function createEditorState(schema, content) {
     const doc = fromHTML(schema, content);
-    editorState = EditorState.create({
+    return EditorState.create({
       doc,
       schema,
       plugins: [
@@ -33,25 +43,45 @@
         onUpdatePlugin
       ]
     });
-    // Only if there is already an editorView and the content change was external
-    // update editorView with the new editorState
-    if (!editorChange) {
-      editorView?.updateState(editorState);
+  }
+
+  // Update editor state when content or multiLine changes
+  function updateEditorState() {
+    const schema = createSchema();
+    const newEditorState = createEditorState(schema, content);
+
+    if (editorView && !editorChange) {
+      editorView.updateState(newEditorState);
     } else {
+      editorState = newEditorState;
       editorChange = false;
     }
   }
 
+  // Initialize editor state
+  $: {
+    const schema = createSchema();
+    if (!editorState) {
+      editorState = createEditorState(schema, content);
+    }
+  }
+
+  // Watch for changes to content or multiLine
+  $: {
+    if (content !== undefined && editorState) {
+      updateEditorState();
+    }
+  }
+
   function dispatchTransaction(transaction) {
-    const editorState = this.state.apply(transaction);
-    this.updateState(editorState);
+    const newState = this.state.apply(transaction);
+    this.updateState(newState);
     if (transaction.docChanged) {
-      content = toHTML(editorState);
+      content = toHTML(newState);
       // Leave a hint so we know the last content update came
       // from the editor (not the parent)
       editorChange = true;
     }
-    this.state = editorState;
   }
 
   const onUpdatePlugin = new Plugin({
@@ -65,12 +95,15 @@
   });
 
   onMount(() => {
-    editorView = new EditorView(prosemirrorNode, {
-      state: editorState,
-      dispatchTransaction
-    });
-    activeEditorView.set(editorView);
+    if (prosemirrorNode && editorState) {
+      editorView = new EditorView(prosemirrorNode, {
+        state: editorState,
+        dispatchTransaction
+      });
+      activeEditorView.set(editorView);
+    }
   });
+
   onDestroy(() => {
     // Guard on server side
     if (editorView) {
@@ -79,7 +112,7 @@
   });
 </script>
 
-<div id="prosemirror-editor" bind:this={prosemirrorNode} />
+<div id="prosemirror-editor" bind:this={prosemirrorNode}></div>
 
 <style>
   :global(#prosemirror-editor .ProseMirror) {
