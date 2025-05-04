@@ -2,8 +2,9 @@ import { getAsset } from '$lib/api';
 import { error } from '@sveltejs/kit';
 
 export const GET = async ({ params, setHeaders }) => {
+  // In SvelteKit 2.x, params.path is already a string, not an array
   const path = params.path;
-  const file = getAsset(path);
+  const file = await getAsset(path);
 
   if (!file || !file.data) {
     throw error(404, 'Asset not found');

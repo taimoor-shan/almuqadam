@@ -4,6 +4,7 @@ import { nanoid } from '$lib/util';
 import { ADMIN_PASSWORD } from '$env/static/private';
 import { Blob } from 'node:buffer';
 import { query, queryOne, queryMany, transaction } from '$lib/db';
+import { storeAssetInDatabase, getAssetFromDatabase, deleteAssetFromDatabase, listAssets } from './storage';
 
 
 /**
@@ -291,38 +292,24 @@ export async function createOrUpdateCounter(counter_id) {
   });
 }
 
+// Asset management functions using optimized storage
+
 // asset_id is a string and has the form path
 export async function storeAsset(asset_id, file) {
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-
-  await query(
-    `INSERT INTO assets (asset_id, mime_type, updated_at, size, data)
-     VALUES ($1, $2, $3, $4, $5)
-     ON CONFLICT (asset_id) DO UPDATE
-     SET mime_type = EXCLUDED.mime_type,
-         updated_at = EXCLUDED.updated_at,
-         size = EXCLUDED.size,
-         data = EXCLUDED.data`,
-    [asset_id, file.type, new Date().toISOString(), file.size, buffer]
-  );
+  return await storeAssetInDatabase(asset_id, file);
 }
 
 export async function getAsset(asset_id) {
-  const row = await queryOne(
-    `SELECT asset_id, mime_type, updated_at, size, data
-     FROM assets
-     WHERE asset_id = $1`,
-    [asset_id]
-  );
+  return await getAssetFromDatabase(asset_id);
+}
 
-  if (!row) return null;
+// Additional asset management functions
+export async function deleteAsset(asset_id, currentUser) {
+  if (!currentUser) throw new Error('Not authorized');
+  return await deleteAssetFromDatabase(asset_id);
+}
 
-  return {
-    filename: row.asset_id.split('/').slice(-1),
-    mimeType: row.mime_type,
-    lastModified: row.updated_at,
-    size: row.size,
-    data: new Blob([row.data], { type: row.mime_type })
-  };
+export async function getAllAssets(currentUser) {
+  if (!currentUser) throw new Error('Not authorized');
+  return await listAssets();
 }
