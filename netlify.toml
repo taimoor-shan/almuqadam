@@ -1,6 +1,6 @@
 [build]
-  command = "npm run build"
-  publish = ".netlify/functions-internal"
+  command = "./build-netlify.sh"
+  publish = "build"
   functions = ".netlify/functions-internal"
 
 [dev]
@@ -16,12 +16,12 @@
 
 # Set environment variables
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "18.17.0"
 
 # Set up scheduled functions (similar to cron jobs)
 [functions."scheduled-cleanup"]
   schedule = "0 5 * * *"
-  
+
 # Handle 404 errors
 [[redirects]]
   from = "/*"
