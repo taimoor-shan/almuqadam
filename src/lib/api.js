@@ -1,15 +1,9 @@
 import slugify from 'slugify';
 import { SHORTCUTS } from './constants';
-import Database from 'better-sqlite3';
 import { nanoid } from '$lib/util';
-import { DB_PATH, ADMIN_PASSWORD } from '$env/static/private';
+import { ADMIN_PASSWORD } from '$env/static/private';
 import { Blob } from 'node:buffer';
-
-const db = new Database(DB_PATH, {
-  // verbose: console.log
-});
-db.pragma('journal_mode = WAL');
-db.pragma('case_sensitive_like = true');
+import { query, queryOne, queryMany, transaction } from '$lib/db';
 
 
 /**
@@ -18,31 +12,25 @@ db.pragma('case_sensitive_like = true');
 export async function createArticle(title, content, teaser, currentUser) {
   if (!currentUser) throw new Error('Not authorized');
 
-    let slug = slugify(title, {
-      lower: true,
-      strict: true
-    });
+  let slug = slugify(title, {
+    lower: true,
+    strict: true
+  });
 
-    // If slug is already used, we add a unique postfix
-    const articleExists = db.prepare('SELECT * FROM articles WHERE slug = ?').get(slug);
-    if (articleExists) {
-      slug = slug + '-' + nanoid();
-    }
+  // If slug is already used, we add a unique postfix
+  const articleExists = await queryOne('SELECT slug FROM articles WHERE slug = $1', [slug]);
+  if (articleExists) {
+    slug = slug + '-' + nanoid();
+  }
 
-    db.prepare(`
-        INSERT INTO articles (slug, title, content, teaser, published_at)
-        VALUES(?, ?, ?, ?, DATETIME('now'))
-      `)
-      .run(
-        slug,
-        title,
-        content,
-        teaser
-      );
+  const result = await query(
+    `INSERT INTO articles (slug, title, content, teaser, published_at)
+     VALUES($1, $2, $3, $4, CURRENT_TIMESTAMP)
+     RETURNING slug, created_at`,
+    [slug, title, content, teaser]
+  );
 
-  const newArticleQuery = "SELECT slug, created_at FROM articles WHERE slug = ?";
-  const newArticle = db.prepare(newArticleQuery).get(slug);
-  return newArticle;
+  return result.rows[0];
 }
 
 /**
@@ -51,35 +39,33 @@ export async function createArticle(title, content, teaser, currentUser) {
 export async function updateArticle(slug, title, content, teaser, currentUser) {
   if (!currentUser) throw new Error('Not authorized');
 
-  const query = `
-    UPDATE articles
-    SET title = ?, content = ?, teaser = ?, updated_at = datetime('now')
-    WHERE slug = ?
-  `;
-  const updateStmt = db.prepare(query);
-  updateStmt.run(title, content, teaser, slug);
+  const result = await query(
+    `UPDATE articles
+     SET title = $1, content = $2, teaser = $3, updated_at = CURRENT_TIMESTAMP
+     WHERE slug = $4
+     RETURNING slug, updated_at`,
+    [title, content, teaser, slug]
+  );
 
-  const updatedArticleQuery = "SELECT slug, updated_at FROM articles WHERE slug = ?";
-  const updatedArticle = db.prepare(updatedArticleQuery).get(slug);
-
-  return updatedArticle;
+  return result.rows[0];
 }
 
 /*
   This can be replaced with any user-based authentication system
 */
 export async function authenticate(password, sessionTimeout) {
-  const expires = __getDateTimeMinutesAfter(sessionTimeout);
   if (password === ADMIN_PASSWORD) {
     const sessionId = nanoid();
+    const expires = new Date();
+    expires.setMinutes(expires.getMinutes() + sessionTimeout);
 
     // Now is a good time to remove expired sessions
-    db.prepare('DELETE FROM sessions WHERE expires < ?').run(new Date().toISOString());
+    await query('DELETE FROM sessions WHERE expires < $1', [new Date().toISOString()]);
 
     // Create a new session
-    db.prepare('INSERT INTO sessions (session_id, expires) values(?, ?) returning session_id').run(
-      sessionId,
-      expires
+    await query(
+      'INSERT INTO sessions (session_id, expires) VALUES($1, $2) RETURNING session_id',
+      [sessionId, expires.toISOString()]
     );
 
     return { sessionId };
@@ -92,7 +78,7 @@ export async function authenticate(password, sessionTimeout) {
   Log out of the admin session ...
 */
 export async function destroySession(sessionId) {
-  db.prepare('DELETE FROM sessions WHERE session_id = ?').run(sessionId);
+  await query('DELETE FROM sessions WHERE session_id = $1', [sessionId]);
   return true;
 }
 
@@ -100,29 +86,27 @@ export async function destroySession(sessionId) {
  * List all available articles (newest first)
  */
 export async function getArticles(currentUser) {
-  let articles;
-  let statement;
-
   if (currentUser) {
     // When logged in, show both drafts and published articles
-    statement = db.prepare(
-      'SELECT *, COALESCE(published_at, updated_at, created_at) AS modified_at FROM articles ORDER BY modified_at DESC'
+    return await queryMany(
+      `SELECT *, COALESCE(published_at, updated_at, created_at) AS modified_at
+       FROM articles
+       ORDER BY modified_at DESC`
     );
   } else {
-    statement = db.prepare(
-      'SELECT * FROM articles WHERE published_at IS NOT NULL ORDER BY published_at DESC'
+    return await queryMany(
+      `SELECT * FROM articles
+       WHERE published_at IS NOT NULL
+       ORDER BY published_at DESC`
     );
   }
-
-  articles = statement.all();
-  return articles;
 }
 
 /**
  * Given a slug, determine article to "read next"
  */
 export async function getNextArticle(slug) {
-  const query = `
+  const result = await queryOne(`
     WITH previous_published AS (
       SELECT
         title,
@@ -131,7 +115,7 @@ export async function getNextArticle(slug) {
         published_at
       FROM articles
       WHERE
-        published_at < (SELECT published_at FROM articles WHERE slug = ?)
+        published_at < (SELECT published_at FROM articles WHERE slug = $1)
       ORDER BY published_at DESC
       LIMIT 1
     ),
@@ -142,7 +126,7 @@ export async function getNextArticle(slug) {
         slug,
         published_at
       FROM articles
-      WHERE slug <> ?
+      WHERE slug <> $1
       ORDER BY published_at DESC
       LIMIT 1
     )
@@ -154,9 +138,8 @@ export async function getNextArticle(slug) {
     )
     ORDER BY published_at ASC
     LIMIT 1;
-  `;
+  `, [slug]);
 
-  const result = db.prepare(query).get(slug, slug);
   return result;
 }
 
@@ -164,24 +147,25 @@ export async function getNextArticle(slug) {
  * Search within all searchable items (including articles and website sections)
  */
 export async function search(q, currentUser) {
-  let query;
-  if (currentUser) {
-    query = `
-      SELECT title AS name, '/blog/' || slug AS url, COALESCE(published_at, updated_at, created_at) AS modified_at
-      FROM articles
-      WHERE title LIKE ? COLLATE NOCASE
-      ORDER BY modified_at DESC;
-    `;
-  } else {
-    query = `
-      SELECT title AS name, '/blog/' || slug AS url, COALESCE(published_at, updated_at, created_at) AS modified_at
-      FROM articles
-      WHERE title LIKE ? COLLATE NOCASE AND published_at IS NOT NULL
-      ORDER BY modified_at DESC;
-    `;
-  }
+  let results;
 
-  const results = db.prepare(query).all(`%${q}%`);
+  if (currentUser) {
+    results = await queryMany(
+      `SELECT title AS name, '/blog/' || slug AS url, COALESCE(published_at, updated_at, created_at) AS modified_at
+       FROM articles
+       WHERE title ILIKE $1
+       ORDER BY modified_at DESC`,
+      [`%${q}%`]
+    );
+  } else {
+    results = await queryMany(
+      `SELECT title AS name, '/blog/' || slug AS url, COALESCE(published_at, updated_at, created_at) AS modified_at
+       FROM articles
+       WHERE title ILIKE $1 AND published_at IS NOT NULL
+       ORDER BY modified_at DESC`,
+      [`%${q}%`]
+    );
+  }
 
   // Also include predefined shortcuts in search
   SHORTCUTS.forEach(shortcut => {
@@ -197,9 +181,7 @@ export async function search(q, currentUser) {
  * Retrieve article based on a given slug
  */
 export async function getArticleBySlug(slug) {
-  const query = "SELECT * FROM articles WHERE slug = ?";
-  const article = db.prepare(query).get(slug);
-  return article;
+  return await queryOne('SELECT * FROM articles WHERE slug = $1', [slug]);
 }
 
 /**
@@ -208,25 +190,21 @@ export async function getArticleBySlug(slug) {
 export async function deleteArticle(slug, currentUser) {
   if (!currentUser) throw new Error('Not authorized');
 
-  const query = "DELETE FROM articles WHERE slug = ?";
-  const result = db.prepare(query).run(slug);
-
-  return result.changes > 0;
+  const result = await query('DELETE FROM articles WHERE slug = $1', [slug]);
+  return result.rowCount > 0;
 }
 
 /**
  * In this minimal setup there is only one user, the website admin.
  * If you want to support multiple users/authors you want to return the current user record here.
  */
-/**
- * In this minimal setup there is only one user, the website admin.
- * If you want to support multiple users/authors you want to return the current user record here.
- */
 export async function getCurrentUser(session_id) {
-  const stmt = db.prepare(
-    'SELECT session_id, expires FROM sessions WHERE session_id = ? AND expires > ?'
+  if (!session_id) return null;
+
+  const session = await queryOne(
+    'SELECT session_id, expires FROM sessions WHERE session_id = $1 AND expires > $2',
+    [session_id, new Date().toISOString()]
   );
-  const session = stmt.get(session_id, new Date().toISOString());
 
   if (session) {
     return { name: 'Admin' };
@@ -241,15 +219,25 @@ export async function getCurrentUser(session_id) {
  */
 export async function createOrUpdatePage(page_id, page, currentUser) {
   if (!currentUser) throw new Error('Not authorized');
-  const pageExists = db.prepare('SELECT page_id FROM pages WHERE page_id = ?').get(page_id);
+
+  // For PostgreSQL, we can pass the object directly for JSONB columns
+  // No need to stringify as the pg driver will handle it
+  const pageData = page;
+
+  const pageExists = await queryOne('SELECT page_id FROM pages WHERE page_id = $1', [page_id]);
+
   if (pageExists) {
-    return db
-      .prepare('UPDATE pages SET data = ?, updated_at = ? WHERE page_id = ? RETURNING page_id')
-      .get(JSON.stringify(page), new Date().toISOString(), page_id);
+    const result = await query(
+      'UPDATE pages SET data = $1, updated_at = $2 WHERE page_id = $3 RETURNING page_id',
+      [pageData, new Date().toISOString(), page_id]
+    );
+    return result.rows[0];
   } else {
-    return db
-      .prepare('INSERT INTO pages (page_id, data, updated_at) values(?, ?, ?) RETURNING page_id')
-      .get(page_id, JSON.stringify(page), new Date().toISOString());
+    const result = await query(
+      'INSERT INTO pages (page_id, data, updated_at) VALUES($1, $2, $3) RETURNING page_id',
+      [page_id, pageData, new Date().toISOString()]
+    );
+    return result.rows[0];
   }
 }
 
@@ -257,9 +245,21 @@ export async function createOrUpdatePage(page_id, page, currentUser) {
  * E.g. getPage("home") gets all dynamic data for the home page
  */
 export async function getPage(page_id) {
-  const page = db.prepare('SELECT data FROM pages WHERE page_id = ?').get(page_id);
+  const page = await queryOne('SELECT data FROM pages WHERE page_id = $1', [page_id]);
   if (page?.data) {
-    return JSON.parse(page.data);
+    // Check if data is already an object (PostgreSQL JSONB) or a string (needs parsing)
+    if (typeof page.data === 'object') {
+      return page.data;
+    } else {
+      try {
+        return JSON.parse(page.data);
+      } catch (error) {
+        console.error(`Error parsing JSON for page ${page_id}:`, error);
+        console.log('Data type:', typeof page.data);
+        console.log('Data value:', page.data);
+        return null;
+      }
+    }
   } else {
     return null;
   }
@@ -269,21 +269,26 @@ export async function getPage(page_id) {
  * We can count all kinds of things with this.
  */
 export async function createOrUpdateCounter(counter_id) {
-  return db.transaction(() => {
-    // Remove recipients associated with the friend if there are any entries
-    const counter_exists = db
-      .prepare('SELECT counter_id FROM counters WHERE counter_id = ?')
-      .get(counter_id);
-    if (counter_exists) {
-      return db
-        .prepare('UPDATE counters SET count = count + 1 WHERE counter_id = ? RETURNING count')
-        .get(counter_id);
+  return await transaction(async (client) => {
+    const counter_exists = await client.query(
+      'SELECT counter_id FROM counters WHERE counter_id = $1',
+      [counter_id]
+    );
+
+    if (counter_exists.rows.length > 0) {
+      const result = await client.query(
+        'UPDATE counters SET count = count + 1 WHERE counter_id = $1 RETURNING count',
+        [counter_id]
+      );
+      return result.rows[0];
     } else {
-      return db
-        .prepare('INSERT INTO counters (counter_id, count) values(?, 1) RETURNING count')
-        .get(counter_id);
+      const result = await client.query(
+        'INSERT INTO counters (counter_id, count) VALUES($1, 1) RETURNING count',
+        [counter_id]
+      );
+      return result.rows[0];
     }
-  })();
+  });
 }
 
 // asset_id is a string and has the form path
@@ -291,34 +296,28 @@ export async function storeAsset(asset_id, file) {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  const sql = `
-  INSERT into assets (asset_id, mime_type, updated_at, size, data) VALUES (?, ?, ?, ?, ?)
-  ON CONFLICT (asset_id) DO
-  UPDATE
-     SET mime_type = excluded.mime_type,
-         updated_at = excluded.updated_at,
-         size = excluded.size,
-         data = excluded.data
-  WHERE asset_id = excluded.asset_id
-  `;
-  const stmnt = db.prepare(sql);
-  stmnt.run(asset_id, file.type, new Date().toISOString(), file.size, buffer);
+  await query(
+    `INSERT INTO assets (asset_id, mime_type, updated_at, size, data)
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (asset_id) DO UPDATE
+     SET mime_type = EXCLUDED.mime_type,
+         updated_at = EXCLUDED.updated_at,
+         size = EXCLUDED.size,
+         data = EXCLUDED.data`,
+    [asset_id, file.type, new Date().toISOString(), file.size, buffer]
+  );
 }
 
-export function getAsset(asset_id) {
-  const sql = `
-  SELECT
-    asset_id,
-    mime_type,
-    updated_at,
-    size,
-    data
-  FROM assets
-  WHERE asset_id = ?
-  `;
+export async function getAsset(asset_id) {
+  const row = await queryOne(
+    `SELECT asset_id, mime_type, updated_at, size, data
+     FROM assets
+     WHERE asset_id = $1`,
+    [asset_id]
+  );
 
-  const stmnt = db.prepare(sql);
-  const row = stmnt.get(asset_id);
+  if (!row) return null;
+
   return {
     filename: row.asset_id.split('/').slice(-1),
     mimeType: row.mime_type,
@@ -326,11 +325,4 @@ export function getAsset(asset_id) {
     size: row.size,
     data: new Blob([row.data], { type: row.mime_type })
   };
-}
-
-/**
- * Helpers
- */
-function __getDateTimeMinutesAfter(minutes) {
-  return new Date(new Date().getTime() + minutes * 60000).toISOString();
 }

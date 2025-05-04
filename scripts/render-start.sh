@@ -11,12 +11,14 @@ FOLDER=./data
 if [ ! -d "$FOLDER" ]; then
     echo "$FOLDER directory doesn't exist, creating it..."
     mkdir -p ./data
+    chmod 777 ./data
 fi
 
 # Check if database file exists
 if [ ! -f ./data/db.sqlite3 ]; then
     echo "Database file doesn't exist, creating it..."
     touch ./data/db.sqlite3
+    chmod 666 ./data/db.sqlite3
 fi
 
 # Always initialize/update the database with schema
@@ -27,6 +29,10 @@ sqlite3 ./data/db.sqlite3 < ./sql/schema.sql
 # Verify tables were created
 echo "Verifying database tables..."
 sqlite3 ./data/db.sqlite3 "SELECT name FROM sqlite_master WHERE type='table';"
+
+# Run the Node.js database initialization script as well
+echo "Running Node.js database initialization script..."
+node ./scripts/init-db.js
 
 # Start the application
 echo "Starting the application..."
