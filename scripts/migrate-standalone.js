@@ -26,10 +26,12 @@ async function migrate() {
   console.log('Starting PostgreSQL migration...');
   console.log(`Using database URL: ${DATABASE_URL.replace(/:[^:]*@/, ':****@')}`);
 
-  // Create a PostgreSQL client
+  // Create a PostgreSQL client with appropriate SSL settings
   const client = new pg.Client({
     connectionString: DATABASE_URL,
-    ssl: false // Disable SSL for local development
+    ssl: process.env.NODE_ENV === 'production'
+      ? { rejectUnauthorized: false } // Enable SSL with self-signed certificates for production
+      : DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false } // Disable SSL for localhost, enable for other environments
   });
 
   try {

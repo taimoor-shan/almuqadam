@@ -112,9 +112,44 @@ Please use this as a starting point for new pages you want to add to your websit
 
 Just navigate to `http://127.0.0.1:5173/login` and enter your secure admin password (`ADMIN_PASSWORD`). Now you see an additional ellipsis menu, which will provide you an "Edit page" or "Edit post" option for all pages that you have set up as "editable".
 
-## Deployment to Fly.io
+## Deployment to Vercel
 
-This repo contains the files you need to deploy your site to [fly.io](https://fly.io/).
+This project is configured to deploy to [Vercel](https://vercel.com/), which offers a great developer experience and excellent performance.
+
+1. Create an account with [Vercel](https://vercel.com/) if you don't have one already.
+2. Install the Vercel CLI:
+   ```bash
+   npm install -g vercel
+   ```
+3. Log in to Vercel:
+   ```bash
+   vercel login
+   ```
+4. Deploy your application:
+   ```bash
+   vercel
+   ```
+5. Follow the prompts to configure your project.
+6. Set up the following environment variables in your Vercel project settings:
+   - `DATABASE_URL`: Your PostgreSQL connection string
+   - `ADMIN_PASSWORD`: Your secure admin password
+   - `ORIGIN`: Your Vercel deployment URL (e.g., https://your-app.vercel.app)
+
+For more detailed instructions, see the [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md) guide.
+
+## Testing Vercel Deployment Locally
+
+You can test your Vercel deployment locally using the Vercel CLI:
+
+```bash
+npm run vercel-dev
+```
+
+This will start a local development server that simulates the Vercel environment.
+
+## Deployment to Fly.io (Alternative)
+
+This repo also contains the files you need to deploy your site to [fly.io](https://fly.io/).
 
 1. Create an account with [fly.io](https://fly.io/). (Fly [require an active, valid credit / bank card](https://fly.io/docs/about/credit-cards/) to prevent abuse, but the site runs well on their free tier. Unless you have a very busy site, hosting will be free.)
 1. [Install `fly`](https://fly.io/docs/hands-on/install-flyctl/) and sign in with `fly auth login`
@@ -136,46 +171,6 @@ fly deploy \
 The `-a` option in `fly deploy` lets you override the app name specified in `fly.toml`.
 
 Fly will let you know when the app is deployed. Visit the URL shown in your terminal and sign in at `/login` with the `ADMIN_PASSWORD` you set above.
-
-## Connect a domain to your Fly.io app
-
-- Run `fly ips list -a myapp` to get the IPv4 and IPv6 addresses.
-- Head over to your DNS provider and add A and AAAA records for myapp.com with the IPv4 and IPv6 values.
-- Run `fly certs create -a myapp myapp.com`
-- Run `fly certs show -a myapp myapp.com` to watch your certificates being issued.
-
-## Fly.io Backups
-
-You can pull a backup locally and run it to check if it is valid. That's also quite useful for developing/testing against the latest production data. For the best experience, keep your database small. ;)
-
-1. Make a snapshot remotely
-   - `fly ssh console`
-   - `sqlite3 data/db.sqlite3 ".backup data/backup-db.sqlite3"`
-   - `sqlite3 data/backup-db.sqlite3 "PRAGMA integrity_check;"` (optional integrity check)
-   - Exit the remote console (CTRL+D)
-1. Download the database and test it with your local instance
-   - `rm -rf data/db.*` (careful, this wipe the database files locally)
-   - `fly sftp get data/backup-db.sqlite3 data/db.sqlite3` (and puts the downloaded backup in place)
-
-To restore a backup in production, you need to be a bit careful and follow these steps (your site could be down for a few minutes during the restore).
-
-1. Make sure nobody writes to the app
-1. Make a backup remotely (in case something goes wrong)
-   - `fly ssh console`
-   - `sqlite3 data/db.sqlite3 ".backup data/backup-db.sqlite3"`
-   - `sqlite3 data/backup-db.sqlite3 "PRAGMA integrity_check;"` (optional integrity check)
-   - `rm -rf data/db.*` (this removes the current database files, not the backup)
-   - Exit the remote console (CTRL+D)
-1. Copy your local db.sqlite3 file to production using SFTP
-   - `sqlite3 data/db.sqlite3 ".backup data/backup-db.sqlite3"`
-   - `rm -rf data/db*`
-   - `mv data/backup-db.sqlite3 data/db.sqlite3` (the first 3 commands make sure db.sqlite3 has the very latest state)
-   - `fly sftp shell`
-   - `cd app/data`
-   - `put data/db.sqlite3`
-   - Exit SFTP client (CTRL+D)
-1. Restart the app (so that the new DB gets picked up)
-   - `fly apps restart`
 
 ## Get in touch
 

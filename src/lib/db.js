@@ -1,10 +1,12 @@
 import pg from 'pg';
 import { DATABASE_URL } from '$env/static/private';
 
-// Create a PostgreSQL pool
+// Create a PostgreSQL pool with appropriate SSL settings
 const pool = new pg.Pool({
   connectionString: DATABASE_URL,
-  ssl: false // Disable SSL for local development
+  ssl: process.env.NODE_ENV === 'production'
+    ? { rejectUnauthorized: false } // Enable SSL with self-signed certificates for production
+    : DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false } // Disable SSL for localhost, enable for other environments
 });
 
 // Log connection info (without password)
