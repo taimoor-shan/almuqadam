@@ -1,0 +1,95 @@
+{
+	"version": 3,
+	"routes": [
+		{
+			"src": "/_app/immutable/.+",
+			"headers": {
+				"cache-control": "public, immutable, max-age=31536000"
+			}
+		},
+		{
+			"handle": "filesystem"
+		},
+		{
+			"src": "^/?(?:/__data.json)?$",
+			"dest": "/"
+		},
+		{
+			"src": "^/about/?(?:/__data.json)?$",
+			"dest": "/about"
+		},
+		{
+			"src": "^/api/counter/?(?:/__data.json)?$",
+			"dest": "/api/counter"
+		},
+		{
+			"src": "^/api/create-article/?(?:/__data.json)?$",
+			"dest": "/api/create-article"
+		},
+		{
+			"src": "^/api/cron/?(?:/__data.json)?$",
+			"dest": "/api/cron"
+		},
+		{
+			"src": "^/api/delete-article/?(?:/__data.json)?$",
+			"dest": "/api/delete-article"
+		},
+		{
+			"src": "^/api/save-global/?(?:/__data.json)?$",
+			"dest": "/api/save-global"
+		},
+		{
+			"src": "^/api/save-page/?(?:/__data.json)?$",
+			"dest": "/api/save-page"
+		},
+		{
+			"src": "^/api/search/?(?:/__data.json)?$",
+			"dest": "/api/search"
+		},
+		{
+			"src": "^/api/update-article/?(?:/__data.json)?$",
+			"dest": "/api/update-article"
+		},
+		{
+			"src": "^/api/upload-asset/?(?:/__data.json)?$",
+			"dest": "/api/upload-asset"
+		},
+		{
+			"src": "^/assets(/.*)?/?(?:/__data.json)?$",
+			"dest": "/assets/[...path]"
+		},
+		{
+			"src": "^/blog/?(?:/__data.json)?$",
+			"dest": "/blog"
+		},
+		{
+			"src": "^/blog/new/?(?:/__data.json)?$",
+			"dest": "/blog/new"
+		},
+		{
+			"src": "^/blog/([^/]+?)/?(?:/__data.json)?$",
+			"dest": "/blog/[slug]"
+		},
+		{
+			"src": "^/global-settings/?(?:/__data.json)?$",
+			"dest": "/global-settings"
+		},
+		{
+			"src": "^/imprint/?(?:/__data.json)?$",
+			"dest": "/imprint"
+		},
+		{
+			"src": "^/login/?(?:/__data.json)?$",
+			"dest": "/login"
+		},
+		{
+			"src": "^/logout/?(?:/__data.json)?$",
+			"dest": "/logout"
+		},
+		{
+			"src": "/.*",
+			"dest": "/![-]/catchall"
+		}
+	],
+	"overrides": {}
+}
