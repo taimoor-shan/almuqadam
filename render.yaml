@@ -1,9 +1,9 @@
 services:
   - type: web
     name: editable-website
-    env: node
-    buildCommand: npm install dotenv && npm install && npm run build && npm run migrate
-    startCommand: node build
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerCommand: sh scripts/render-docker-start.sh
     envVars:
       - key: NODE_ENV
         value: production
