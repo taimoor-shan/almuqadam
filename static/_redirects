@@ -1,5 +1,0 @@
-# Netlify redirects file
-# This is a backup to the redirects in netlify.toml
-
-# Redirect all URLs to the SvelteKit app
-/*    /.netlify/functions/render    200

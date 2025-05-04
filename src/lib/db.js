@@ -4,7 +4,7 @@ import { DATABASE_URL } from '$env/static/private';
 // Create a PostgreSQL pool
 const pool = new pg.Pool({
   connectionString: DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  ssl: false // Disable SSL for local development
 });
 
 // Log connection info (without password)

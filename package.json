@@ -5,11 +5,11 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "postbuild": "mkdir -p .netlify/functions-internal && cp -r build/* .netlify/functions-internal/ 2>/dev/null || true",
     "preview": "vite preview",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
-    "migrate": "node scripts/migrate-standalone.js"
+    "migrate": "node scripts/migrate-standalone.js",
+    "vercel-dev": "vercel dev"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^3.1.1",
@@ -31,7 +31,7 @@
   "dependencies": {
     "@fontsource/jost": "^5.0.16",
     "@supabase/supabase-js": "^2.39.7",
-    "@sveltejs/adapter-netlify": "^5.0.1",
+    "@sveltejs/adapter-vercel": "^5.7.1",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.10",
     "autoprefixer": "^10.4.18",

@@ -1,6 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
-import { DATABASE_URL, ADMIN_PASSWORD, ORIGIN } from './netlify.js';
+import { DATABASE_URL, ADMIN_PASSWORD, ORIGIN } from './vercel.js';
 
 export default defineConfig({
   plugins: [sveltekit()],

@@ -1,9 +1,10 @@
 import pg from "pg";
-const DATABASE_URL = "postgres://taimoor:Qwerty%40007@localhost:5432/editable_website";
+const DATABASE_URL = "postgres://default:s5uJkVfFM6PQ@ep-crimson-cell-10033438-pooler.us-east-1.aws.neon.tech/verceldb?sslmode=require";
 const ADMIN_PASSWORD = "Qwerty@007";
 const pool = new pg.Pool({
   connectionString: DATABASE_URL,
-  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false
+  ssl: false
+  // Disable SSL for local development
 });
 console.log(`Connecting to PostgreSQL database: ${DATABASE_URL.replace(/:[^:]*@/, ":****@")}`);
 pool.on("connect", () => {
