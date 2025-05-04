@@ -4,6 +4,9 @@
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
+  "git": {
+    "deploymentEnabled": false
+  },
   "env": {
     "NODE_ENV": "production"
   },
