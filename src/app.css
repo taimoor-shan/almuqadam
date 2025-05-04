@@ -4723,7 +4723,7 @@ figcaption {
 
 .cta-feature-list-icon {
   flex: none;
-  margin-top: 4px;
+  margin-top: 0px;
 }
 
 .cta-content-wrap {

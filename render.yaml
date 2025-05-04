@@ -3,7 +3,11 @@ services:
     name: editable-website
     env: node
     buildCommand: npm install && npm run build
-    startCommand: node build
+    startCommand: npm start
+    disk:
+      name: data
+      mountPath: ./data
+      sizeGB: 1
     envVars:
       - key: NODE_ENV
         value: production

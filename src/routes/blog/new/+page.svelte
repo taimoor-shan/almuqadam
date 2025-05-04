@@ -12,11 +12,13 @@
 
   let showUserMenu = false,
     title = 'Untitled',
-    content = 'Copy and paste your text here.';
+    content = 'Copy and paste your text here.',
+    cta;
 
   $: {
     $currentUser = data.currentUser;
     $isEditing = true;
+    cta = data.globalData?.cta;
   }
 
   async function createArticle() {
@@ -51,7 +53,7 @@
 <Article bind:title bind:content />
 
 <NotEditable>
-  <EditableWebsiteTeaser />
+  <EditableWebsiteTeaser bind:cta />
 </NotEditable>
 
 <Footer counter="/blog/new" />

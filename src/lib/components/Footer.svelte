@@ -71,7 +71,12 @@
       </div>
     </div>
   </footer>
-  <a href="https://webflow.com/templates/designers/webestica" target="_blank" class="more-templates w-inline-block"><img src="https://cdn.prod.website-files.com/6360b7ce770ddeb3770f652f/63a59d6f6df355075be6d82a_wbs-icon.svg" loading="eager" width="22" height="22" alt="" />
-    <div>More Templates</div>
-  </a>
+  <span  class="more-templates w-inline-block">
+    <div>
+      <a href="https://wa.me/1234567890" target="_blank" class="whatsapp-button w-inline-block">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v5/icons/whatsapp.svg" alt="WhatsApp" width="22" height="22" />
+        <span class="ms-2">Chat on WhatsApp</span>
+      </a>
+    </div>
+  </span>
 </NotEditable>

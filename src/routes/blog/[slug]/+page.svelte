@@ -17,6 +17,7 @@
 
   let showUserMenu = false;
   let title, teaser, content, published_at, updatedAt;
+  let cta;
 
   $: {
     $currentUser = data.currentUser;
@@ -29,6 +30,7 @@
     content = data.content;
     published_at = data.published_at;
     updatedAt = data.updatedAt;
+    cta = data.globalData?.cta;
     $isEditing = false;
   }
 
@@ -107,7 +109,7 @@
 {/if}
 
 <NotEditable>
-  <EditableWebsiteTeaser />
+  <EditableWebsiteTeaser bind:cta />
 </NotEditable>
 
 <Footer counter={`/blog/${data.slug}`} />

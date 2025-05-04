@@ -10,10 +10,14 @@
   import Footer from '$lib/components/Footer.svelte';
   import Image from '$lib/components/Image.svelte';
   import NotEditable from '$lib/components/NotEditable.svelte';
+  import EditableWebsiteTeaser from '$lib/components/EditableWebsiteTeaser.svelte';
   import { currentUser, isEditing } from '$lib/stores.js';
   import WebsiteHeader from '$lib/components/WebsiteHeader.svelte';
 
   export let data;
+  // let globalData;
+
+
 
   // --------------------------------------------------------------------------
   // DEFAULT PAGE CONTENT - ADJUST TO YOUR NEEDS
@@ -142,10 +146,14 @@
     aboutImage,
     whoWeAre,
     whyChooseUs,
-    showUserMenu;
+    showUserMenu,
+    globalData,
+    cta;  
 
   function initOrReset() {
     $currentUser = data.currentUser;
+    globalData = data.globalData;
+    cta = globalData?.cta;
     pageTitle = data.page?.pageTitle || 'About Naseer UK';
     pageSubtitle = data.page?.pageSubtitle || 'Your Trusted Partner in Immigration Services';
     aboutContent = data.page?.aboutContent || ABOUT_CONTENT_PLACEHOLDER;
@@ -760,5 +768,8 @@
     </div>
   </div>
 </section>
+
+<EditableWebsiteTeaser bind:cta />
+
 
 <Footer counter="/about" />

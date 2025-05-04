@@ -10,8 +10,11 @@
 
   export let data;
   let showUserMenu;
+  let cta;
+
   $: {
     $currentUser = data.currentUser;
+    cta = data.globalData?.cta;
   }
 </script>
 
@@ -40,6 +43,6 @@
   {/each}
 </div>
 
-<EditableWebsiteTeaser />
+<EditableWebsiteTeaser bind:cta />
 
 <Footer counter="/blog" />

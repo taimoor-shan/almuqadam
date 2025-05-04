@@ -4,10 +4,22 @@
   import NotEditable from './NotEditable.svelte';
   import Search from './Search.svelte';
   import { isEditing, currentUser } from '$lib/stores.js';
+  import { page } from '$app/stores';
 
   // TODO: Replace with a globally managed context menu implementation (only one active)
   export let showUserMenu = undefined;
   export let showSearch = undefined;
+
+  // Function to check if a link is active
+  function isActive(path) {
+    // Exact match
+    if ($page.url.pathname === path) return true;
+
+    // Check if it's a nested route (e.g., /blog/some-post should highlight /blog)
+    if (path !== '/' && $page.url.pathname.startsWith(path)) return true;
+
+    return false;
+  }
 
   function onKeyDown(e) {
     // Close modals
@@ -106,7 +118,7 @@
   <NotEditable>
     <div class="w-layout-blockcontainer container w-container">
       <div class="flex items-center relative justify-between">
-        <a href="index.html" class="brand-wrap w-nav-brand">
+        <a href="/" class="brand-wrap w-nav-brand">
           <img
             loading="eager"
             src="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778b72212f759419cce452a_visahub.svg"
@@ -114,14 +126,11 @@
             class="brand"
           /></a
         >
-        <nav role="navigation" class="nav-menu w-nav-menu">
-          <a href="/" class="nav-link w-nav-link">Home</a>
-          <a href="/about" aria-current="page" class="nav-link w-nav-link w--current">About</a>
-          <a href="/immigration" class="nav-link w-nav-link">Immigration</a>
-          <a
-            href="/blog"
-            class="nav-link w-nav-link">Blog</a
-          >
+        <nav class="nav-menu w-nav-menu">
+          <a href="/" class={classNames("nav-link w-nav-link", isActive('/') ? 'w--current' : '')}>Home</a>
+          <a href="/about" class={classNames("nav-link w-nav-link", isActive('/about') ? 'w--current' : '')}>About</a>
+          <a href="/immigration" class={classNames("nav-link w-nav-link", isActive('/immigration') ? 'w--current' : '')}>Immigration</a>
+          <a href="/blog" class={classNames("nav-link w-nav-link", isActive('/blog') ? 'w--current' : '')}>Blog</a>
         </nav>
         {#if $currentUser}
           <button
@@ -149,7 +158,7 @@
         {/if}
         <div class="cta flex gap-4">
           <div id="w-node-_63067e08-366b-f93d-ca5a-9cb96c243ffe-2ccf17b1" class="nav-right">
-            <a href="/contact" class="button-black nav-button w-button">Get started</a>
+            <a href="/contact" class={classNames("button-black nav-button w-button", isActive('/contact') ? 'active-button' : '')}>Get started</a>
           </div>
           <div
             id="w-node-_63067e08-366b-f93d-ca5a-9cb96c244005-2ccf17b1"
