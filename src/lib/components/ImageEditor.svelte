@@ -58,10 +58,10 @@
       // Get cropped image as blob
       const croppedBlob = await getCroppedImg(newSrc, cropDetail.pixels);
       // Resize the cropped blob
-      resizedBlob = await resizeImage(croppedBlob, maxWidth, maxHeight, quality, content_type);
+      resizedBlob = await resizeImage(croppedBlob, maxWidth, maxHeight, 0.95, content_type);
     } else {
       // If no crop data, use the original file directly
-      resizedBlob = await resizeImage(file, maxWidth, maxHeight, quality, content_type);
+      resizedBlob = await resizeImage(file, maxWidth, maxHeight, 0.95, content_type);
     }
 
     const resizedFile = new File([resizedBlob], `${file.name.split('.')[0]}.${extension}`, {

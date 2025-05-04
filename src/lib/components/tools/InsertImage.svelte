@@ -23,9 +23,9 @@
     const extension = is_safari() ? 'jpg' : 'webp';
 
     const path = [['images', nanoid()].join('/'), extension].join('.');
-    const maxWidth = 1440;
-    const maxHeight = 1440;
-    const quality = 0.8;
+    const maxWidth = 1920; // Was 1440
+    const maxHeight = 1280; // Was 1440
+    const quality = 1; // Was 0.8
 
     const resizedBlob = await resizeImage(file, maxWidth, maxHeight, quality, content_type);
     const resizedFile = new File([resizedBlob], `${file.name.split('.')[0]}.${extension}`, {
