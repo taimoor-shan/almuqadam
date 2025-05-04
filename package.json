@@ -8,6 +8,7 @@
     "preview": "vite preview",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
+    "init-db": "node scripts/init-db.js",
     "start": "sh ./scripts/render-start.sh"
   },
   "devDependencies": {
