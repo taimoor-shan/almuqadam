@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
+    "postbuild": "mkdir -p .netlify/functions-internal && cp -r build/* .netlify/functions-internal/ 2>/dev/null || true",
     "preview": "vite preview",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
