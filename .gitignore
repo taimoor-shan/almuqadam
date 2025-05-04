@@ -11,3 +11,5 @@ vite.config.ts.timestamp-*
 *.sqlite*
 fly.toml
 .tool-versions
+.vercel
+package-lock.json
