@@ -1,14 +1,17 @@
 
-import adapter from '@sveltejs/adapter-vercel';
+import adapter from '@sveltejs/adapter-netlify';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   kit: {
-    // Adapter for Vercel deployment with specific configuration
+    // Adapter for Netlify deployment
     adapter: adapter({
-      runtime: 'nodejs18.x',
-      regions: ['iad1'],
+      // if true, will create a Netlify Edge Function
+      edge: false,
+
+      // if true, will split your app into multiple functions
+      // instead of creating a single one for the entire app
       split: false
     }),
     csrf: {
