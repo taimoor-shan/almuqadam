@@ -18,7 +18,7 @@
   <footer class="footer bg-black py-10 px-4">
  
       
-        <p class="text-white text-center w-full text-4xl md:text-5xl lg:text-8xl">
+        <p class="text-white text-center w-full text-2xl md:text-5xl lg:text-8xl">
           509 Real Estate Services LLC
         </p>
     

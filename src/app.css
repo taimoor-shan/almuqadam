@@ -685,7 +685,7 @@ figcaption{text-align:center; margin-top:15px;}
 .immigration-title{margin-bottom:15px; font-size:24px;}
 .immigration-arrow-wrap{z-index:2; background-color:var(--color--black); border-radius:50%; justify-content:center; align-items:center; width:60px; height:60px; display:flex; position:absolute; inset:30px 30px auto auto;}
 .immigration-arrow{width:16px; height:16px;}
-.step-section{position:relative; overflow:hidden;}
+.step-section{position:relative; overflow:hidden;background-color:#eeeeee;}
 .grid-step{grid-column-gap:30px; grid-row-gap:30px; grid-template-rows:auto; grid-template-columns:1fr 1fr 1fr; grid-auto-columns:1fr; align-items:start; display:grid;}
 .step-item{z-index:2; text-align:center; flex-flow:column; justify-content:flex-start; align-items:center; display:flex; position:relative;}
 .step-item.center{margin-top:30px;}
@@ -1251,7 +1251,7 @@ figcaption{text-align:center; margin-top:15px;}
   .footer-logo-item{grid-column-gap:20px; grid-row-gap:20px;}
   .hero-section{margin-top:-90px; padding-top:140px;}
   .hero-title-center{margin-bottom:15px; font-size:48px;}
-  .hero-button-list{margin-top:20px;}
+  .hero-button-list{margin-top:20px;grid-column-gap: 20px;}
   .hero-image-wrap{margin-top:30px; margin-left:20px; margin-right:20px;}
   .hero-blur{height:400px;}
   .hero-blur-divider{height:250px; top:170px;}
@@ -1373,10 +1373,10 @@ figcaption{text-align:center; margin-top:15px;}
 }
 @media screen and (max-width:479px){
   body{font-size:16px; line-height:1.3em;}
-  h1{font-size:40px;}
-  h2{font-size:36px;}
-  h3{font-size:30px;}
-  h4{font-size:26px;}
+  h1{font-size:36px;}
+  h2{font-size:30px;}
+  h3{font-size:26px;}
+  h4{font-size:24px;}
   h5{font-size:20px;}
   h6{font-size:18px;}
   label{margin-bottom:5px;}
@@ -1428,15 +1428,15 @@ figcaption{text-align:center; margin-top:15px;}
   .nav-menu{margin-left:15px; margin-right:15px; padding-left:15px; padding-right:15px;}
   .nav-link,.dropdown-link{font-size:16px; line-height:1.5em;}
   .dropdown-list{padding-top:5px; padding-bottom:5px;}
-  .button-gradient{padding:12px 30px; font-size:16px; line-height:1.4em;}
+  .button-gradient{padding:12px 26px; font-size:14px; line-height:1.4em;}
   .footer-subscribe-title{margin-bottom:10px; font-size:20px;}
   .grid-footer-contact{grid-template-columns:1fr; padding-bottom:15px;}
   .footer-bottom{margin-top:15px;}
   .social-list{grid-column-gap:12px; grid-row-gap:12px;}
   .hero-section{margin-top:-70px; padding-top:120px;}
-  .hero-title-center{font-size:40px;}
+  .hero-title-center{font-size:36px; line-height:1.2em; margin-bottom:10px;}
   .button-icon{width:18px; height:18px;}
-  .button-secondary-2-outline{padding:12px 30px; font-size:16px; line-height:1.4em;}
+  .button-secondary-2-outline{padding:12px 26px; font-size:14px; line-height:1.4em;}
   .hero-image-wrap{margin-left:15px; margin-right:15px;}
   .about-section{padding-top:60px;}
   .about-title-right{font-size:18px; line-height:1.3em;}

@@ -55,7 +55,7 @@
 <section class="bento-gallery-section py-12 md:py-24">
   <div class="container mx-auto px-6">
     <div class="section-title text-center mb-8 md:mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold">{title}</h2>
+      <h2 class="">{title}</h2>
     </div>
 
     {#if images.length > 0}

@@ -19,6 +19,7 @@
   import EditableWebsiteTeaser from '$lib/components/EditableWebsiteTeaser.svelte';
   import BentoGallery from '$lib/components/BentoGallery.svelte';
   import Lightbox from '$lib/components/Lightbox.svelte';
+  import Notification from '$lib/components/Notification.svelte';
   import emailjs from '@emailjs/browser';
 
   import Icon from '@iconify/svelte';
@@ -130,8 +131,7 @@
     phone1,
     phone2,
     email,
-    logoText,
-    formSubmitted = false;
+    logoText;
 
   // Form fields
   let name = '';
@@ -140,6 +140,10 @@
   let message = '';
   let interested_in = '';
   let isSubmitting = false;
+
+  // Notification state
+  let showNotification = false;
+  let notificationMessage = '';
 
   // Helper function to create Google Maps URL from address
   function getGoogleMapsUrl(address) {
@@ -248,8 +252,8 @@
     phone = '';
     message = '';
     interested_in = '';
-    formSubmitted = false;
     isSubmitting = false;
+    showNotification = false;
 
     $isEditing = false;
   }
@@ -347,9 +351,6 @@
 
       console.log('Email sent successfully:', result.text);
 
-      // Show success message
-      formSubmitted = true;
-
       // Reset form fields
       name = '';
       emailInput = '';
@@ -357,15 +358,15 @@
       message = '';
       interested_in = '';
 
-      // After 5 seconds, hide the success message
-      setTimeout(() => {
-        formSubmitted = false;
-      }, 5000);
+      // Show success notification
+      notificationMessage = 'Thank you! Your message has been received. We\'ll get back to you shortly.';
+      showNotification = true;
+
+      // Notification will auto-hide after the duration set in the component
     } catch (error) {
       console.error('Error submitting form:', error);
-      alert(
-        'There was an error sending your message. Please try again or contact us directly by phone.'
-      );
+      notificationMessage = 'There was an error sending your message. Please try again or contact us directly by phone.';
+      showNotification = true;
     } finally {
       // Reset loading state
       isSubmitting = false;
@@ -590,7 +591,7 @@
 <section id="contactSec" class="section-spacing" style="padding-top: 0;">
   <div class="w-layout-blockcontainer container w-container">
     <div class="section-title text-center mb-12">
-      <h1 class="text-4xl md:text-5xl font-bold"><PlainText bind:content={contactTitle} /></h1>
+      <h2 class=""><PlainText bind:content={contactTitle} /></h2>
       <p class="text-xl mt-4"><PlainText bind:content={contactSubtitle} /></p>
     </div>
 
@@ -742,94 +743,87 @@
       <div class="contact-item">
         <h2 class="text-2xl font-bold mb-6 text-blue-600">Get a Free Offer</h2>
 
-        {#if formSubmitted}
-          <div class="success-message w-form-done block">
-            <div>Thank you! Your message has been received. We'll get back to you shortly.</div>
+        <form on:submit|preventDefault={handleSubmit} class="w-form">
+          <div class="grid-contact-form-inner">
+            <div>
+              <label for="name" class="sr-only">Name</label>
+              <input
+                type="text"
+                class="form-input w-input"
+                maxlength="256"
+                name="name"
+                id="name"
+                placeholder="Your name"
+                aria-label="Name"
+                required
+                bind:value={name}
+              />
+            </div>
+            <div>
+              <label for="phone" class="sr-only">Phone</label>
+              <input
+                type="tel"
+                class="form-input w-input"
+                maxlength="256"
+                name="phone"
+                id="phone"
+                placeholder="Your phone number"
+                aria-label="Phone"
+                bind:value={phone}
+              />
+            </div>
           </div>
-        {:else}
-          <form on:submit|preventDefault={handleSubmit} class="w-form">
-            <div class="grid-contact-form-inner">
-              <div>
-                <label for="name" class="sr-only">Name</label>
-                <input
-                  type="text"
-                  class="form-input w-input"
-                  maxlength="256"
-                  name="name"
-                  id="name"
-                  placeholder="Your name"
-                  aria-label="Name"
-                  required
-                  bind:value={name}
-                />
-              </div>
-              <div>
-                <label for="phone" class="sr-only">Phone</label>
-                <input
-                  type="tel"
-                  class="form-input w-input"
-                  maxlength="256"
-                  name="phone"
-                  id="phone"
-                  placeholder="Your phone number"
-                  aria-label="Phone"
-                  bind:value={phone}
-                />
-              </div>
+          <div class="grid-contact-form-inner">
+            <div class="">
+              <label for="email" class="sr-only">Email</label>
+              <input
+                type="email"
+                class="form-input w-input"
+                maxlength="256"
+                name="email"
+                id="email"
+                placeholder="Your email"
+                aria-label="Email"
+                required
+                bind:value={emailInput}
+              />
             </div>
-            <div class="grid-contact-form-inner">
-              <div class="">
-                <label for="email" class="sr-only">Email</label>
-                <input
-                  type="email"
-                  class="form-input w-input"
-                  maxlength="256"
-                  name="email"
-                  id="email"
-                  placeholder="Your email"
-                  aria-label="Email"
-                  required
-                  bind:value={emailInput}
-                />
-              </div>
-              <div class="">
-                <label for="interested_in" class="sr-only">Interested In?</label>
-                <select
-                  class="form-input w-input"
-                  name="interested_in"
-                  id="interested_in"
-                  aria-label="Interested In"
-                  required
-                  bind:value={interested_in}>
-                  <option value="" disabled selected>Interested In?</option>
-                  <option value="buy">Buying</option>
-                  <option value="sell">Selling</option>
-                </select>
-              </div>
+            <div class="">
+              <label for="interested_in" class="sr-only">Interested In?</label>
+              <select
+                class="form-input w-input"
+                name="interested_in"
+                id="interested_in"
+                aria-label="Interested In"
+                required
+                bind:value={interested_in}>
+                <option value="" disabled selected>Interested In?</option>
+                <option value="buy">Buying</option>
+                <option value="sell">Selling</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="">
+            <div class="mb-5">
+              <label for="message" class="sr-only">Message</label>
+              <textarea
+                class="form-input form-textarea w-input"
+                maxlength="5000"
+                name="message"
+                id="message"
+                placeholder="How can we help you?"
+                aria-label="Message"
+                required
+                bind:value={message}
+              ></textarea>
             </div>
 
-              <div class="">
-                <div class="mb-5">
-                  <label for="message" class="sr-only">Message</label>
-                  <textarea
-                    class="form-input form-textarea w-input"
-                    maxlength="5000"
-                    name="message"
-                    id="message"
-                    placeholder="How can we help you?"
-                    aria-label="Message"
-                    required
-                    bind:value={message}
-                  ></textarea>
-                </div>
-
-                <button type="submit" class="button-gradient w-button" disabled={isSubmitting}>
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
-                </button>
-
-            </div>
-          </form>
-        {/if}
+            <button type="submit" class="button-gradient w-button" disabled={isSubmitting}>
+              {isSubmitting ? 'Sending...' : 'Send Message'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -843,3 +837,11 @@
 />
 
 <Footer counter="/" />
+
+<!-- Notification component -->
+<Notification
+  type="success"
+  message={notificationMessage}
+  bind:show={showNotification}
+  duration={5000}
+/>
