@@ -136,7 +136,7 @@ export async function getNextArticle(slug) {
       SELECT * FROM previous_published
       UNION
       SELECT * FROM latest_article
-    )
+    ) AS combined_results
     ORDER BY published_at ASC
     LIMIT 1;
   `, [slug]);

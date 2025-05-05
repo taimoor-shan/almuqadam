@@ -1,0 +1,161 @@
+[
+  {
+    "page_id": "about",
+    "data": {
+      "features": [
+        {
+          "icon": "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/67791f67a9346f4da95ddd0a_icon-10.svg",
+          "text": "Expert team"
+        },
+        {
+          "icon": "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/67791f67a9346f4da95ddd0a_icon-10.svg",
+          "text": "High approval rates"
+        },
+        {
+          "icon": "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/67791f67a9346f4da95ddd0a_icon-10.svg",
+          "text": "Fast and reliable service"
+        }
+      ],
+      "whoWeAre": {
+        "title": "Who we are",
+        "content": "\n      <p>We are a dedicated visa and immigration agency committed to helping individuals and families achieve their dreams of living, working, and studying abroad. With years of experience and a team of experts, we simplify the complexities of immigration processes to ensure a smooth and successful journey for our clients.</p>",
+        "vectorImage": "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778d61303bfc2abf8a13ab9_vector.avif",
+        "featureItems": [
+          {
+            "title": "Our mission",
+            "description": "Providing tailored visa and immigration solutions to help people achieve their global aspirations."
+          },
+          {
+            "title": "Our vision",
+            "description": "To be a trusted partner, guiding individuals and families toward a brighter future abroad."
+          }
+        ]
+      },
+      "heroTitle": "Simplifying your",
+      "pageTitle": "About Naseer UK",
+      "aboutImage": "/images/about-image.jpg",
+      "heroImages": [
+        "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/678dedda5bfb461092e80c48_about-image-06.avif",
+        "/assets/images/qYw8pXnPhqA5cY0GTmLHv.webp"
+      ],
+      "teamMembers": [
+        {
+          "bio": "John has over 15 years of experience in immigration law and has helped hundreds of families successfully navigate the immigration process.",
+          "name": "John Smith",
+          "image": "/images/person-placeholder.jpg",
+          "title": "Immigration Consultant"
+        },
+        {
+          "bio": "Sarah specializes in complex immigration cases and brings a wealth of knowledge in international law to our team.",
+          "name": "Sarah Johnson",
+          "image": "/images/person-placeholder.jpg",
+          "title": "Legal Advisor"
+        }
+      ],
+      "whyChooseUs": {
+        "items": [
+          {
+            "icon": "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/677b8e1f1eb128761b662609_icon-15.svg",
+            "title": "24/7 Support",
+            "description": "Our team is available around the clock to assist you."
+          },
+          {
+            "icon": "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/677b8e2037b52b05c1c0850d_icon-14.svg",
+            "title": "Personalized solutions",
+            "description": "Every case is unique, and we tailor our services to meet your specific needs."
+          },
+          {
+            "icon": "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/677b8e1f308938b15683f7f8_icon-16.svg",
+            "title": "Transparent process",
+            "description": "Clear communication and guidance at every step."
+          }
+        ],
+        "title": "Why choose us"
+      },
+      "aboutContent": "\n    <h2>Our Mission</h2>\n    <p>At Naseer UK, our mission is to provide exceptional immigration services with integrity, expertise, and personalized attention. We believe in making the immigration process transparent, stress-free, and successful for every client.</p>\n\n    <h2>Our Approach</h2>\n    <p>We take a client-centered approach to immigration services. Each case is unique, and we develop tailored strategies that address your specific needs and circumstances. Our team stays up-to-date with the latest immigration laws and policies to ensure you receive the most current and accurate advice.</p>\n\n    <h2>Our Values</h2>\n    <ul>\n      <li><strong>Integrity:</strong> We maintain the highest ethical standards in all our dealings.</li>\n      <li><strong>Excellence:</strong> We strive for excellence in every aspect of our service.</li>\n      <li><strong>Compassion:</strong> We understand the emotional journey of immigration and provide support throughout the process.</li>\n      <li><strong>Transparency:</strong> We believe in clear communication and keeping our clients informed at every step.</li>\n    </ul>\n  ",
+      "heroCounters": [
+        {
+          "value": "10",
+          "suffix": "K+",
+          "description": "Achieving their global goals"
+        },
+        {
+          "value": "98",
+          "suffix": "%",
+          "description": "Successful visa outcomes"
+        },
+        {
+          "value": "18",
+          "suffix": "+",
+          "description": "Expert guidance"
+        },
+        {
+          "value": "15",
+          "suffix": "+",
+          "description": "Visa services"
+        }
+      ],
+      "heroSpanText": "immigration",
+      "pageSubtitle": "Your Trusted Partner in Immigration Services"
+    },
+    "updated_at": "2025-05-04T07:21:50.527Z"
+  },
+  {
+    "page_id": "home",
+    "data": {
+      "bio": "\n\t\t<p>Modern tools, such as Svelte and Tailwind allow you to easily hand-craft fast and beautiful websites. What’s missing is the ability to <strong>make edits without changing the source code</strong>.</p>\n\t\t<p>With this <a href=\"https://github.com/michael/editable-website\">open-source website template</a>, I want to fill that gap.</p>\n    <p>If you have questions or need any help, contact me.</p>\n\t",
+      "faqs": "\n\t\t<h2>Question 1</h2>\n    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mi lectus, pellentesque nec urna eget, pretium dictum arcu. In rutrum pretium leo, id efficitur nisl ullamcorper sit amet.</p>\n    <h2>Question 2</h2>\n    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mi lectus, pellentesque nec urna eget, pretium dictum arcu. In rutrum pretium leo, id efficitur nisl ullamcorper sit amet.</p>\n\t",
+      "title": "Untitled Neon",
+      "bioTitle": "Hi, I'm Michael — I want your website to be editable.",
+      "counters": [
+        {
+          "value": "10",
+          "suffix": "K+",
+          "description": "Assisting thousands of clients in achieving their global goals."
+        },
+        {
+          "value": "98",
+          "suffix": "%",
+          "description": "Consistently achieving successful visa outcomes."
+        },
+        {
+          "value": "18",
+          "suffix": "+",
+          "description": "Expert guidance throughout your immigration journey."
+        }
+      ],
+      "subtitle": "Building bridges for your global future",
+      "heroImage": "/assets/images/Dy7RgaU9njGoM881DEPes.webp",
+      "aboutBlurb": "We are dedicated to helping individuals and families navigate the complex world of visas and immigration with ease. With years of experience and a commitment to personalized service, our team of experts provides end-to-end support, from initial consultation to visa approval.",
+      "bioPicture": "/images/person-placeholder.jpg",
+      "introStep1": {
+        "label": "THE PROBLEM",
+        "title": "The problem statement",
+        "description": "Describe the problem you are solving in a short sentence."
+      },
+      "introStep2": {
+        "label": "THE DREAM",
+        "title": "This is how it should be.",
+        "description": "Describe why it should be like that."
+      },
+      "introStep3": {
+        "label": "THE REALITY",
+        "title": "A statement why it is not that easy.",
+        "description": "Describe the reality a bit more."
+      },
+      "introStep4": {
+        "label": "THE PROMISE",
+        "title": "Still the solution is worth it.",
+        "description": "And why this is, should be described here."
+      },
+      "testimonials": [
+        {
+          "name": "Jane Doe · jane-doe.org",
+          "text": "“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mi lectus, pellentesque nec urna eget, pretium dictum arcu. In rutrum pretium leo, id efficitur nisl ullamcorper sit amet.”",
+          "image": "/images/person-placeholder.jpg"
+        }
+      ]
+    },
+    "updated_at": "2025-05-04T07:49:05.154Z"
+  }
+]
