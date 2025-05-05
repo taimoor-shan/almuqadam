@@ -117,21 +117,19 @@
 >
   <NotEditable>
     <div class="w-layout-blockcontainer container w-container">
-      <div class="flex items-center relative justify-between">
-        <a href="/" class="brand-wrap w-nav-brand">
+      <div class="flex items-center relative justify-center">
+        <!-- <a href="/" class="brand-wrap w-nav-brand">
           <img
             loading="eager"
             src="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778b72212f759419cce452a_visahub.svg"
             alt="Visahub logo"
             class="brand"
-          /></a
+          />
+
+         <h4 class="text-blue-700"> 509 Real Estate Services LLC</h4>
+          </a
         >
-        <nav class="nav-menu w-nav-menu">
-          <a href="/" class={classNames("nav-link w-nav-link", isActive('/') ? 'w--current' : '')}>Home</a>
-          <a href="/about" class={classNames("nav-link w-nav-link", isActive('/about') ? 'w--current' : '')}>About</a>
-          <a href="/immigration" class={classNames("nav-link w-nav-link", isActive('/immigration') ? 'w--current' : '')}>Immigration</a>
-          <a href="/blog" class={classNames("nav-link w-nav-link", isActive('/blog') ? 'w--current' : '')}>Blog</a>
-        </nav>
+        -->
         {#if $currentUser}
           <button
             on:click={() => (showUserMenu = !showUserMenu)}
@@ -156,17 +154,7 @@
             </svg>
           </button>
         {/if}
-        <div class="cta flex gap-4">
-          <div id="w-node-_63067e08-366b-f93d-ca5a-9cb96c243ffe-2ccf17b1" class="nav-right">
-            <a href="/contact" class={classNames("button-black nav-button w-button", isActive('/contact') ? 'active-button' : '')}>Get started</a>
-          </div>
-          <div
-            id="w-node-_63067e08-366b-f93d-ca5a-9cb96c244005-2ccf17b1"
-            class="menu-button w-nav-button"
-          >
-            <div class="menu-button-icon w-icon-nav-menu"></div>
-          </div>
-        </div>
+       
       </div>
     </div>
   </NotEditable>

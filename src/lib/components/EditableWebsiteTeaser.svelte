@@ -11,7 +11,7 @@
     titleHighlight: 'immigration',
     titleEnd: 'journey?',
     buttonText: 'Schedule a free call',
-    buttonUrl: 'contact.html',
+    buttonUrl: '/contact',
     backgroundImage: 'https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/677922fe8c4e46abad5e3388_vector-05.avif',
     features: [
       {
