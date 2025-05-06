@@ -11,7 +11,7 @@
   {type}
   {size}
   {disabled}
-  styles="font-medium hover:bg-gray-100 focus:ring-gray-100 border-2 border-gray-100 bg-white"
+  styles="bg-blue-700 font-medium hover:bg-blue-800 focus:ring-gray-100 border-1 border-gray-700 text-white hover:text-white rounded-full"
   on:click
 >
   <slot />
