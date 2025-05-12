@@ -474,7 +474,7 @@
       <p><PlainText bind:content={subtitle} /></p>
       <div class="hero-button-list">
         <a href="#contactSec" class="button-gradient w-button">Free Visa Assessment</a>
-        <a href="tel:{phone1}" class="button-secondary-2-outline w-inline-block"
+        <!-- <a href="tel:{phone1}" class="button-secondary-2-outline w-inline-block"
           >
           <Icon
             class="text-blue-600"
@@ -483,7 +483,7 @@
             height="24"
           />
           <div>Let's Talk</div>
-        </a>
+        </a> -->
       </div>
     </div>
   </div>

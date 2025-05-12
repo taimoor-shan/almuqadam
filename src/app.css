@@ -1433,7 +1433,7 @@ figcaption{text-align:center; margin-top:15px;}
   .grid-footer-contact{grid-template-columns:1fr; padding-bottom:15px;}
   .footer-bottom{margin-top:15px;}
   .social-list{grid-column-gap:12px; grid-row-gap:12px;}
-  .hero-section{margin-top:-70px; padding-top:120px;}
+  .hero-section{margin-top:-80px; padding-top:120px;}
   .hero-title-center{font-size:36px; line-height:1.2em; margin-bottom:10px;}
   .button-icon{width:18px; height:18px;}
   .button-secondary-2-outline{padding:12px 26px; font-size:14px; line-height:1.4em;}
