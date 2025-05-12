@@ -344,7 +344,7 @@ textarea.w-input,textarea.w-select{height:auto;}
 .w-nav{z-index:1000; background:#ddd; position:relative;}
 .w-nav:before,.w-nav:after{content:" "; grid-area:1 / 1 / 2 / 2; display:table;}
 .w-nav:after{clear:both;}
-.w-nav-brand{float:left; color:#333; text-decoration:none; position:relative;}
+.w-nav-brand{float:left; color:#333; text-decoration:none; position:relative;display: inline-block;}
 .w-nav-link{vertical-align:top; color:#222; text-align:left; margin-left:auto; margin-right:auto; padding:20px; text-decoration:none; display:inline-block; position:relative;}
 .w-nav-link.w--current{color:#0082f3;}
 .w-nav-menu{float:right; position:relative;}
@@ -637,7 +637,7 @@ figcaption{text-align:center; margin-top:15px;}
 .social-link:hover{background-color:var(--color--primary-1);}
 .social-icon{width:14px; height:14px;}
 .hero-section{margin-top:-130px; padding-top:200px; position:relative; overflow:hidden;}
-.hero-content-center{z-index:2; text-align:center; width:80%; margin-left:auto; margin-right:auto; position:relative;}
+.hero-content-center{z-index:2; text-align:center; width:90%; margin-left:auto; margin-right:auto; position:relative;}
 .hero-title-center{margin-bottom:30px; font-size:74px;}
 .hero-button-list{grid-column-gap:30px; grid-row-gap:15px; flex-flow:wrap; justify-content:center; align-items:center; margin-top:40px; display:flex;}
 .button-icon{flex:none; width:24px; height:24px;}
