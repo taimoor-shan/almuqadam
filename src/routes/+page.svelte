@@ -14,6 +14,8 @@
   import NotEditable from '$lib/components/NotEditable.svelte';
   import RunesCounter from '$lib/components/RunesCounter.svelte';
   import ImmigrationItem from '$lib/components/ImmigrationItem.svelte';
+  import EditableVisaService from '$lib/components/EditableVisaService.svelte';
+  import EditableVisaServices from '$lib/components/EditableVisaServices.svelte';
   import { currentUser, isEditing } from '$lib/stores.js';
   import WebsiteHeader from '$lib/components/WebsiteHeader.svelte';
   import EditableWebsiteTeaser from '$lib/components/EditableWebsiteTeaser.svelte';
@@ -39,10 +41,10 @@
   // --------------------------------------------------------------------------
   // DEFAULT PAGE CONTENT - ADJUST TO YOUR NEEDS
   // --------------------------------------------------------------------------
-  const EMAIL = 'realestate509llc@gmail.com';
+  const EMAIL = 'info@almuqadam.com';
 
   // Can contain spaces but must not contain the + sign
-  const PHONE_NUMBER = '947 277 0723';
+  const PHONE_NUMBER = '+44 7700 900123';
 
   const FAQS_PLACEHOLDER = `
 		<h2>Question 1</h2>
@@ -59,17 +61,17 @@
 
   const TESTIMONIALS_PLACEHOLDER = [
     {
-      text: '"509 Real Estate Services made selling my home so easy! They gave me a fair cash offer and closed quickly. I didn\'t have to worry about repairs or showings. The whole process was smooth and professional."',
+      text: '"Almuqadam made my visa application process so easy! They guided me through every step and handled all the paperwork efficiently. The whole process was smooth and professional."',
       image: '/images/person-placeholder.jpg',
-      name: 'Sarah Johnson · Minneapolis, MN'
+      name: 'Sarah Johnson · Dubai, UAE'
     }
   ];
 
   const COUNTERS_PLACEHOLDER = [
     {
-      value: '100',
+      value: '1000',
       suffix: '+',
-      description: 'Homes bought, renovated, and sold throughout Minnesota.'
+      description: 'Successful visa applications processed worldwide.'
     },
     {
       value: '98',
@@ -79,26 +81,26 @@
     {
       value: '15',
       suffix: '+',
-      description: 'Years of combined real estate experience in our team.'
+      description: 'Years of combined visa consultancy experience in our team.'
     }
   ];
 
   // Default steps data
   const STEPS_PLACEHOLDER = [
     {
-      title: 'Contact Us',
+      title: 'Free Assessment',
       description:
-        "Reach out via our form or phone. Tell us a bit about your property or what you're looking for."
+        "Send us a message or fill out the short form — we’ll review your case and let you know if you qualify, no strings attached."
     },
     {
-      title: 'Get a Fast, Fair Offer',
+      title: 'Documentation Support',
       description:
-        "We'll evaluate your home or situation and provide a no-obligation cash offer—often within 24–48 hours."
+        "We’ll tell you exactly what documents you need, help you prepare them, and make sure everything is in order."
     },
     {
-      title: 'Close on Your Terms',
+      title: 'Submit & Wait with Confidence',
       description:
-        'If you accept, we handle everything. Choose your closing date. No fees, no surprises.'
+        'We guide you through the application process and keep you updated. No guesswork, no stress — just clear steps all the way.'
     }
   ];
 
@@ -122,23 +124,22 @@
     showUserMenu,
     galleryImages,
     galleryTitle,
-    lightboxOpen = false,
-    lightboxIndex = 0,
     contactTitle,
     contactSubtitle,
     officeAddress1,
-    officeAddress2,
     phone1,
-    phone2,
     email,
-    logoText;
+    logoText,
+    visaServices;
 
   // Form fields
-  let name = '';
+  let fullName = '';
   let emailInput = '';
   let phone = '';
+  let currentVisaStatus = '';
+  let visaNeeded = '';
   let message = '';
-  let interested_in = '';
+  let contactConsent = false;
   let isSubmitting = false;
 
   // Notification state
@@ -154,12 +155,12 @@
 
   function initOrReset() {
     $currentUser = data.currentUser;
-    title = data.page?.title || '509 Real Estate Services LLC';
-    logoText = data.page?.logoText || '509 Real Estate Services LLC';
-    subtitle = data.page?.subtitle || 'We Buy, Renovate, and Sell Homes in Minnesota';
+    title = data.page?.title || 'Almuqadam';
+    logoText = data.page?.logoText || 'Almuqadam';
+    subtitle = data.page?.subtitle || 'We Assist You in Your Global Journey';
     aboutBlurb =
       data.page?.aboutBlurb ||
-      'We are dedicated to helping homeowners in Minnesota sell their properties quickly and hassle-free. Whether you need to sell your home fast or are looking for a beautifully renovated property, our team of real estate experts provides personalized service to meet your needs.';
+      'We are UK-based and here to help you get your visit visa without the hassle. We work mostly with students and professionals who want to travel to Europe, the US, or Australia. There is no jargon, no false hopes—just real help from someone who’s done it hundreds of times.';
     faqs = data.page?.faqs || FAQS_PLACEHOLDER;
 
     // Make a deep copy
@@ -205,11 +206,11 @@
     heroImage = data.page?.heroImage || '/images/ch_hero.jpeg';
     whatWeDoTitle = data.page?.whatWeDoTitle || 'What We Do';
     bioPicture = data.page?.bioPicture || '/images/person-placeholder.jpg';
-    bioTitle = data.page?.bioTitle || "Hi, I'm Michael — I want your website to be editable.";
+    bioTitle = data.page?.bioTitle || "Hi, I'm Almuqadam — I want your website to be editable.";
     bio = data.page?.bio || BIO_PLACEHOLDER;
     steps = JSON.parse(JSON.stringify(data.page?.steps || STEPS_PLACEHOLDER));
-    stepsTitle = data.page?.stepsTitle || 'How It Works – Just 3 Simple Steps';
-    galleryTitle = data.page?.galleryTitle || 'Our Property Gallery';
+    stepsTitle = data.page?.stepsTitle || 'Our Visa Process – Just 3 Simple Steps';
+    galleryTitle = data.page?.galleryTitle || 'Visa Destinations Gallery';
     galleryImages = JSON.parse(
       JSON.stringify(
         data.page?.galleryImages || [
@@ -240,18 +241,41 @@
     // Contact section
     contactTitle = data.page?.contactTitle || 'Contact Us';
     contactSubtitle = data.page?.contactSubtitle || 'Get in touch with our team';
-    officeAddress1 = data.page?.officeAddress1 || '8900 penn ave ste 200 Bloomington, MN 55431';
-    officeAddress2 = data.page?.officeAddress2 || '418 N Main st floor 2 Royal oak, MI 48067';
-    phone1 = data.page?.phone1 || '947 277 0723';
-    phone2 = data.page?.phone2 || '313 784 3610';
-    email = data.page?.email || '509realestateservicesllc@gmail.com';
+    officeAddress1 = data.page?.officeAddress1 || '19 Ashwood Close, Greater London, United Kingdom';
+
+    phone1 = data.page?.phone1 || '+44 7700 900123';
+    email = data.page?.email || 'info@almuqadam.com';
+
+    // Initialize visa services
+    visaServices = data.page?.visaServices || [
+      {
+        image: "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677e7240e3e34d7fa6783b18_service-01.avif",
+        title: "Schengen Visa",
+        description: "Travel across 25+ European countries with one visa. Perfect for tourism, business trips, or visiting family.",
+        link: "immigration/visa-application-assistance.html"
+      },
+      {
+        image: "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677e724aed0c2bd50318aff5_service-02.avif",
+        title: "USA Visit Visa",
+        description: "Heading to the States? We guide you through the tricky B1/B2 process and help avoid common pitfalls.",
+        link: "immigration/permanent-residency-solutions.html"
+      },
+      {
+        image: "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677e72530d4acb3027e0ab80_service-03.avif",
+        title: "Australia Visit Visa",
+        description: "From holidays to short business trips, we'll help you apply with confidence and avoid delays.",
+        link: "immigration/citizenship-applications.html"
+      }
+    ];
 
     // Reset form fields
-    name = '';
+    fullName = '';
     emailInput = '';
     phone = '';
+    currentVisaStatus = '';
+    visaNeeded = '';
     message = '';
-    interested_in = '';
+    contactConsent = false;
     isSubmitting = false;
     showNotification = false;
 
@@ -334,11 +358,13 @@
 
       // Prepare template parameters for EmailJS
       const templateParams = {
-        from_name: name,
+        from_name: fullName,
         from_email: emailInput,
         phone: phone || 'Not provided',
-        interested_in: interested_in || 'Not specified',
-        message: message,
+        current_visa_status: currentVisaStatus || 'Not provided',
+        visa_needed: visaNeeded,
+        message: message || 'No message provided',
+        contact_consent: contactConsent ? 'Yes' : 'No',
         to_email: EMAIL
       };
 
@@ -352,11 +378,13 @@
       console.log('Email sent successfully:', result.text);
 
       // Reset form fields
-      name = '';
+      fullName = '';
       emailInput = '';
       phone = '';
+      currentVisaStatus = '';
+      visaNeeded = '';
       message = '';
-      interested_in = '';
+      contactConsent = false;
 
       // Show success notification
       notificationMessage = 'Thank you! Your message has been received. We\'ll get back to you shortly.';
@@ -379,6 +407,9 @@
     try {
       // Only persist the start page when logged in as an admin
       if ($currentUser) {
+        // Make a deep copy of visaServices to ensure all changes are captured
+        const visaServicesCopy = JSON.parse(JSON.stringify(visaServices));
+
         await fetchJSON('POST', '/api/save-page', {
           pageId: 'home',
           page: {
@@ -406,10 +437,9 @@
             contactTitle,
             contactSubtitle,
             officeAddress1,
-            officeAddress2,
             phone1,
-            phone2,
-            email
+            email,
+            visaServices: visaServicesCopy
           }
         });
       }
@@ -424,13 +454,13 @@
 </script>
 
 <svelte:head>
-  <title>509 Real Estate Services LLC | Minnesota Home Buyers & Sellers</title>
+  <title>Almuqadam - Explore Beyond the boundries | Visit Visa Consultancy</title>
   <meta
     name="description"
-    content="We buy homes in Minnesota, renovate them, and sell them. We also sell homes for larger companies. Get a free offer for your property today!"
+    content="Expert visa consultancy services to help you explore the world. We specialize in visit visas with high approval rates and personalized guidance."
   />
-  <link rel="alternate" hreflang="en" href="https://509realestate.com" />
-  <link rel="canonical" href="https://509realestate.com" />
+  <link rel="alternate" hreflang="en" href="https://almuqadam.com" />
+  <link rel="canonical" href="https://almuqadam.com" />
 </svelte:head>
 <WebsiteHeader bind:showUserMenu on:cancel={initOrReset} on:save={savePage}>
   <PrimaryButton on:click={toggleEdit}>Edit page</PrimaryButton>
@@ -440,17 +470,17 @@
 <section class="hero-section">
   <div class="w-layout-blockcontainer container-medium w-container">
     <div class="hero-content-center">
-      <h6 class="text-blue-700 md:text-2xl"><PlainText bind:content={logoText} /></h6>
       <h1 class="hero-title-center"><PlainText bind:content={title} /></h1>
       <p><PlainText bind:content={subtitle} /></p>
       <div class="hero-button-list">
-        <a href="#contactSec" class="button-gradient w-button">Get a Free Offer</a>
+        <a href="#contactSec" class="button-gradient w-button">Free Visa Assessment</a>
         <a href="tel:{phone1}" class="button-secondary-2-outline w-inline-block"
-          ><img
-            src="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778ce50f6ef7ca3e10af73f_icon-03.svg"
-            loading="eager"
-            alt="Icon 03"
-            class="button-icon"
+          >
+          <Icon
+            class="text-blue-600"
+            icon="carbon:phone"
+            width="24"
+            height="24"
           />
           <div>Let's Talk</div>
         </a>
@@ -473,10 +503,12 @@
 
 <!-- about -->
 <section class="about-section section-spacing-bottom">
-  <div class="container w-container">
-    <div class="flex flex-col md:flex-row gap-6 justify-between">
-      <div class="w-full md:w-[60%]">
+  <div class="w-layout-blockcontainer container w-container">
+      <div class="about-content-right">
+      <span class="text-primary-1">About Us</span>
+
         <div>
+
           <h2 class="about-title-right"><PlainText bind:content={aboutBlurb} /></h2>
         </div>
         <div class="grid-about-counter">
@@ -498,30 +530,25 @@
           {/if}
         </div>
       </div>
-      <div class="w-full md:w-[30%]">
-        <div class="immigration-item-light w-inline-block border border-blue-600">
-          <h4 class="">
-            <PlainText bind:content={whatWeDoTitle} />
-          </h4>
-          <span class="line w-[1px] h-[100%] bg-blue-600"></span>
-          <div role="list" class="flex flex-col">
-            <ImmigrationItem
-              service={{
-                title: 'We Buy Homes—Any Condition'
-              }}
-            />
 
-            <ImmigrationItem
-              service={{
-                title: 'We Renovate & Add Value'
-              }}
-            />
+  </div>
+  <div data-w-id="1bf37b48-b442-9317-453e-3e872ec208bd" class="vector-01"><img src="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778d61303bfc2abf8a13ab9_vector-01.avif" loading="lazy" sizes="(max-width: 628px) 100vw, 628px" srcset="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778d61303bfc2abf8a13ab9_vector-01-p-500.png 500w, https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778d61303bfc2abf8a13ab9_vector-01.avif 628w" alt="Vector 01" class="vector-01-image" /></div>
 
-            <ImmigrationItem
-              service={{
-                title: 'We Sell Homes for Big Firms'
-              }}
-            />
+</section>
+
+<!-- Services -->
+<section class="immigration-section">
+  <div class="w-layout-blockcontainer container w-container">
+    <div data-w-id="943f276d-10dd-ea22-23fd-05ec45819578" style="" class="immigration-wrap">
+      <div class="section-title immigration-section-title">
+      <span class="text-primary-1">Our Services</span>
+
+        <h2>What We Offer</h2>
+      </div>
+      <div class="">
+        <div class="">
+          <div class="">
+            <EditableVisaServices bind:services={visaServices} />
           </div>
         </div>
       </div>
@@ -532,6 +559,7 @@
 <section class="step-section section-spacing">
   <div class="w-layout-blockcontainer container w-container">
     <div data-w-id="29680200-4a43-3181-792e-694af7a13e5b" class="section-title text-center">
+      <span class="text-primary-1">How It Works</span>
       <h2><PlainText bind:content={stepsTitle} /></h2>
     </div>
   </div>
@@ -569,13 +597,8 @@
     </div>
   </div>
 </section>
-<!-- Bento Gallery -->
-<BentoGallery
-  bind:images={galleryImages}
-  bind:title={galleryTitle}
-  bind:lightboxOpen
-  bind:lightboxIndex
-/>
+
+
 
 <!-- FAQs -->
 <!-- <div class="bg-white">
@@ -590,251 +613,208 @@
 <!-- Contact Section -->
 <section id="contactSec" class="section-spacing" style="padding-top: 0;">
   <div class="w-layout-blockcontainer container w-container">
-    <div class="section-title text-center mb-12">
-      <h2 class=""><PlainText bind:content={contactTitle} /></h2>
-      <p class="text-xl mt-4"><PlainText bind:content={contactSubtitle} /></p>
-    </div>
+
 
     <div class="grid-contact-split">
+
       <!-- Contact Information -->
-      <div class="">
-        <div class="gap-12 flex flex-col justify-between">
-          <div class="contact-item">
-            <h3 class="text-blue-600 text-xl font-semibold mb-3">Office Locations</h3>
-           <div class="flex flex-col md:flex-row gap-4">
-            <div class="w-full md:w-1/2">
-              <div class="flex items-start">
-                <img
-                  src="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778c8c269cc7a0553111f1e_icon-02.svg"
-                  loading="eager"
-                  alt="Location Icon"
-                  class="footer-address-icon mr-2"
-                />
-                <div>
-                  <p class="font-semibold">Business address</p>
-                  {#if $isEditing}
-                    <p><RichText bind:content={officeAddress1} /></p>
-                  {:else}
-                    <p>
-                      <a
-                        href={getGoogleMapsUrl(officeAddress1)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="hover:text-blue-600 transition-colors"
-                      >
-                        {officeAddress1}
-                      </a>
-                    </p>
-                  {/if}
-                </div>
-              </div>
+      <div class="contact-info">
+        <div class="section-title text-start mb-12">
+          <h2 class=""><PlainText bind:content={contactTitle} /></h2>
+          <p class="text-xl mt-4"><PlainText bind:content={contactSubtitle} /></p>
+        </div>
+        <div class="phone">
+          <h6 class="text-blue-600 mb-3">Phone</h6>
+          {#if $isEditing}
+            <div class="flex gap-2">
+              <Icon
+                class="text-blue-600"
+                icon="carbon:phone"
+                width="24"
+                height="24"
+              />
+              <PlainText bind:content={phone1} />
             </div>
-            <div class="w-full md:w-1/2">
-              <div class="flex items-start">
-                <img
-                  src="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778c8c269cc7a0553111f1e_icon-02.svg"
-                  loading="eager"
-                  alt="Location Icon"
-                  class="footer-address-icon mr-2"
+          {:else}
+            <a href="tel:{phone1}" class="hover:text-blue-600 transition-colors flex gap-2">
+              <Icon
+                class="text-blue-600"
+                icon="carbon:phone"
+                width="24"
+                height="24"
+              />
+              {phone1}
+            </a>
+          {/if}
+        </div>
+
+           <div class="email py-6">
+            <h6 class="text-blue-600 mb-3">Email</h6>
+            {#if $isEditing}
+              <div class="flex gap-2">
+                <Icon
+                  class="text-blue-600"
+                  icon="ic:baseline-email"
+                  width="24"
+                  height="24"
                 />
-                <div>
-                  <p class="font-semibold">Mailing office address</p>
-                  {#if $isEditing}
-                    <p><RichText bind:content={officeAddress2} /></p>
-                  {:else}
-                    <p>
-                      <a
-                        href={getGoogleMapsUrl(officeAddress2)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="hover:text-blue-600 transition-colors"
-                      >
-                        {officeAddress2}
-                      </a>
-                    </p>
-                  {/if}
-                </div>
+                <PlainText bind:content={email} />
               </div>
-            </div>
+            {:else}
+              <a href="mailto:{email}" class="hover:text-blue-600 transition-colors flex gap-2">
+                <Icon icon="mdi:envelope-outline" width="24" height="24" />
+                {email}
+              </a>
+            {/if}
            </div>
-          </div>
-          <div class="contact-item">
-            <div class="">
-              <h3 class="text-blue-600 text-xl font-semibold mb-3">Phone</h3>
-              <div class="flex items-center mb-3">
-                {#if $isEditing}
-                  <div class="flex gap-2">
-                    <Icon
-                      class="text-blue-600"
-                      icon="proicons:phone"
-                      width="24"
-                      height="24"
-                    />
-                    <PlainText bind:content={phone1} />
-                  </div>
-                {:else}
-                  <a href="tel:{phone1}" class="hover:text-blue-600 transition-colors flex gap-2">
-                    <Icon
-                      class="text-blue-600"
-                      icon="proicons:phone"
-                      width="24"
-                      height="24"
-                    />
-                    {phone1}
-                  </a>
-                {/if}
-              </div>
-              <div class="flex items-center">
-                {#if $isEditing}
-                  <div class="flex gap-2">
-                    <Icon
-                      class="text-blue-600"
-                      icon="carbon:phone"
-                      width="24"
-                      height="24"
-                    />
-                    <PlainText bind:content={phone2} />
-                  </div>
-                {:else}
-                  <a href="tel:{phone2}" class="hover:text-blue-600 transition-colors flex gap-2">
-                    <Icon
-                      class="text-blue-600"
-                      icon="carbon:phone"
-                      width="24"
-                      height="24"
-                    />
-                    {phone2}
-                  </a>
-                {/if}
-              </div>
-            </div>
+
+<div class="address">
+  <h6 class="text-blue-600 mb-3">Address</h6>
+  {#if $isEditing}
+    <p><RichText bind:content={officeAddress1} /></p>
+  {:else}
+    <p>
+      <a
+        href={getGoogleMapsUrl(officeAddress1)}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:text-blue-600 transition-colors flex gap-2"
+      >
+      <Icon icon="akar-icons:location" width="24" height="24" />
+        {officeAddress1}
+      </a>
+    </p>
+  {/if}
+</div>
+
+
 
             <div>
-              <h3 class="text-blue-600 text-xl font-semibold mb-3">Email</h3>
-              <div class="flex items-center">
-                {#if $isEditing}
-                  <div class="flex gap-2">
-                    <Icon
-                      class="text-blue-600"
-                      icon="ic:baseline-email"
-                      width="24"
-                      height="24"
-                    />
-                    <PlainText bind:content={email} />
-                  </div>
-                {:else}
-                  <a href="mailto:{email}" class="hover:text-blue-600 transition-colors flex gap-2">
-                    <Icon
-                      class="text-blue-600"
-                      icon="ic:baseline-email"
-                      width="24"
-                      height="24"
-                    />
-                    {email}
-                  </a>
-                {/if}
-              </div>
+
             </div>
-          </div>
+
         </div>
-      </div>
+
 
       <!-- Contact Form -->
       <div class="contact-item">
-        <h2 class="text-2xl font-bold mb-6 text-blue-600">Get a Free Offer</h2>
+        <h6 class=" mb-6 text-blue-600">Get a Free Visa Assessment</h6>
 
         <form on:submit|preventDefault={handleSubmit} class="w-form">
           <div class="grid-contact-form-inner">
             <div>
-              <label for="name" class="sr-only">Name</label>
+              <label for="fullName" class="sr-only">Full Name</label>
               <input
                 type="text"
                 class="form-input w-input"
                 maxlength="256"
-                name="name"
-                id="name"
-                placeholder="Your name"
-                aria-label="Name"
+                name="fullName"
+                id="fullName"
+                placeholder="Full Name"
+                aria-label="Full Name"
                 required
-                bind:value={name}
+                bind:value={fullName}
               />
             </div>
             <div>
-              <label for="phone" class="sr-only">Phone</label>
-              <input
-                type="tel"
-                class="form-input w-input"
-                maxlength="256"
-                name="phone"
-                id="phone"
-                placeholder="Your phone number"
-                aria-label="Phone"
-                bind:value={phone}
-              />
-            </div>
-          </div>
-          <div class="grid-contact-form-inner">
-            <div class="">
-              <label for="email" class="sr-only">Email</label>
+              <label for="email" class="sr-only">Email Address</label>
               <input
                 type="email"
                 class="form-input w-input"
                 maxlength="256"
                 name="email"
                 id="email"
-                placeholder="Your email"
-                aria-label="Email"
+                placeholder="Email Address"
+                aria-label="Email Address"
                 required
                 bind:value={emailInput}
               />
             </div>
-            <div class="">
-              <label for="interested_in" class="sr-only">Interested In?</label>
+          </div>
+          <div class="grid-contact-form-inner mb-0">
+            <div>
+              <label for="phone" class="sr-only">Phone Number</label>
+              <input
+                type="tel"
+                class="form-input w-input"
+                maxlength="256"
+                name="phone"
+                id="phone"
+                placeholder="Phone Number"
+                aria-label="Phone Number"
+                bind:value={phone}
+              />
+            </div>
+            <div>
+              <label for="currentVisaStatus" class="sr-only">Current Visa Status</label>
               <select
                 class="form-input w-input"
-                name="interested_in"
-                id="interested_in"
-                aria-label="Interested In"
-                required
-                bind:value={interested_in}>
-                <option value="" disabled selected>Interested In?</option>
-                <option value="buy">Buying</option>
-                <option value="sell">Selling</option>
+                name="currentVisaStatus"
+                id="currentVisaStatus"
+                aria-label="Current Visa Status"
+                bind:value={currentVisaStatus}>
+                <option value="" disabled selected>Current Visa Status</option>
+                <option value="student">Student</option>
+                <option value="work">Work Permit</option>
+                <option value="tourist">Tourist</option>
+                <option value="none">None</option>
+                <option value="other">Other</option>
               </select>
             </div>
           </div>
-
-          <div class="">
-            <div class="mb-5">
-              <label for="message" class="sr-only">Message</label>
-              <textarea
-                class="form-input form-textarea w-input"
-                maxlength="5000"
-                name="message"
-                id="message"
-                placeholder="How can we help you?"
-                aria-label="Message"
-                required
-                bind:value={message}
-              ></textarea>
-            </div>
-
-            <button type="submit" class="button-gradient w-button" disabled={isSubmitting}>
-              {isSubmitting ? 'Sending...' : 'Send Message'}
-            </button>
+          <div class="mb-4">
+            <label for="visaNeeded" class="sr-only">Which visa do you need?</label>
+            <select
+              class="form-input w-input"
+              name="visaNeeded"
+              id="visaNeeded"
+              aria-label="Which visa do you need?"
+              required
+              bind:value={visaNeeded}>
+              <option value="" disabled selected>Which visa do you need?</option>
+              <option value="schengen">Schengen</option>
+              <option value="usa">USA</option>
+              <option value="australia">Australia</option>
+              <option value="other">Other</option>
+            </select>
           </div>
+
+          <div class="mb-5">
+            <label for="message" class="sr-only">Short Message</label>
+            <textarea
+              class="form-input form-textarea w-input"
+              maxlength="5000"
+              name="message"
+              id="message"
+              placeholder="Short Message (optional)"
+              aria-label="Short Message"
+              bind:value={message}
+            ></textarea>
+          </div>
+
+          <div class="mb-5">
+            <label class="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="contactConsent"
+                id="contactConsent"
+                required
+                bind:checked={contactConsent}
+              />
+              <span>I agree to be contacted for visa assistance.</span>
+            </label>
+          </div>
+
+          <button type="submit" class="button-gradient w-button" disabled={isSubmitting}>
+            {isSubmitting ? 'Sending...' : 'Send Message'}
+          </button>
         </form>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Bento Lightbox -->
-<Lightbox
-  bind:images={galleryImages}
-  bind:currentIndex={lightboxIndex}
-  bind:isOpen={lightboxOpen}
-/>
+
 
 <Footer counter="/" />
 

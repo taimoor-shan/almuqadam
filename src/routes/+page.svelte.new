@@ -1,0 +1,449 @@
+<script>
+  import PlainText from '$lib/components/PlainText.svelte';
+  import RichText from '$lib/components/RichText.svelte';
+  import { fetchJSON } from '$lib/util';
+  import PrimaryButton from '$lib/components/PrimaryButton.svelte';
+  import SecondaryButton from '$lib/components/SecondaryButton.svelte';
+  import LoginMenu from '$lib/components/LoginMenu.svelte';
+  import ArticleTeaser from '$lib/components/ArticleTeaser.svelte';
+  import Testimonial from '$lib/components/Testimonial.svelte';
+  import Counter from '$lib/components/Counter.svelte';
+  import IntroStep from '$lib/components/IntroStep.svelte';
+  import Footer from '$lib/components/Footer.svelte';
+  import Image from '$lib/components/Image.svelte';
+  import NotEditable from '$lib/components/NotEditable.svelte';
+  import RunesCounter from '$lib/components/RunesCounter.svelte';
+  import ImmigrationItem from '$lib/components/ImmigrationItem.svelte';
+  import EditableVisaService from '$lib/components/EditableVisaService.svelte';
+  import { currentUser, isEditing } from '$lib/stores.js';
+  import WebsiteHeader from '$lib/components/WebsiteHeader.svelte';
+  import EditableWebsiteTeaser from '$lib/components/EditableWebsiteTeaser.svelte';
+  import BentoGallery from '$lib/components/BentoGallery.svelte';
+  import Lightbox from '$lib/components/Lightbox.svelte';
+  import Notification from '$lib/components/Notification.svelte';
+  import emailjs from '@emailjs/browser';
+
+  import Icon from '@iconify/svelte';
+
+  // Import EmailJS environment variables
+  import {
+    PUBLIC_EMAILJS_SERVICE_ID,
+    PUBLIC_EMAILJS_TEMPLATE_ID,
+    PUBLIC_EMAILJS_PUBLIC_KEY
+  } from '$env/static/public';
+
+  // Initialize EmailJS
+  emailjs.init(PUBLIC_EMAILJS_PUBLIC_KEY);
+
+  export let data;
+
+  // --------------------------------------------------------------------------
+  // DEFAULT PAGE CONTENT - ADJUST TO YOUR NEEDS
+  // --------------------------------------------------------------------------
+  const EMAIL = 'info@almuqadam.com';
+
+  // Can contain spaces but must not contain the + sign
+  const PHONE_NUMBER = '0044 747 277 0723';
+
+  const FAQS_PLACEHOLDER = `
+		<h2>Question 1</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mi lectus, pellentesque nec urna eget, pretium dictum arcu. In rutrum pretium leo, id efficitur nisl ullamcorper sit amet.</p>
+    <h2>Question 2</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mi lectus, pellentesque nec urna eget, pretium dictum arcu. In rutrum pretium leo, id efficitur nisl ullamcorper sit amet.</p>
+	`;
+
+  const BIO_PLACEHOLDER = `
+		<p>Modern tools, such as Svelte and Tailwind allow you to easily hand-craft fast and beautiful websites. What's missing is the ability to <strong>make edits without changing the source code</strong>.</p>
+		<p>With this <a href="https://github.com/michael/editable-website">open-source website template</a>, I want to fill that gap.</p>
+    <p>If you have questions or need any help, contact me.</p>
+	`;
+
+  const TESTIMONIALS_PLACEHOLDER = [
+    {
+      text: '"Almuqadam made my visa application process so easy! They guided me through every step and handled all the paperwork efficiently. The whole process was smooth and professional."',
+      image: '/images/person-placeholder.jpg',
+      name: 'Sarah Johnson · Dubai, UAE'
+    }
+  ];
+
+  const COUNTERS_PLACEHOLDER = [
+    {
+      value: '1000',
+      suffix: '+',
+      description: 'Successful visa applications processed worldwide.'
+    },
+    {
+      value: '98',
+      suffix: '%',
+      description: 'Client satisfaction rate with our services.'
+    },
+    {
+      value: '15',
+      suffix: '+',
+      description: 'Years of combined visa consultancy experience in our team.'
+    }
+  ];
+
+  // Default steps data
+  const STEPS_PLACEHOLDER = [
+    {
+      title: 'Free Assessment',
+      description:
+        "Send us a message or fill out the short form — we'll review your case and let you know if you qualify, no strings attached."
+    },
+    {
+      title: 'Documentation Support',
+      description:
+        "We'll tell you exactly what documents you need, help you prepare them, and make sure everything is in order."
+    },
+    {
+      title: 'Submit & Wait with Confidence',
+      description:
+        'We guide you through the application process and keep you updated. No guesswork, no stress — just clear steps all the way.'
+    }
+  ];
+
+  let title,
+    subtitle,
+    aboutBlurb,
+    steps,
+    stepsTitle,
+    testimonials,
+    counters,
+    faqs,
+    introStep1,
+    introStep2,
+    introStep3,
+    introStep4,
+    bioTitle,
+    bioPicture,
+    bio,
+    heroImage,
+    whatWeDoTitle,
+    showUserMenu,
+    galleryImages,
+    galleryTitle,
+    lightboxOpen = false,
+    lightboxIndex = 0,
+    contactTitle,
+    contactSubtitle,
+    officeAddress1,
+    officeAddress2,
+    phone1,
+    phone2,
+    email,
+    logoText,
+    visaServices;
+
+  // Form fields
+  let name = '';
+  let emailInput = '';
+  let phone = '';
+  let message = '';
+  let interested_in = '';
+  let isSubmitting = false;
+
+  // Notification state
+  let showNotification = false;
+  let notificationMessage = '';
+
+  // Helper function to create Google Maps URL from address
+  function getGoogleMapsUrl(address) {
+    // Encode the address for use in a URL
+    const encodedAddress = encodeURIComponent(address);
+    return `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+  }
+
+  function initOrReset() {
+    $currentUser = data.currentUser;
+    title = data.page?.title || 'Almuqadam';
+    logoText = data.page?.logoText || 'Almuqadam';
+    subtitle = data.page?.subtitle || 'We Assist You in Your Global Journey';
+    aboutBlurb =
+      data.page?.aboutBlurb ||
+      'We are UK-based and here to help you get your visit visa without the hassle. We work mostly with students and professionals who want to travel to Europe, the US, or Australia. There is no jargon, no false hopes—just real help from someone who's done it hundreds of times.';
+    faqs = data.page?.faqs || FAQS_PLACEHOLDER;
+
+    // Make a deep copy
+    testimonials = JSON.parse(JSON.stringify(data.page?.testimonials || TESTIMONIALS_PLACEHOLDER));
+    counters = JSON.parse(JSON.stringify(data.page?.counters || COUNTERS_PLACEHOLDER));
+
+    introStep1 = JSON.parse(
+      JSON.stringify(
+        data.page?.introStep1 || {
+          label: 'THE PROBLEM',
+          title: 'The problem statement',
+          description: 'Describe the problem you are solving in a short sentence.'
+        }
+      )
+    );
+    introStep2 = JSON.parse(
+      JSON.stringify(
+        data.page?.introStep2 || {
+          label: 'THE DREAM',
+          title: 'This is how it should be.',
+          description: 'Describe why it should be like that.'
+        }
+      )
+    );
+    introStep3 = JSON.parse(
+      JSON.stringify(
+        data.page?.introStep3 || {
+          label: 'THE REALITY',
+          title: 'A statement why it is not that easy.',
+          description: 'Describe the reality a bit more.'
+        }
+      )
+    );
+    introStep4 = JSON.parse(
+      JSON.stringify(
+        data.page?.introStep4 || {
+          label: 'THE PROMISE',
+          title: 'Still the solution is worth it.',
+          description: 'And why this is, should be described here.'
+        }
+      )
+    );
+    heroImage = data.page?.heroImage || '/images/ch_hero.jpeg';
+    whatWeDoTitle = data.page?.whatWeDoTitle || 'What We Do';
+    bioPicture = data.page?.bioPicture || '/images/person-placeholder.jpg';
+    bioTitle = data.page?.bioTitle || "Hi, I'm Almuqadam — I want your website to be editable.";
+    bio = data.page?.bio || BIO_PLACEHOLDER;
+    steps = JSON.parse(JSON.stringify(data.page?.steps || STEPS_PLACEHOLDER));
+    stepsTitle = data.page?.stepsTitle || 'Our Visa Process – Just 3 Simple Steps';
+    galleryTitle = data.page?.galleryTitle || 'Visa Destinations Gallery';
+    galleryImages = JSON.parse(
+      JSON.stringify(
+        data.page?.galleryImages || [
+          {
+            src: '/images/person-placeholder.jpg',
+            alt: 'Gallery image 1'
+          },
+          {
+            src: '/images/person-placeholder.jpg',
+            alt: 'Gallery image 2'
+          },
+          {
+            src: '/images/person-placeholder.jpg',
+            alt: 'Gallery image 3'
+          },
+          {
+            src: '/images/person-placeholder.jpg',
+            alt: 'Gallery image 4'
+          },
+          {
+            src: '/images/person-placeholder.jpg',
+            alt: 'Gallery image 5'
+          }
+        ]
+      )
+    );
+
+    // Contact section
+    contactTitle = data.page?.contactTitle || 'Contact Us';
+    contactSubtitle = data.page?.contactSubtitle || 'Get in touch with our team';
+    officeAddress1 = data.page?.officeAddress1 || 'Office 302, Al Safa Tower, Sheikh Zayed Road, Dubai, UAE';
+    officeAddress2 = data.page?.officeAddress2 || 'Suite 205, Business Bay, Downtown Dubai, UAE';
+    phone1 = data.page?.phone1 || '0044 747 277 0723';
+    phone2 = data.page?.phone2 || '00971501234567';
+    email = data.page?.email || 'info@almuqadam.com';
+
+    // Initialize visa services
+    visaServices = data.page?.visaServices || [
+      {
+        image: "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677e7240e3e34d7fa6783b18_service-01.avif",
+        title: "Schengen Visa",
+        description: "Travel across 25+ European countries with one visa. Perfect for tourism, business trips, or visiting family.",
+        link: "immigration/visa-application-assistance.html"
+      },
+      {
+        image: "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677e724aed0c2bd50318aff5_service-02.avif",
+        title: "USA Visit Visa",
+        description: "Heading to the States? We guide you through the tricky B1/B2 process and help avoid common pitfalls.",
+        link: "immigration/permanent-residency-solutions.html"
+      },
+      {
+        image: "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677e72530d4acb3027e0ab80_service-03.avif",
+        title: "Australia Visit Visa",
+        description: "From holidays to short business trips, we'll help you apply with confidence and avoid delays.",
+        link: "immigration/citizenship-applications.html"
+      }
+    ];
+
+    // Reset form fields
+    name = '';
+    emailInput = '';
+    phone = '';
+    message = '';
+    interested_in = '';
+    isSubmitting = false;
+    showNotification = false;
+
+    $isEditing = false;
+  }
+
+  // --------------------------------------------------------------------------
+  // Page logic
+  // --------------------------------------------------------------------------
+
+  function toggleEdit() {
+    $isEditing = true;
+    showUserMenu = false;
+  }
+
+  function addTestimonial() {
+    testimonials.push({
+      text: '"Add a quote text here"',
+      image: '/images/person-placeholder.jpg',
+      name: 'Firstname Lastname · example.com'
+    });
+    testimonials = testimonials; // trigger update
+  }
+
+  function deleteTestimonial(index) {
+    testimonials.splice(index, 1);
+    testimonials = testimonials; // trigger update
+  }
+
+  function moveTestimonial(index, direction) {
+    let toIndex;
+    if (direction === 'up' && index > 0) {
+      toIndex = index - 1;
+    } else if (direction === 'down' && index < testimonials.length - 1) {
+      toIndex = index + 1;
+    } else {
+      return; // operation not possible
+    }
+    // Remove item from original position
+    const element = testimonials.splice(index, 1)[0];
+    // Insert at new position
+    testimonials.splice(toIndex, 0, element);
+    testimonials = testimonials; // trigger update
+  }
+
+  function addCounter() {
+    counters.push({
+      value: '0',
+      suffix: '+',
+      description: 'Add counter description here'
+    });
+    counters = counters; // trigger update
+  }
+
+  function deleteCounter(index) {
+    counters.splice(index, 1);
+    counters = counters; // trigger update
+  }
+
+  function moveCounter(index, direction) {
+    let toIndex;
+    if (direction === 'up' && index > 0) {
+      toIndex = index - 1;
+    } else if (direction === 'down' && index < counters.length - 1) {
+      toIndex = index + 1;
+    } else {
+      return; // operation not possible
+    }
+    // Remove item from original position
+    const element = counters.splice(index, 1)[0];
+    // Insert at new position
+    counters.splice(toIndex, 0, element);
+    counters = counters; // trigger update
+  }
+
+  async function handleSubmit() {
+    try {
+      // Set loading state
+      isSubmitting = true;
+
+      // Prepare template parameters for EmailJS
+      const templateParams = {
+        from_name: name,
+        from_email: emailInput,
+        phone: phone || 'Not provided',
+        interested_in: interested_in || 'Not specified',
+        message: message,
+        to_email: EMAIL
+      };
+
+      // Send email using EmailJS directly from the client
+      const result = await emailjs.send(
+        PUBLIC_EMAILJS_SERVICE_ID,
+        PUBLIC_EMAILJS_TEMPLATE_ID,
+        templateParams
+      );
+
+      console.log('Email sent successfully:', result.text);
+
+      // Reset form fields
+      name = '';
+      emailInput = '';
+      phone = '';
+      message = '';
+      interested_in = '';
+
+      // Show success notification
+      notificationMessage = 'Thank you! Your message has been received. We\'ll get back to you shortly.';
+      showNotification = true;
+
+      // Notification will auto-hide after the duration set in the component
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      notificationMessage = 'There was an error sending your message. Please try again or contact us directly by phone.';
+      showNotification = true;
+    } finally {
+      // Reset loading state
+      isSubmitting = false;
+    }
+  }
+
+  // No need for event handlers anymore, we're using direct binding
+
+  async function savePage() {
+    try {
+      // Only persist the start page when logged in as an admin
+      if ($currentUser) {
+        await fetchJSON('POST', '/api/save-page', {
+          pageId: 'home',
+          page: {
+            title,
+            logoText,
+            subtitle,
+            aboutBlurb,
+            faqs,
+            testimonials,
+            counters,
+            introStep1,
+            introStep2,
+            introStep3,
+            introStep4,
+            bioPicture,
+            bioTitle,
+            bio,
+            heroImage,
+            whatWeDoTitle,
+            steps,
+            stepsTitle,
+            galleryImages,
+            galleryTitle,
+            // Contact section
+            contactTitle,
+            contactSubtitle,
+            officeAddress1,
+            officeAddress2,
+            phone1,
+            phone2,
+            email,
+            visaServices
+          }
+        });
+      }
+      $isEditing = false;
+    } catch (err) {
+      console.error(err);
+      alert('There was an error. Please try again.');
+    }
+  }
+
+  initOrReset();
+</script>
