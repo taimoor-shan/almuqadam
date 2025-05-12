@@ -34,6 +34,10 @@
 
   // Functions to manage features
   function addFeature() {
+    // Ensure features array exists
+    if (!cta.features) {
+      cta.features = [];
+    }
     cta.features.push({
       icon: 'https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/67792371323c341c6b28ca30_icon-11.svg',
       text: 'New feature'

@@ -13,31 +13,14 @@
   import EditableWebsiteTeaser from '$lib/components/EditableWebsiteTeaser.svelte';
   import Notification from '$lib/components/Notification.svelte';
   import Icon from '@iconify/svelte';
-  import emailjs from '@emailjs/browser';
-
-  // Import EmailJS environment variables
-  import {
-    PUBLIC_EMAILJS_SERVICE_ID,
-    PUBLIC_EMAILJS_TEMPLATE_ID,
-    PUBLIC_EMAILJS_PUBLIC_KEY
-  } from '$env/static/public';
-
-  // Initialize EmailJS
-  emailjs.init(PUBLIC_EMAILJS_PUBLIC_KEY);
+  import ContactForm from '$lib/components/ContactForm.svelte';
 
   export let data;
 
   // Default content
   let title, subtitle, contactInfo, officeAddress, phone, email, heroImage, showUserMenu, cta;
-  
-  // Form fields
-  let fullName = '';
-  let emailInput = '';
-  let phone1 = '';
-  let visaNeeded = '';
-  let message = '';
-  let contactConsent = false;
-  let isSubmitting = false;
+
+  // Notification state
   let showNotification = false;
   let notificationMessage = '';
 
@@ -45,7 +28,7 @@
     $currentUser = data.currentUser;
     title = data.page?.title || 'Contact Us';
     subtitle = data.page?.subtitle || 'Get in touch with our visa experts';
-    contactInfo = data.page?.contactInfo || 
+    contactInfo = data.page?.contactInfo ||
       `<p>We're here to help with all your visa-related questions and needs. Reach out to us through any of the contact methods below, or fill out the form to request a free consultation.</p>
       <p>Our team of visa experts is available Monday through Friday, 9:00 AM to 6:00 PM UK time.</p>`;
     officeAddress = data.page?.officeAddress || '19 Ashwood Close, Greater London, United Kingdom';
@@ -84,48 +67,7 @@
     }
   }
 
-  async function handleSubmit() {
-    try {
-      // Set loading state
-      isSubmitting = true;
 
-      // Prepare template parameters for EmailJS
-      const templateParams = {
-        from_name: fullName,
-        from_email: emailInput,
-        phone: phone1 || 'Not provided',
-        visa_needed: visaNeeded,
-        message: message || 'No message provided',
-        contact_consent: contactConsent ? 'Yes' : 'No',
-        to_email: email
-      };
-
-      // Send email using EmailJS directly from the client
-      const result = await emailjs.send(
-        PUBLIC_EMAILJS_SERVICE_ID,
-        PUBLIC_EMAILJS_TEMPLATE_ID,
-        templateParams
-      );
-
-      // Reset form fields
-      fullName = '';
-      emailInput = '';
-      phone1 = '';
-      visaNeeded = '';
-      message = '';
-      contactConsent = false;
-
-      // Show success notification
-      notificationMessage = 'Your message has been sent successfully! We will get back to you soon.';
-      showNotification = true;
-    } catch (error) {
-      console.error('Error sending email:', error);
-      notificationMessage = 'There was an error sending your message. Please try again later.';
-      showNotification = true;
-    } finally {
-      isSubmitting = false;
-    }
-  }
 
   // Initialize page data
   initOrReset();
@@ -175,7 +117,7 @@
         <div class="prose md:prose-xl mb-8">
           <RichText multiLine bind:content={contactInfo} />
         </div>
-        
+
         <div class="contact-details">
           <div class="mb-6">
             <h6 class="text-blue-600 mb-3">Address</h6>
@@ -195,7 +137,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="mb-6">
             <h6 class="text-blue-600 mb-3">Phone</h6>
             {#if $isEditing}
@@ -220,7 +162,7 @@
               </a>
             {/if}
           </div>
-          
+
           <div class="mb-6">
             <h6 class="text-blue-600 mb-3">Email</h6>
             {#if $isEditing}
@@ -247,87 +189,14 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Contact Form -->
       <div class="contact-form">
-        <h3 class="text-2xl font-bold mb-6">Send Us a Message</h3>
-        <form on:submit|preventDefault={handleSubmit}>
-          <div class="mb-5">
-            <label for="fullName" class="block mb-2">Full Name *</label>
-            <input
-              type="text"
-              id="fullName"
-              name="fullName"
-              required
-              class="w-full p-3 border border-gray-300 rounded"
-              bind:value={fullName}
-            />
-          </div>
-          
-          <div class="mb-5">
-            <label for="email" class="block mb-2">Email Address *</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              class="w-full p-3 border border-gray-300 rounded"
-              bind:value={emailInput}
-            />
-          </div>
-          
-          <div class="mb-5">
-            <label for="phone" class="block mb-2">Phone Number</label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              class="w-full p-3 border border-gray-300 rounded"
-              bind:value={phone1}
-            />
-          </div>
-          
-          <div class="mb-5">
-            <label for="visaNeeded" class="block mb-2">Visa Type Needed *</label>
-            <input
-              type="text"
-              id="visaNeeded"
-              name="visaNeeded"
-              required
-              placeholder="e.g., UK Visit Visa, Schengen Visa, etc."
-              class="w-full p-3 border border-gray-300 rounded"
-              bind:value={visaNeeded}
-            />
-          </div>
-          
-          <div class="mb-5">
-            <label for="message" class="block mb-2">Your Message</label>
-            <textarea
-              id="message"
-              name="message"
-              rows="4"
-              class="w-full p-3 border border-gray-300 rounded"
-              bind:value={message}
-            ></textarea>
-          </div>
-          
-          <div class="mb-5">
-            <label class="flex items-center gap-2">
-              <input
-                type="checkbox"
-                name="contactConsent"
-                id="contactConsent"
-                required
-                bind:checked={contactConsent}
-              />
-              <span>I agree to be contacted for visa assistance.</span>
-            </label>
-          </div>
-          
-          <button type="submit" class="button-gradient w-button" disabled={isSubmitting}>
-            {isSubmitting ? 'Sending...' : 'Send Message'}
-          </button>
-        </form>
+        <ContactForm
+          title="Send Us a Message"
+          recipientEmail={email}
+          customClass="contact-page-form"
+        />
       </div>
     </div>
   </div>
