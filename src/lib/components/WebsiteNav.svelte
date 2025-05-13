@@ -156,7 +156,7 @@
               class={classNames("button-black nav-button w-button", isActive('/contact') ? 'active-button' : '')}
               on:click={closeMenu}
             >
-              Get started
+              Contact Us
             </a>
           </div>
           <button

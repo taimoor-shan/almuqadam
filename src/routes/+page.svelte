@@ -489,7 +489,7 @@
       <h2><PlainText bind:content={stepsTitle} /></h2>
     </div>
   </div>
-  <div data-w-id="564a66c3-0f05-b260-7019-72c51ed9e5f5" style="" class="step-wrap">
+  <div  style="" class="step-wrap">
     <img
       src="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778e316e8221903bac49617_vector-02.svg"
       loading="eager"

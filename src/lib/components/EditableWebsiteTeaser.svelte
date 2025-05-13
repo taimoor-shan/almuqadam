@@ -69,7 +69,7 @@
 
 <section class="cta-section section-spacing">
   <div class="w-layout-blockcontainer container w-container">
-    <div data-w-id="eb5f441a-d2c2-118b-d0a4-b31977d2e8cc" class="cta-wrap gradient-1">
+    <div class="cta-wrap bg-black">
       <div class="cta-content-wrap">
         <h2 class="cta-title">
           <PlainText bind:content={cta.title} />
@@ -178,19 +178,20 @@
           </div>
         {/if}
 
-        <a href={cta.buttonUrl} class="button-black w-button">
+        <a href={cta.buttonUrl} class="button-gradient w-button">
           <PlainText bind:content={cta.buttonText} />
         </a>
       </div>
 
-      <Image
+      <!-- <Image
         src={cta.backgroundImage}
         loading="lazy"
         alt="Background vector image"
         class="vector-06"
-        maxWidth="450"
-        maxHeight="450"
-      />
+        maxWidth="630"
+        maxHeight="630"
+      /> -->
+      <img src="/images/teaserBg.avif" loading="lazy" alt="Vector 05" class="vector-06" />
     </div>
   </div>
 </section>

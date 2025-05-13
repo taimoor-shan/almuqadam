@@ -19,22 +19,22 @@
 
 
 
-    <footer class="bg-gray-4">
-      <div class="mx-auto w-full max-w-screen-xl p-4 py-8 lg:py-16">
+    <footer class="bg-gray-4 py-12 border-t border-primary-1">
+      <div class="mx-auto w-full max-w-screen-xl p-4">
           <div class="md:flex md:justify-between">
-            <div class=" w-full md:w-[50%]">
-              <a href="/" class="brand-wrap w-nav-brand mb-6 md:mb-0">
+            <div class=" w-full md:w-[50%] mb-6 md:mb-0">
+              <a href="/" class="brand-wrap w-nav-brand inline-block">
                 <img
                   loading="eager"
-                  src="/images/AlMuqadamLogo.png"
+                  src="/images/AlMuqadamLogo.svg"
                   alt="AlMuqadam logo"
-                  class="brand"
+                  class="brand w-auto"
                 /></a
               >
             </div>
             <div class="grid grid-cols-2 gap-8 sm:gap-6 w-full md:w-[50%]">
                 <div>
-                    <h6 class="mb-6 text-blue-600">Navigation</h6>
+                    <h6 class="mb-6 text-primary-1">Navigation</h6>
                     <ul class="text-gray-500 dark:text-gray-400 font-medium">
                         <li class="mb-4">
                             <a href="/" class="hover:underline">Home</a>
@@ -53,9 +53,8 @@
                         </li>
                     </ul>
                 </div>
-
                 <div>
-                    <h6 class="mb-6 text-blue-600">Contact Us</h6>
+                    <h6 class="mb-6 text-primary-1">Contact Us</h6>
 
                     <ul class="text-gray-500 dark:text-gray-400 font-medium">
                         <li class="mb-4">

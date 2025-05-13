@@ -88,7 +88,7 @@
 
 <div class={customClass}>
   {#if showTitle}
-    <h6 class="mb-6 text-blue-600">{title}</h6>
+    <h4 class="mb-6 text-primary-1">{title}</h4>
   {/if}
 
   <form on:submit|preventDefault={handleSubmit} class="w-form">

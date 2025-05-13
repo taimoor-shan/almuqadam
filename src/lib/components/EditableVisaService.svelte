@@ -16,7 +16,7 @@
   const serviceId = Math.random().toString(36).substring(2, 9);
 </script>
 
-<a data-w-id="visa-service-item" href={$isEditing ? undefined : service.link} class="immigration-item w-inline-block border hover:border-blue-600">
+<a data-w-id="visa-service-item" href={$isEditing ? undefined : service.link} class="immigration-item w-inline-block border hover:border-green-600">
   <div class="immigration-image-wrap">
     <Image
       bind:src={service.image}
@@ -36,7 +36,7 @@
     </div>
   </div>
   <div class="immigration-content">
-    <h2 class="immigration-title text-blue-700">
+    <h2 class="immigration-title text-heading">
       <PlainText bind:content={service.title} />
     </h2>
     <p class="no-margin">

@@ -120,10 +120,10 @@
 
         <div class="contact-details">
           <div class="mb-6">
-            <h6 class="text-blue-600 mb-3">Address</h6>
+            <h6 class="text-primary-1 mb-3">Address</h6>
             <div class="flex gap-2">
               <Icon
-                class="text-blue-600 flex-shrink-0 mt-1"
+                class="text-primary-1 flex-shrink-0 mt-1"
                 icon="carbon:location"
                 width="24"
                 height="24"
@@ -139,11 +139,11 @@
           </div>
 
           <div class="mb-6">
-            <h6 class="text-blue-600 mb-3">Phone</h6>
+            <h6 class="text-primary-1 mb-3">Phone</h6>
             {#if $isEditing}
               <div class="flex gap-2">
                 <Icon
-                  class="text-blue-600"
+                  class="text-primary-1"
                   icon="carbon:phone"
                   width="24"
                   height="24"
@@ -151,9 +151,9 @@
                 <PlainText bind:content={phone} />
               </div>
             {:else}
-              <a href="tel:{phone}" class="hover:text-blue-600 transition-colors flex gap-2">
+              <a href="tel:{phone}" class="hover:text-primary-1 transition-colors flex gap-2">
                 <Icon
-                  class="text-blue-600"
+                  class="text-primary-1"
                   icon="carbon:phone"
                   width="24"
                   height="24"
@@ -164,11 +164,11 @@
           </div>
 
           <div class="mb-6">
-            <h6 class="text-blue-600 mb-3">Email</h6>
+            <h6 class="text-primary-1 mb-3">Email</h6>
             {#if $isEditing}
               <div class="flex gap-2">
                 <Icon
-                  class="text-blue-600"
+                  class="text-primary-1"
                   icon="carbon:email"
                   width="24"
                   height="24"
@@ -176,9 +176,9 @@
                 <PlainText bind:content={email} />
               </div>
             {:else}
-              <a href="mailto:{email}" class="hover:text-blue-600 transition-colors flex gap-2">
+              <a href="mailto:{email}" class="hover:text-primary-1 transition-colors flex gap-2">
                 <Icon
-                  class="text-blue-600"
+                  class="text-primary-1"
                   icon="carbon:email"
                   width="24"
                   height="24"
@@ -222,7 +222,7 @@
   </div>
 </section>
 
-<EditableWebsiteTeaser bind:cta />
+
 
 <Footer counter="/contact" />
 
