@@ -313,3 +313,84 @@ export async function getAllAssets(currentUser) {
   if (!currentUser) throw new Error('Not authorized');
   return await listAssets();
 }
+
+/**
+ * Creates a new country
+ */
+export async function createCountry(title, content, teaser, featured_image, currentUser) {
+  if (!currentUser) throw new Error('Not authorized');
+
+  let slug = slugify(title, {
+    lower: true,
+    strict: true
+  });
+
+  // If slug is already used, we add a unique postfix
+  const countryExists = await queryOne('SELECT slug FROM countries WHERE slug = $1', [slug]);
+  if (countryExists) {
+    slug = slug + '-' + nanoid();
+  }
+
+  const result = await query(
+    `INSERT INTO countries (slug, title, content, teaser, featured_image, published_at)
+     VALUES($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
+     RETURNING slug, created_at`,
+    [slug, title, content, teaser, featured_image]
+  );
+
+  return result.rows[0];
+}
+
+/**
+ * Update an existing country
+ */
+export async function updateCountry(slug, title, content, teaser, featured_image, currentUser) {
+  if (!currentUser) throw new Error('Not authorized');
+
+  const result = await query(
+    `UPDATE countries
+     SET title = $1, content = $2, teaser = $3, featured_image = $4, updated_at = CURRENT_TIMESTAMP
+     WHERE slug = $5
+     RETURNING slug, updated_at`,
+    [title, content, teaser, featured_image, slug]
+  );
+
+  return result.rows[0];
+}
+
+/**
+ * List all available countries (newest first)
+ */
+export async function getCountries(currentUser) {
+  if (currentUser) {
+    // When logged in, show both drafts and published countries
+    return await queryMany(
+      `SELECT *, COALESCE(published_at, updated_at, created_at) AS modified_at
+       FROM countries
+       ORDER BY modified_at DESC`
+    );
+  } else {
+    return await queryMany(
+      `SELECT * FROM countries
+       WHERE published_at IS NOT NULL
+       ORDER BY published_at DESC`
+    );
+  }
+}
+
+/**
+ * Retrieve country based on a given slug
+ */
+export async function getCountryBySlug(slug) {
+  return await queryOne('SELECT * FROM countries WHERE slug = $1', [slug]);
+}
+
+/**
+ * Remove the entire country
+ */
+export async function deleteCountry(slug, currentUser) {
+  if (!currentUser) throw new Error('Not authorized');
+
+  const result = await query('DELETE FROM countries WHERE slug = $1', [slug]);
+  return result.rowCount > 0;
+}

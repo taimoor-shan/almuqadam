@@ -6,5 +6,6 @@ module.exports = {
     autoprefixer: {},
     ...(process.env.NODE_ENV === 'production' ? { cssnano: { preset: 'default' } } : {})
   },
-  map: process.env.NODE_ENV !== 'production'
+  // Enable sourcemap generation in PostCSS
+  map: { inline: false }
 };

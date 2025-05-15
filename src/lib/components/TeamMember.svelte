@@ -54,7 +54,7 @@
         {#if $isEditing}
           <PlainText bind:content={member.email} />
         {:else}
-          <Icon class="text-white" icon="mdi:email-outline" width="20" height="20" />
+          <Icon class="" icon="mdi:email-outline" width="20" height="20" />
           <!-- {member.email || 'example@gmail.com'} -->
         {/if}
       </a>
@@ -62,7 +62,7 @@
         {#if $isEditing}
           <PlainText bind:content={member.phone} />
         {:else}
-          <Icon class="text-white" icon="mdi:phone-outline" width="20" height="20" />
+          <Icon class="" icon="mdi:phone-outline" width="20" height="20" />
           <!-- {member.phone || '+(251) 854-6308'} -->
         {/if}
       </a>

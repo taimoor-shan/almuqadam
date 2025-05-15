@@ -124,6 +124,13 @@
           >
             Blog
           </a>
+          <a
+            href="/countries"
+            class={classNames("nav-link w-nav-link", isActive('/countries') ? 'w--current' : '')}
+            on:click={closeMenu}
+          >
+            Countries
+          </a>
         </nav>
         {#if $currentUser}
           <button
@@ -231,6 +238,13 @@
             on:click={closeMenu}
           >
             Blog
+          </a>
+          <a
+            href="/countries"
+            class={classNames("nav-link w-nav-link w--nav-link-open", isActive('/countries') ? 'w--current' : '')}
+            on:click={closeMenu}
+          >
+            Countries
           </a>
           <a
             href="/contact"

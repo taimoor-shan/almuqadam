@@ -469,7 +469,7 @@
       <div class="section-title immigration-section-title">
       <span class="text-primary-1">Our Services</span>
 
-        <h2>What We Offer</h2>
+        <h2>Countries We Serve</h2>
       </div>
       <div class="">
         <div class="">
@@ -541,7 +541,7 @@
   <div class="w-layout-blockcontainer container w-container">
 
 
-    <div class="grid-contact-split">
+    <div class="grid-contact-split items-center">
 
       <!-- Contact Information -->
       <div class="contact-info">
@@ -574,7 +574,7 @@
           {/if}
         </div>
 
-           <div class="email py-6">
+           <div class="email">
             <h6 class="text-blue-600 mb-3">Email</h6>
             {#if $isEditing}
               <div class="flex gap-2">

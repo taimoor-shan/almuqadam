@@ -9,5 +9,9 @@ export default defineConfig({
     'process.env.DATABASE_URL': JSON.stringify(DATABASE_URL),
     'process.env.ADMIN_PASSWORD': JSON.stringify(ADMIN_PASSWORD),
     'process.env.ORIGIN': JSON.stringify(ORIGIN)
+  },
+  css: {
+    // Enable CSS sourcemaps in development
+    devSourcemap: true
   }
 });
