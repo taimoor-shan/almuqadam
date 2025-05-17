@@ -24,7 +24,7 @@
   }
 </script>
 
-<div class="grid-agent-detail bg-gray-4">
+<div class="grid-agent-detail bg-accent">
   <div class="agent-detail-image-wrap">
     <Image
       bind:src={member.image}

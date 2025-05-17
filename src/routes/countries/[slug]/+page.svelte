@@ -1,4 +1,5 @@
 <script>
+
   import { extractTeaser, fetchJSON } from '$lib/util';
   import PrimaryButton from '$lib/components/PrimaryButton.svelte';
   import WebsiteNav from '$lib/components/WebsiteNav.svelte';
@@ -11,11 +12,12 @@
   import NotEditable from '$lib/components/NotEditable.svelte';
   import EditorToolbar from '$lib/components/tools/EditorToolbar.svelte';
   import { currentUser, isEditing } from '$lib/stores';
+  import Image from '$lib/components/Image.svelte';
 
   export let data;
 
   let showUserMenu = false;
-  let title, teaser, content, featured_image, published_at, updatedAt;
+  let title, teaser, content, featured_image, flag, published_at, updatedAt;
   let cta;
 
   $: {
@@ -28,6 +30,7 @@
     teaser = data.teaser;
     content = data.content;
     featured_image = data.featured_image;
+    flag = data.flag || '/images/person-placeholder.jpg';
     published_at = data.published_at;
     updatedAt = data.updatedAt;
     cta = data.globalData?.cta;
@@ -62,10 +65,16 @@
         title,
         content,
         teaser,
-        featured_image
+        featured_image,
+        flag
       });
       updatedAt = result.updatedAt;
       $isEditing = false;
+
+      // If the slug has changed (due to title change), navigate to the new URL
+      if (result.slug && result.slug !== data.slug) {
+        goto(`/countries/${result.slug}`);
+      }
     } catch (err) {
       console.error(err);
       alert(
@@ -93,8 +102,35 @@
     </form>
   </Modal>
 {/if}
+{#if $isEditing}
+<div class="pt-12 sm:pt-24 max-w-screen-md mx-auto px-6">
+  <div class="font-bold text-sm">FEATURED IMAGE</div>
+  <div class="mt-4 mb-8">
+    <Image
+      bind:src={featured_image}
+      alt="Featured country image"
+      maxWidth="1920"
+      maxHeight="768"
+      quality="1"
+      class="w-full h-auto rounded-lg"
+    />
+  </div>
 
-<Country bind:title bind:content bind:featured_image bind:published_at />
+  <div class="font-bold text-sm mt-8">COUNTRY FLAG</div>
+  <div class="mt-4 mb-8">
+    <Image
+      bind:src={flag}
+      alt="Country flag"
+      maxWidth="200"
+      maxHeight="200"
+      quality="1"
+      class="w-auto h-auto rounded-full"
+    />
+  </div>
+</div>
+{/if}
+
+<Country bind:title bind:content bind:featured_image bind:flag bind:published_at />
 
 <NotEditable>
   <EditableWebsiteTeaser bind:cta />

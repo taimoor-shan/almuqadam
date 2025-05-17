@@ -19,7 +19,6 @@
 
   // Form fields
   let fullName = '';
-  let emailInput = '';
   let phone = '';
   let currentVisaStatus = '';
   let message = '';
@@ -43,7 +42,7 @@
       // Prepare template parameters for EmailJS
       const templateParams = {
         from_name: fullName,
-        from_email: emailInput,
+        from_email: 'No email provided', // Placeholder since email field was removed
         phone: phone || 'Not provided',
         current_visa_status: currentVisaStatus || 'Not provided',
         country_name: countryName, // Include country name in the email
@@ -63,7 +62,6 @@
 
       // Reset form fields
       fullName = '';
-      emailInput = '';
       phone = '';
       currentVisaStatus = '';
       message = '';
@@ -87,11 +85,11 @@
 
 <div class={customClass}>
   {#if showTitle}
-    <h4 class="mb-6 text-primary-1">{title}</h4>
+    <h4 class="mb-6 text-prime">{title}</h4>
   {/if}
 
   <form on:submit|preventDefault={handleSubmit} class="w-form">
-    <div class="grid-contact-form-inner">
+    <div class="countryFormInner">
       <div>
         <label for="fullName" class="sr-only">Full Name</label>
         <input
@@ -106,23 +104,7 @@
           bind:value={fullName}
         />
       </div>
-      <div>
-        <label for="email" class="sr-only">Email Address</label>
-        <input
-          type="email"
-          class="form-input w-input"
-          maxlength="256"
-          name="email"
-          id="email"
-          placeholder="Email Address"
-          aria-label="Email Address"
-          required
-          bind:value={emailInput}
-        />
-      </div>
-    </div>
-    <div class="grid-contact-form-inner mb-4">
-      <div>
+       <div>
         <label for="phone" class="sr-only">Phone Number</label>
         <input
           type="tel"
@@ -167,8 +149,9 @@
     </div>
 
     <div class="mb-5">
-      <label class="flex items-center gap-2">
+      <label class="flex items-top gap-3">
         <input
+        class="mt-1"
           type="checkbox"
           name="contactConsent"
           id="contactConsent"
@@ -180,7 +163,7 @@
     </div>
 
     <button type="submit" class="button-gradient w-button" disabled={isSubmitting}>
-      {isSubmitting ? 'Sending...' : 'Send Message'}
+      {isSubmitting ? 'Sending...' : 'Submit'}
     </button>
   </form>
 

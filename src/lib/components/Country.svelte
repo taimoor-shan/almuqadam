@@ -7,6 +7,7 @@
   export let title;
   export let content;
   export let featured_image;
+  export let flag = '/images/person-placeholder.jpg';
   export let published_at = undefined;
 </script>
 
@@ -19,9 +20,18 @@
         </h1>
         {#if !published_at}
           <div class="font-bold text-sm text-white">DRAFT</div>
-        {:else}
-          <div class="font-bold text-sm text-white">{formatDate(published_at)}</div>
         {/if}
+          <div class="country-flag-container">
+            <Image
+              class="country-flag--image"
+              maxWidth="200"
+              maxHeight="200"
+              quality="1"
+              src={flag}
+              alt={title}
+            />
+          </div>
+       
       </div>
     </div>
     <div class="country-detail-hero-overlay"></div>
@@ -32,7 +42,7 @@
   <div class="w-layout-blockcontainer container w-container">
     <div class="grid-country-detail">
       <div>
-        <div id="country_content" class="rich-text w-richtext prose sm:prose-xl">
+        <div id="country_content" class="richText">
           <RichText multiLine bind:content />
         </div>
       </div>
@@ -41,18 +51,18 @@
         <div class="sidebar-item">
           <div class="sidebar-item-inner">
             <div class="sidebar-title-inline-wrap">
-              <h2 class="sidebar-title-inline">Visa for</h2>
-              <h2 class="sidebar-title-inline heading-serif"><PlainText bind:content={title} /></h2>
+              <h2 class="sidebar-title-inline">Inquire about</h2>
+              <h2 class="sidebar-title-inline heading-serif text-dark"><PlainText bind:content={title} /></h2>
             </div>
             <div class="mt-6">
               <CountryContactForm
-                title="Apply for Visa"
+                title=""
                 countryName={title}
                 showTitle={true}
               />
             </div>
           </div>
-          <div class="sidebar-contact">
+          <!-- <div class="sidebar-contact">
             <h2 class="sidebar-contact-title">Contact info</h2>
             <div class="contact-wrap">
               <div class="contact-link-wrap">
@@ -64,7 +74,7 @@
                 <a href="mailto:info@almuqadam.com" class="contact-link">info@almuqadam.com</a>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

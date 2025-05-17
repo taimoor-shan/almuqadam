@@ -8,7 +8,7 @@
   import PrimaryButton from './PrimaryButton.svelte';
   import SecondaryButton from './SecondaryButton.svelte';
   import { createEventDispatcher } from 'svelte';
-  import ToggleHeading from './tools/ToggleHeading.svelte';
+  import MultiLevelHeading from './tools/MultiLevelHeading.svelte';
   import InsertImage from './tools/InsertImage.svelte';
   import CreateLink from './tools/CreateLink.svelte';
 
@@ -88,8 +88,8 @@
                 /></svg
               >
             </CreateLink>
-            <div class="hidden sm:block w-px bg-gray-300 mx-3" />
-            <ToggleHeading {editorState} {editorView}>
+            <div class="hidden sm:block w-px bg-gray-300 mx-3"></div>
+            <MultiLevelHeading {editorState} {editorView}>
               <svg
                 class="h-3 w-3 sm:h-4 sm:w-4"
                 fill="currentColor"
@@ -100,7 +100,7 @@
                   d="M0 64C0 46.3 14.3 32 32 32H80h48c17.7 0 32 14.3 32 32s-14.3 32-32 32H112V208H336V96H320c-17.7 0-32-14.3-32-32s14.3-32 32-32h48 48c17.7 0 32 14.3 32 32s-14.3 32-32 32H400V240 416h16c17.7 0 32 14.3 32 32s-14.3 32-32 32H368 320c-17.7 0-32-14.3-32-32s14.3-32 32-32h16V272H112V416h16c17.7 0 32 14.3 32 32s-14.3 32-32 32H80 32c-17.7 0-32-14.3-32-32s14.3-32 32-32H48V240 96H32C14.3 96 0 81.7 0 64z"
                 /></svg
               >
-            </ToggleHeading>
+            </MultiLevelHeading>
             <ToggleBlockquote {editorState} {editorView}>
               <svg
                 class="h-3 w-3 sm:h-4 sm:w-4"
@@ -113,7 +113,7 @@
                 /></svg
               >
             </ToggleBlockquote>
-            <div class="hidden sm:block w-px bg-gray-300 mx-3" />
+            <div class="hidden sm:block w-px bg-gray-300 mx-3"></div>
             <ToggleBulletList {editorState} {editorView}>
               <svg
                 class="h-3 w-3 sm:h-4 sm:w-4"
@@ -138,7 +138,7 @@
                 /></svg
               >
             </ToggleOrderedList>
-            <div class="hidden sm:block w-px bg-gray-300 mx-3" />
+            <div class="hidden sm:block w-px bg-gray-300 mx-3"></div>
             <InsertImage {currentUser} {editorState} {editorView}>
               <svg
                 class="h-3 w-3 sm:h-4 sm:w-4"
@@ -154,9 +154,9 @@
           </div>
         {/if}
 
-        <div class="flex-1 h-8" />
+        <div class="flex-1 h-8"></div>
         <SecondaryButton type="button" on:click={handleCancel}>Cancel</SecondaryButton>
-        <div class="shrink-0 w-2 sm:w-4" />
+        <div class="shrink-0 w-2 sm:w-4"></div>
         <PrimaryButton type="button" on:click={handleSave}>Save</PrimaryButton>
       </div>
     </div>

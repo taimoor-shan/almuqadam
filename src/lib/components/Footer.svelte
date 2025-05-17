@@ -19,7 +19,7 @@
 
 
 
-    <footer class="bg-gray-4 py-12 border-t border-primary-1">
+    <footer class="bg-accent py-12 border-t border-primary-1">
       <div class="mx-auto w-full max-w-screen-xl p-4">
           <div class="md:flex md:justify-between">
             <div class=" w-full md:w-[50%] mb-6 md:mb-0">

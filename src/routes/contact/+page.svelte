@@ -10,6 +10,7 @@
   import WebsiteHeader from '$lib/components/WebsiteHeader.svelte';
   import EditableWebsiteTeaser from '$lib/components/EditableWebsiteTeaser.svelte';
   import ContactForm from '$lib/components/ContactForm.svelte';
+  import Accordion from '$lib/components/Accordion.svelte';
 
   export let data;
 
@@ -19,13 +20,18 @@
 
   function initOrReset() {
     $currentUser = data.currentUser;
-    title = data.page?.title || 'How can we help you today?';
-    subtitle = data.page?.subtitle || 'Get in touch with our visa experts';
-    contactInfo = data.page?.contactInfo ||
+
+    // Log the data to debug
+    console.log('Page data:', data.page);
+
+    // Use nullish coalescing to handle both undefined and null values
+    title = data.page?.title ?? 'How can we help you today?';
+    subtitle = data.page?.subtitle ?? 'Get in touch with our visa experts';
+    contactInfo = data.page?.contactInfo ??
       `<p>We're here to help with all your visa-related questions and needs. Reach out to us through any of the contact methods below, or fill out the form to request a free consultation.</p>
       <p>Our team of visa experts is available Monday through Friday, 9:00 AM to 6:00 PM UK time.</p>`;
-    heroImage = data.page?.heroImage || '/images/ch_hero.jpeg';
-    faqs = data.page?.faqs ||
+    heroImage = data.page?.heroImage ?? '/images/ch_hero.jpeg';
+    faqs = data.page?.faqs ??
       `<h2>What documents do I need for a visa application?</h2>
       <p>Required documents typically include a valid passport, completed application form, passport-sized photos, proof of travel insurance, flight itinerary, accommodation details, proof of financial means, and a cover letter. Specific requirements vary by country and visa type.</p>
       <h2>How long does the visa application process take?</h2>
@@ -34,12 +40,12 @@
       <p>We maintain a high success rate of over 95% for visa applications. Our expertise in preparing thorough applications significantly increases approval chances.</p>`;
 
     // New contact section variables
-    phoneSupport1 = data.page?.phoneSupport1 || '(91) 125 879 786';
-    phoneSupport2 = data.page?.phoneSupport2 || '(+85) 578 666 333';
-    emailSupport = data.page?.emailSupport || 'info@almuqadam.com';
-    officeAddress1 = data.page?.officeAddress1 || 'Las Vegas - 4th Floor, Plot No.22,145 Murphy Canyon Rd.';
-    officeHours1 = data.page?.officeHours1 || 'Mon-Sat: 9 AM – 6 PM';
-    officeHours2 = data.page?.officeHours2 || 'Sunday: Closed';
+    phoneSupport1 = data.page?.phoneSupport1 ?? '(91) 125 879 786';
+    phoneSupport2 = data.page?.phoneSupport2 ?? '(+85) 578 666 333';
+    emailSupport = data.page?.emailSupport ?? 'info@almuqadam.com';
+    officeAddress1 = data.page?.officeAddress1 ?? 'Las Vegas - 4th Floor, Plot No.22,145 Murphy Canyon Rd.';
+    officeHours1 = data.page?.officeHours1 ?? 'Mon-Sat: 9 AM – 6 PM';
+    officeHours2 = data.page?.officeHours2 ?? 'Sunday: Closed';
 
     $isEditing = false;
   }
@@ -52,6 +58,11 @@
   async function savePage() {
     try {
       if ($currentUser) {
+        // If we have an accordion component reference, get the HTML from it
+        if (accordionComponent) {
+          faqs = accordionComponent.itemsToHtml();
+        }
+
         await fetchJSON('POST', '/api/save-page', {
           pageId: 'contact',
           page: {
@@ -64,7 +75,8 @@
             emailSupport,
             officeAddress1,
             officeHours1,
-            officeHours2
+            officeHours2,
+            faqs
           }
         });
       }
@@ -75,7 +87,8 @@
     }
   }
 
-
+  // Reference to the accordion component
+  let accordionComponent;
 
   // Initialize page data
   initOrReset();
@@ -188,86 +201,7 @@
 </section>
 
 <!-- Faqs Section -->
-<section class="faqs-section section-spacing">
-  <div class="w-layout-blockcontainer inner-container w-container">
-    <div data-w-id="bc625d64-9165-91ab-81e1-85a2cd3d604d" style="" class="section-title text-center">
-      <h2>Frequently <span class="heading-serif">asked</span> questions</h2>
-    </div>
-    <div data-w-id="bc625d64-9165-91ab-81e1-85a2cd3d6053" style="" class="accordion-list">
-      <div class="accordion-wrap">
-        <div data-w-id="bc625d64-9165-91ab-81e1-85a2cd3d6055" class="accordion-heading">
-          <h2 style="color:rgb(32,80,214)" class="accordion-title open">How long does the visa application process take?</h2>
-          <div class="accordion-line-wrap">
-            <div class="accordion-line-hr"></div>
-            <div style="-webkit-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(90deg) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(90deg) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(90deg) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(90deg) skew(0, 0)" class="accordion-line-vr open"></div>
-          </div>
-        </div>
-        <div class="accordion-content-wrap">
-          <div class="accordion-content">
-            <p class="no-margin">The processing time depends on the visa type and the country you’re applying to. It can range from a few weeks to several months. We provide accurate timelines during the consultation phase.</p>
-          </div>
-        </div>
-      </div>
-      <div class="accordion-wrap">
-        <div data-w-id="bc625d64-9165-91ab-81e1-85a2cd3d6060" class="accordion-heading">
-          <h2 style="color:rgb(20,24,36)" class="accordion-title">What documents are required for a visa application?</h2>
-          <div class="accordion-line-wrap">
-            <div class="accordion-line-hr"></div>
-            <div style="-webkit-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0)" class="accordion-line-vr"></div>
-          </div>
-        </div>
-        <div style="height:0px" class="accordion-content-wrap">
-          <div class="accordion-content">
-            <p class="no-margin">Required documents vary by visa type but generally include a valid passport, proof of financial stability, and other relevant records like employment or study documents. We will guide you through the specific requirements for your application.</p>
-          </div>
-        </div>
-      </div>
-      <div class="accordion-wrap">
-        <div data-w-id="bc625d64-9165-91ab-81e1-85a2cd3d606b" class="accordion-heading">
-          <h2 style="color:rgb(20,24,36)" class="accordion-title">Can I apply for a visa online?</h2>
-          <div class="accordion-line-wrap">
-            <div class="accordion-line-hr"></div>
-            <div style="-webkit-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0)" class="accordion-line-vr"></div>
-          </div>
-        </div>
-        <div style="height:0px" class="accordion-content-wrap">
-          <div class="accordion-content">
-            <p class="no-margin">Yes, many countries offer online visa application portals. Our team can assist you in completing and submitting your application online for convenience and accuracy.</p>
-          </div>
-        </div>
-      </div>
-      <div class="accordion-wrap">
-        <div data-w-id="bc625d64-9165-91ab-81e1-85a2cd3d6076" class="accordion-heading">
-          <h2 style="color:rgb(20,24,36)" class="accordion-title">What happens if my visa application is rejected?</h2>
-          <div class="accordion-line-wrap">
-            <div class="accordion-line-hr"></div>
-            <div style="-webkit-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0)" class="accordion-line-vr"></div>
-          </div>
-        </div>
-        <div style="height:0px" class="accordion-content-wrap">
-          <div class="accordion-content">
-            <p class="no-margin">If your application is rejected, we will review the reasons for denial and help you reapply by addressing any issues or missing documentation.</p>
-          </div>
-        </div>
-      </div>
-      <div class="accordion-wrap">
-        <div data-w-id="bc625d64-9165-91ab-81e1-85a2cd3d6081" class="accordion-heading">
-          <h2 style="color:rgb(20,24,36)" class="accordion-title">Do I need an immigration lawyer for my visa application?</h2>
-          <div class="accordion-line-wrap">
-            <div class="accordion-line-hr"></div>
-            <div style="-webkit-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0)" class="accordion-line-vr"></div>
-          </div>
-        </div>
-        <div style="height:0px" class="accordion-content-wrap">
-          <div class="accordion-content">
-            <p class="no-margin">While it’s not always required, having expert assistance can increase your chances of approval. We offer professional immigration consultations to ensure your application is complete and compliant.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<Accordion bind:this={accordionComponent} faqsHtml={faqs} />
 
 <Footer counter="/contact" />
-
 

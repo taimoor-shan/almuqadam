@@ -247,10 +247,15 @@ export async function createOrUpdatePage(page_id, page, currentUser) {
  */
 export async function getPage(page_id) {
   const page = await queryOne('SELECT data FROM pages WHERE page_id = $1', [page_id]);
+
+  // Debug logging
+  console.log(`getPage(${page_id}) result:`, page);
+
   if (page?.data) {
     // Check if data is already an object (PostgreSQL JSONB) or a string (needs parsing)
     if (typeof page.data === 'object') {
-      return page.data;
+      // Make a deep copy to ensure we don't have any reference issues
+      return JSON.parse(JSON.stringify(page.data));
     } else {
       try {
         return JSON.parse(page.data);
@@ -317,7 +322,7 @@ export async function getAllAssets(currentUser) {
 /**
  * Creates a new country
  */
-export async function createCountry(title, content, teaser, featured_image, currentUser) {
+export async function createCountry(title, content, teaser, featured_image, flag, currentUser) {
   if (!currentUser) throw new Error('Not authorized');
 
   let slug = slugify(title, {
@@ -332,10 +337,10 @@ export async function createCountry(title, content, teaser, featured_image, curr
   }
 
   const result = await query(
-    `INSERT INTO countries (slug, title, content, teaser, featured_image, published_at)
-     VALUES($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
+    `INSERT INTO countries (slug, title, content, teaser, featured_image, flag, published_at)
+     VALUES($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP)
      RETURNING slug, created_at`,
-    [slug, title, content, teaser, featured_image]
+    [slug, title, content, teaser, featured_image, flag]
   );
 
   return result.rows[0];
@@ -344,18 +349,46 @@ export async function createCountry(title, content, teaser, featured_image, curr
 /**
  * Update an existing country
  */
-export async function updateCountry(slug, title, content, teaser, featured_image, currentUser) {
+export async function updateCountry(slug, title, content, teaser, featured_image, flag, currentUser) {
   if (!currentUser) throw new Error('Not authorized');
 
-  const result = await query(
-    `UPDATE countries
-     SET title = $1, content = $2, teaser = $3, featured_image = $4, updated_at = CURRENT_TIMESTAMP
-     WHERE slug = $5
-     RETURNING slug, updated_at`,
-    [title, content, teaser, featured_image, slug]
-  );
+  // Generate a new slug if the title has changed
+  let newSlug = slugify(title, {
+    lower: true,
+    strict: true
+  });
 
-  return result.rows[0];
+  // Check if the slug would actually change
+  if (newSlug !== slug) {
+    // Check if the new slug already exists
+    const slugExists = await queryOne('SELECT slug FROM countries WHERE slug = $1', [newSlug]);
+    if (slugExists) {
+      // If slug already exists, add a unique identifier
+      newSlug = newSlug + '-' + nanoid();
+    }
+
+    // Update with new slug
+    const result = await query(
+      `UPDATE countries
+       SET title = $1, content = $2, teaser = $3, featured_image = $4, flag = $5, slug = $6, updated_at = CURRENT_TIMESTAMP
+       WHERE slug = $7
+       RETURNING slug, updated_at`,
+      [title, content, teaser, featured_image, flag, newSlug, slug]
+    );
+
+    return result.rows[0];
+  } else {
+    // No slug change needed
+    const result = await query(
+      `UPDATE countries
+       SET title = $1, content = $2, teaser = $3, featured_image = $4, flag = $5, updated_at = CURRENT_TIMESTAMP
+       WHERE slug = $6
+       RETURNING slug, updated_at`,
+      [title, content, teaser, featured_image, flag, slug]
+    );
+
+    return result.rows[0];
+  }
 }
 
 /**

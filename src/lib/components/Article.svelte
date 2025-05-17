@@ -23,7 +23,7 @@
 </div>
 
 <div class="max-w-screen-md mx-auto px-6 pb-12 sm:pb-24">
-  <div id="article_content" class="prose sm:prose-xl">
+  <div id="article_content" class="richText">
     <RichText multiLine bind:content />
   </div>
 </div>

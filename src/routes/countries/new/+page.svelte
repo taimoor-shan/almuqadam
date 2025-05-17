@@ -15,6 +15,7 @@
     title = 'Country Name',
     content = 'Add detailed information about this country here.',
     featured_image = '/images/person-placeholder.jpg',
+    flag = '/images/person-placeholder.jpg',
     cta;
 
   $: {
@@ -33,7 +34,8 @@
         title,
         content,
         teaser,
-        featured_image
+        featured_image,
+        flag
       });
       goto(`/countries/${slug}`);
     } catch (err) {
@@ -59,15 +61,27 @@
     <Image
       bind:src={featured_image}
       alt="Featured country image"
-      maxWidth="1200"
-      maxHeight="600"
-      quality="0.9"
+      maxWidth="1920"
+      maxHeight="768"
+      quality="1"
       class="w-full h-auto rounded-lg"
+    />
+  </div>
+
+  <div class="font-bold text-sm mt-8">COUNTRY FLAG</div>
+  <div class="mt-4 mb-8">
+    <Image
+      bind:src={flag}
+      alt="Country flag"
+      maxWidth="200"
+      maxHeight="200"
+      quality="1"
+      class="w-auto h-auto rounded-full"
     />
   </div>
 </div>
 
-<Country bind:title bind:content bind:featured_image />
+<Country bind:title bind:content bind:featured_image bind:flag />
 
 <NotEditable>
   <EditableWebsiteTeaser bind:cta />

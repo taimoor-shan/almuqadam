@@ -111,26 +111,20 @@
             About Us
           </a>
           <a
-            href="/visas"
-            class={classNames("nav-link w-nav-link", isActive('/visas') ? 'w--current' : '')}
-            on:click={closeMenu}
-          >
-            Visas
-          </a>
-          <a
-            href="/blog"
-            class={classNames("nav-link w-nav-link", isActive('/blog') ? 'w--current' : '')}
-            on:click={closeMenu}
-          >
-            Blog
-          </a>
-          <a
             href="/countries"
             class={classNames("nav-link w-nav-link", isActive('/countries') ? 'w--current' : '')}
             on:click={closeMenu}
           >
             Countries
           </a>
+          <!-- <a
+            href="/blog"
+            class={classNames("nav-link w-nav-link", isActive('/blog') ? 'w--current' : '')}
+            on:click={closeMenu}
+          >
+            Blog
+          </a> -->
+        
         </nav>
         {#if $currentUser}
           <button
@@ -225,20 +219,14 @@
           >
             About
           </a>
-          <a
-            href="/visas"
-            class={classNames("nav-link w-nav-link w--nav-link-open", isActive('/visas') ? 'w--current' : '')}
-            on:click={closeMenu}
-          >
-            Visas
-          </a>
-          <a
+          
+          <!-- <a
             href="/blog"
             class={classNames("nav-link w-nav-link w--nav-link-open", isActive('/blog') ? 'w--current' : '')}
             on:click={closeMenu}
           >
             Blog
-          </a>
+          </a> -->
           <a
             href="/countries"
             class={classNames("nav-link w-nav-link w--nav-link-open", isActive('/countries') ? 'w--current' : '')}
@@ -313,12 +301,12 @@
   }
 
   .w-nav-overlay .w-nav-link:hover {
-    color: var(--color--primary-1);
+    color: var(--color--prime);
     padding-left: 5px;
   }
 
   .w-nav-overlay .w-nav-link.w--current {
-    color: var(--color--primary-1);
+    color: var(--color--prime);
     font-weight: 600;
   }
 
@@ -348,7 +336,7 @@
   }
 
   .mobile-menu-close:hover {
-    color: var(--color--primary-1);
+    color: var(--color--prime);
     transform: rotate(90deg);
   }
 
@@ -405,7 +393,7 @@
   }
 
   .menu-button:hover .hamburger-line {
-    background-color: var(--color--primary-1);
+    background-color: var(--color--prime);
   }
 
   /* Ensure hamburger button is visible on mobile */

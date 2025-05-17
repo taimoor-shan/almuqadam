@@ -42,7 +42,7 @@ When adding custom CSS, use the `@layer` directive to place your styles in the a
 /* For reusable component styles */
 @layer components {
   .btn-primary {
-    @apply bg-primary-1 text-white px-4 py-2 rounded;
+    @apply bg-prime text-white px-4 py-2 rounded;
   }
 }
 

@@ -12,7 +12,13 @@
     "vercel-dev": "vercel dev",
     "backup": "node scripts/backup-content.js",
     "restore": "node scripts/restore-content.js",
-    "safe-migrate": "npm run backup && npm run migrate && npm run restore"
+    "safe-migrate": "npm run backup && npm run migrate && npm run restore",
+    "pg-backup": "node scripts/pg-backup.js",
+    "pg-restore": "node scripts/pg-restore.js",
+    "check-db": "node scripts/check-db.js",
+    "migrate-remote-to-local": "node scripts/migrate-remote-to-local.js",
+    "pg-dump-restore": "node scripts/pg-dump-restore.js",
+    "copy-data": "node scripts/copy-data.js"
   },
   "devDependencies": {
     "@iconify/svelte": "^5.0.0",
@@ -47,6 +53,7 @@
     "camelcase-keys": "^9.1.3",
     "dotenv": "^16.5.0",
     "emailjs": "^4.0.3",
+    "flowbite-svelte": "^1.2.4",
     "googleapis": "^148.0.0",
     "nanoid": "^5.0.6",
     "nodemailer": "^7.0.2",
