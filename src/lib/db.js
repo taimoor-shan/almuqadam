@@ -40,25 +40,25 @@ async function initializeDatabase() {
     if (!tableCheck.rows[0].exists) {
       console.log('Creating database tables...');
 
-      // Create tables
+      // Create tables with fully qualified names
       await client.query(`
-        CREATE TABLE IF NOT EXISTS sessions (
+        CREATE TABLE IF NOT EXISTS public.sessions (
           session_id TEXT PRIMARY KEY,
           expires TIMESTAMP NOT NULL
         );
 
-        CREATE TABLE IF NOT EXISTS pages (
+        CREATE TABLE IF NOT EXISTS public.pages (
           page_id TEXT PRIMARY KEY,
           data JSONB NOT NULL,
           updated_at TIMESTAMP NOT NULL
         );
 
-        CREATE TABLE IF NOT EXISTS counters (
+        CREATE TABLE IF NOT EXISTS public.counters (
           counter_id TEXT PRIMARY KEY,
           count INTEGER NOT NULL
         );
 
-        CREATE TABLE IF NOT EXISTS assets (
+        CREATE TABLE IF NOT EXISTS public.assets (
           asset_id TEXT PRIMARY KEY,
           mime_type TEXT NOT NULL,
           updated_at TIMESTAMP DEFAULT NULL,
@@ -66,7 +66,7 @@ async function initializeDatabase() {
           data BYTEA NOT NULL
         );
 
-        CREATE TABLE IF NOT EXISTS articles (
+        CREATE TABLE IF NOT EXISTS public.articles (
           article_id SERIAL PRIMARY KEY,
           slug TEXT UNIQUE NOT NULL,
           title TEXT NOT NULL,
@@ -96,9 +96,12 @@ initializeDatabase().catch(console.error);
 export async function query(text, params) {
   const start = Date.now();
   try {
-    const res = await pool.query(text, params);
+    // Replace table names with fully qualified names (public.table_name)
+    const modifiedText = text.replace(/\b(articles|pages|sessions|counters|assets|countries)\b/g, 'public.$1');
+
+    const res = await pool.query(modifiedText, params);
     const duration = Date.now() - start;
-    console.log('Executed query', { text, duration, rows: res.rowCount });
+    console.log('Executed query', { text: modifiedText, duration, rows: res.rowCount });
     return res;
   } catch (error) {
     console.error('Error executing query', { text, error });

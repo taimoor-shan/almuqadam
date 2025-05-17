@@ -1,5 +1,5 @@
 import { f as fail, r as redirect } from "../../../chunks/index2.js";
-import { k as authenticate } from "../../../chunks/api.js";
+import { r as authenticate } from "../../../chunks/api.js";
 const actions = {
   default: async ({ cookies, request }) => {
     const data = await request.formData();

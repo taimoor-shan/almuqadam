@@ -1,4 +1,4 @@
-import { G as fallback, M as attr_class, N as clsx, D as slot, K as bind_props, C as pop, z as push } from "./index.js";
+import { G as fallback, O as attr_class, Q as clsx, D as slot, N as bind_props, C as pop, z as push } from "./index.js";
 import { c as classNames } from "./util.js";
 function Limiter($$payload, $$props) {
   push();

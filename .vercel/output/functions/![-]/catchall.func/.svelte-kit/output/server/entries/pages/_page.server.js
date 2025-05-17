@@ -1,4 +1,4 @@
-import { f as getArticles, h as getPage } from "../../chunks/api.js";
+import { l as getArticles, m as getPage } from "../../chunks/api.js";
 async function load({ locals }) {
   const currentUser = locals.user;
   const articles = await getArticles();

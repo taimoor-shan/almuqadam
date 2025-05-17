@@ -1,4 +1,4 @@
-import { z as push, G as fallback, I as copy_payload, J as assign_payload, K as bind_props, C as pop, F as escape_html } from "./index.js";
+import { z as push, G as fallback, J as copy_payload, K as assign_payload, N as bind_props, C as pop, F as escape_html } from "./index.js";
 import { P as PlainText } from "./EditorToolbar.js";
 import { R as RichText } from "./RichText.js";
 import { f as formatDate } from "./util.js";
@@ -28,7 +28,7 @@ function Article($$payload, $$props) {
         $$settled = false;
       }
     });
-    $$payload2.out += `<!----></h1></div></div> <div class="max-w-screen-md mx-auto px-6 pb-12 sm:pb-24"><div id="article_content" class="prose sm:prose-xl">`;
+    $$payload2.out += `<!----></h1></div></div> <div class="max-w-screen-md mx-auto px-6 pb-12 sm:pb-24"><div id="article_content" class="richText">`;
     RichText($$payload2, {
       multiLine: true,
       get content() {

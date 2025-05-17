@@ -1,8 +1,8 @@
-import { I as copy_payload, J as assign_payload, K as bind_props, C as pop, z as push, Q as store_set, S as head } from "../../../chunks/index.js";
+import { J as copy_payload, K as assign_payload, N as bind_props, C as pop, z as push, T as store_set, U as head } from "../../../chunks/index.js";
 import "../../../chunks/util.js";
 import { P as PrimaryButton } from "../../../chunks/PrimaryButton.js";
 import { L as LoginMenu } from "../../../chunks/LoginMenu.js";
-import { c as currentUser, i as isEditing, F as Footer } from "../../../chunks/EditorToolbar.js";
+import { c as currentUser, i as isEditing, F as Footer } from "../../../chunks/WebsiteNav.js";
 import { E as EditableWebsiteTeaser } from "../../../chunks/EditableWebsiteTeaser.js";
 import { W as WebsiteHeader } from "../../../chunks/WebsiteHeader.js";
 function _page($$payload, $$props) {

@@ -1,0 +1,9 @@
+DATABASE_URL=postgres://localhost:5432/almuqadam_new
+ADMIN_PASSWORD=Qwerty@007
+ORIGIN=http://localhost:5174
+
+# EmailJS Configuration (Client-side)
+PUBLIC_EMAILJS_SERVICE_ID=service_fqwdhsi
+PUBLIC_EMAILJS_TEMPLATE_ID=template_qrd92sn
+PUBLIC_EMAILJS_PUBLIC_KEY=_fFSJ62eMeH1mVe-p
+EMAIL_TO=shaikhspare@gmail.com

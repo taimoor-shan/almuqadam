@@ -1,5 +1,5 @@
-import { z as push, G as fallback, K as bind_props, C as pop } from "./index.js";
-import { a as activeEditorView, o as onDestroy } from "./EditorToolbar.js";
+import { z as push, G as fallback, N as bind_props, C as pop } from "./index.js";
+import { a as activeEditorView, o as onDestroy } from "./WebsiteNav.js";
 import { f as fromHTML } from "./prosemirrorUtil.js";
 import { b as buildKeymap, m as multiLinePlainTextSchema, s as singleLinePlainTextSchema } from "./prosemirrorKeymap.js";
 import { Plugin, EditorState } from "prosemirror-state";

@@ -16,9 +16,17 @@
     "pg-backup": "node scripts/pg-backup.js",
     "pg-restore": "node scripts/pg-restore.js",
     "check-db": "node scripts/check-db.js",
+    "check-local-db": "node scripts/check-local-db.js",
+    "check-live-data": "node scripts/check-live-data.js",
     "migrate-remote-to-local": "node scripts/migrate-remote-to-local.js",
+    "migrate-local-to-live": "node scripts/migrate-local-to-live.js",
+    "migrate-with-ssl": "node scripts/migrate-with-ssl.js",
+    "verify-migration": "node scripts/verify-migration.js",
     "pg-dump-restore": "node scripts/pg-dump-restore.js",
-    "copy-data": "node scripts/copy-data.js"
+    "copy-data": "node scripts/copy-data.js",
+    "copy-local-to-live": "node scripts/copy-local-to-live.js",
+    "direct-copy": "node scripts/direct-copy.js",
+    "ssl-direct-copy": "node scripts/ssl-direct-copy.js"
   },
   "devDependencies": {
     "@iconify/svelte": "^5.0.0",

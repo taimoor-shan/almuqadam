@@ -1,4 +1,4 @@
-import { G as fallback, D as slot, K as bind_props } from "./index.js";
+import { G as fallback, D as slot, N as bind_props } from "./index.js";
 import { B as BaseButton } from "./PrimaryButton.js";
 function SecondaryButton($$payload, $$props) {
   let disabled = fallback($$props["disabled"], void 0);
@@ -10,7 +10,7 @@ function SecondaryButton($$payload, $$props) {
     type,
     size,
     disabled,
-    styles: "font-medium hover:bg-gray-100 focus:ring-gray-100 border-2 border-gray-100 bg-white",
+    styles: "bg-blue-700 font-medium hover:bg-blue-800 focus:ring-gray-100 border-1 border-gray-700 text-white hover:text-white rounded-full",
     children: ($$payload2) => {
       $$payload2.out += `<!---->`;
       slot($$payload2, $$props, "default", {});

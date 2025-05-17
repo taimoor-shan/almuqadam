@@ -1265,8 +1265,30 @@ function clsx(value) {
     return value ?? "";
   }
 }
+const whitespace = [..." 	\n\r\f \v\uFEFF"];
 function to_class(value, hash, directives) {
   var classname = value == null ? "" : "" + value;
+  if (hash) {
+    classname = classname ? classname + " " + hash : hash;
+  }
+  if (directives) {
+    for (var key in directives) {
+      if (directives[key]) {
+        classname = classname ? classname + " " + key : key;
+      } else if (classname.length) {
+        var len = key.length;
+        var a = 0;
+        while ((a = classname.indexOf(key, a)) >= 0) {
+          var b = a + len;
+          if ((a === 0 || whitespace.includes(classname[a - 1])) && (b === classname.length || whitespace.includes(classname[b]))) {
+            classname = (a === 0 ? "" : classname.substring(0, a)) + classname.substring(b + 1);
+          } else {
+            a = b;
+          }
+        }
+      }
+    }
+  }
   return classname === "" ? null : classname;
 }
 function to_style(value, styles) {
@@ -1412,8 +1434,11 @@ function head(payload, fn) {
   fn(head_payload);
   head_payload.out += BLOCK_CLOSE;
 }
+function stringify(value) {
+  return typeof value === "string" ? value : value == null ? "" : value + "";
+}
 function attr_class(value, hash, directives) {
-  var result = to_class(value);
+  var result = to_class(value, hash, directives);
   return result ? ` class="${escape_html(result, true)}"` : "";
 }
 function attr_style(value, directives) {
@@ -1488,23 +1513,24 @@ export {
   escape_html as F,
   fallback as G,
   HYDRATION_ERROR as H,
-  copy_payload as I,
-  assign_payload as J,
-  bind_props as K,
+  store_get as I,
+  copy_payload as J,
+  assign_payload as K,
   LEGACY_PROPS as L,
-  attr_class as M,
-  clsx as N,
-  store_get as O,
-  unsubscribe_stores as P,
-  store_set as Q,
-  ensure_array_like as R,
-  head as S,
-  attr as T,
-  await_block as U,
-  current_component as V,
+  unsubscribe_stores as M,
+  bind_props as N,
+  attr_class as O,
+  attr as P,
+  clsx as Q,
+  stringify as R,
+  ensure_array_like as S,
+  store_set as T,
+  head as U,
+  attr_style as V,
   noop as W,
   safe_not_equal as X,
-  attr_style as Y,
+  await_block as Y,
+  current_component as Z,
   set_active_effect as a,
   active_effect as b,
   active_reaction as c,

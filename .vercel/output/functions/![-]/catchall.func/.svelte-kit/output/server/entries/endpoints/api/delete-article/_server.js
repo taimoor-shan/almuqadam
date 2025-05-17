@@ -1,5 +1,5 @@
 import { j as json } from "../../../../chunks/index2.js";
-import { d as deleteArticle } from "../../../../chunks/api.js";
+import { e as deleteArticle } from "../../../../chunks/api.js";
 async function POST({ request, locals }) {
   const user = locals.user;
   const { slug } = await request.json();

@@ -1,10 +1,10 @@
 import pg from "pg";
-const DATABASE_URL = "postgres://default:s5uJkVfFM6PQ@ep-crimson-cell-10033438-pooler.us-east-1.aws.neon.tech/verceldb?sslmode=require";
+const DATABASE_URL = "postgres://neondb_owner:npg_qzXhDOWv26TQ@ep-blue-sunset-ab1hs87n-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require";
 const ADMIN_PASSWORD = "Qwerty@007";
 const pool = new pg.Pool({
   connectionString: DATABASE_URL,
-  ssl: false
-  // Disable SSL for local development
+  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : DATABASE_URL.includes("localhost") ? false : { rejectUnauthorized: false }
+  // Disable SSL for localhost, enable for other environments
 });
 console.log(`Connecting to PostgreSQL database: ${DATABASE_URL.replace(/:[^:]*@/, ":****@")}`);
 pool.on("connect", () => {
@@ -28,23 +28,23 @@ async function initializeDatabase() {
     if (!tableCheck.rows[0].exists) {
       console.log("Creating database tables...");
       await client.query(`
-        CREATE TABLE IF NOT EXISTS sessions (
+        CREATE TABLE IF NOT EXISTS public.sessions (
           session_id TEXT PRIMARY KEY,
           expires TIMESTAMP NOT NULL
         );
 
-        CREATE TABLE IF NOT EXISTS pages (
+        CREATE TABLE IF NOT EXISTS public.pages (
           page_id TEXT PRIMARY KEY,
           data JSONB NOT NULL,
           updated_at TIMESTAMP NOT NULL
         );
 
-        CREATE TABLE IF NOT EXISTS counters (
+        CREATE TABLE IF NOT EXISTS public.counters (
           counter_id TEXT PRIMARY KEY,
           count INTEGER NOT NULL
         );
 
-        CREATE TABLE IF NOT EXISTS assets (
+        CREATE TABLE IF NOT EXISTS public.assets (
           asset_id TEXT PRIMARY KEY,
           mime_type TEXT NOT NULL,
           updated_at TIMESTAMP DEFAULT NULL,
@@ -52,7 +52,7 @@ async function initializeDatabase() {
           data BYTEA NOT NULL
         );
 
-        CREATE TABLE IF NOT EXISTS articles (
+        CREATE TABLE IF NOT EXISTS public.articles (
           article_id SERIAL PRIMARY KEY,
           slug TEXT UNIQUE NOT NULL,
           title TEXT NOT NULL,
@@ -77,9 +77,10 @@ initializeDatabase().catch(console.error);
 async function query(text, params) {
   const start = Date.now();
   try {
-    const res = await pool.query(text, params);
+    const modifiedText = text.replace(/\b(articles|pages|sessions|counters|assets|countries)\b/g, "public.$1");
+    const res = await pool.query(modifiedText, params);
     const duration = Date.now() - start;
-    console.log("Executed query", { text, duration, rows: res.rowCount });
+    console.log("Executed query", { text: modifiedText, duration, rows: res.rowCount });
     return res;
   } catch (error) {
     console.error("Error executing query", { text, error });

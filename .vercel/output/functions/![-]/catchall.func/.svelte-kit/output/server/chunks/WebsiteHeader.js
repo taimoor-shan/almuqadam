@@ -1,5 +1,6 @@
-import { z as push, G as fallback, I as copy_payload, J as assign_payload, K as bind_props, C as pop, D as slot } from "./index.js";
-import { E as EditorToolbar_1, W as WebsiteNav, M as Modal } from "./EditorToolbar.js";
+import { z as push, G as fallback, J as copy_payload, K as assign_payload, N as bind_props, C as pop, D as slot } from "./index.js";
+import { W as WebsiteNav, M as Modal } from "./WebsiteNav.js";
+import { E as EditorToolbar_1 } from "./EditorToolbar.js";
 function WebsiteHeader($$payload, $$props) {
   push();
   let showUserMenu = fallback($$props["showUserMenu"], false);

@@ -1,7 +1,7 @@
-import { Q as store_set, I as copy_payload, J as assign_payload, K as bind_props, C as pop, z as push, S as head } from "../../../../chunks/index.js";
+import { T as store_set, J as copy_payload, K as assign_payload, N as bind_props, C as pop, z as push, U as head } from "../../../../chunks/index.js";
 import "../../../../chunks/util.js";
 import "../../../../chunks/client.js";
-import { c as currentUser, i as isEditing, N as NotEditable, F as Footer } from "../../../../chunks/EditorToolbar.js";
+import { c as currentUser, i as isEditing, N as NotEditable, F as Footer } from "../../../../chunks/WebsiteNav.js";
 import { E as EditableWebsiteTeaser } from "../../../../chunks/EditableWebsiteTeaser.js";
 import { A as Article } from "../../../../chunks/Article.js";
 import { W as WebsiteHeader } from "../../../../chunks/WebsiteHeader.js";

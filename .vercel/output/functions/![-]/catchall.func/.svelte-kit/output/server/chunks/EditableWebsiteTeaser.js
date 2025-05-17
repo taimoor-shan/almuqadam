@@ -1,7 +1,7 @@
-import { z as push, G as fallback, I as copy_payload, J as assign_payload, K as bind_props, C as pop, R as ensure_array_like, O as store_get, M as attr_class, T as attr, P as unsubscribe_stores } from "./index.js";
+import { z as push, G as fallback, J as copy_payload, K as assign_payload, N as bind_props, C as pop, S as ensure_array_like, I as store_get, O as attr_class, P as attr, M as unsubscribe_stores } from "./index.js";
 import "./util.js";
-import { P as PlainText, i as isEditing } from "./EditorToolbar.js";
-import { I as Image } from "./Image.js";
+import { P as PlainText, I as Image } from "./EditorToolbar.js";
+import { i as isEditing } from "./WebsiteNav.js";
 function EditableWebsiteTeaser($$payload, $$props) {
   push();
   var $$store_subs;
@@ -10,7 +10,7 @@ function EditableWebsiteTeaser($$payload, $$props) {
     titleHighlight: "immigration",
     titleEnd: "journey?",
     buttonText: "Schedule a free call",
-    buttonUrl: "contact.html",
+    buttonUrl: "/contact",
     backgroundImage: "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/677922fe8c4e46abad5e3388_vector-05.avif",
     features: [
       {
@@ -32,7 +32,7 @@ function EditableWebsiteTeaser($$payload, $$props) {
   let $$inner_payload;
   function $$render_inner($$payload2) {
     const each_array = ensure_array_like(cta.features);
-    $$payload2.out += `<section class="cta-section section-spacing"><div class="w-layout-blockcontainer container w-container"><div data-w-id="eb5f441a-d2c2-118b-d0a4-b31977d2e8cc" class="cta-wrap gradient-1"><div class="cta-content-wrap"><h2 class="cta-title">`;
+    $$payload2.out += `<section class="cta-section section-spacing"><div class="w-layout-blockcontainer container w-container"><div class="cta-wrap bg-black"><div class="cta-content-wrap"><h2 class="cta-title">`;
     PlainText($$payload2, {
       get content() {
         return cta.title;
@@ -107,7 +107,7 @@ function EditableWebsiteTeaser($$payload, $$props) {
     } else {
       $$payload2.out += "<!--[!-->";
     }
-    $$payload2.out += `<!--]--> <a${attr("href", cta.buttonUrl)} class="button-black w-button">`;
+    $$payload2.out += `<!--]--> <a${attr("href", cta.buttonUrl)} class="button-gradient w-button">`;
     PlainText($$payload2, {
       get content() {
         return cta.buttonText;
@@ -117,16 +117,7 @@ function EditableWebsiteTeaser($$payload, $$props) {
         $$settled = false;
       }
     });
-    $$payload2.out += `<!----></a></div> `;
-    Image($$payload2, {
-      src: cta.backgroundImage,
-      loading: "lazy",
-      alt: "Background vector image",
-      class: "vector-06",
-      maxWidth: "450",
-      maxHeight: "450"
-    });
-    $$payload2.out += `<!----></div></div></section>`;
+    $$payload2.out += `<!----></a></div> <img src="/images/teaserBg.avif" loading="lazy" alt="Vector 05" class="vector-06"></div></div></section>`;
   }
   do {
     $$settled = true;

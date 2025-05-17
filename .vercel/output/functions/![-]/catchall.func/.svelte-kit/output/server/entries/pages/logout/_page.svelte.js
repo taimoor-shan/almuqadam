@@ -1,4 +1,4 @@
-import { K as bind_props, C as pop, z as push } from "../../../chunks/index.js";
+import { N as bind_props, C as pop, z as push } from "../../../chunks/index.js";
 import { L as Limiter } from "../../../chunks/Limiter.js";
 function _page($$payload, $$props) {
   push();
@@ -8,10 +8,10 @@ function _page($$payload, $$props) {
       $$payload2.out += `<div class="pt-20">`;
       if (form?.incorrect) {
         $$payload2.out += "<!--[-->";
-        $$payload2.out += `<p class="p-4 bg-red-100 text-red-600 my-4 rounded-md">Error while signing out.</p>`;
+        $$payload2.out += `<p class="p-4 bg-red-100 text-red-600 my-4 rounded-md">Error while signing out.</p> <p class="mt-4"><a class="underline" href="/">Return to home page</a></p>`;
       } else {
         $$payload2.out += "<!--[!-->";
-        $$payload2.out += `Successfully logged out. <a class="underline" href="/">Continue</a>.`;
+        $$payload2.out += `<p>Signing out...</p> <p>If you are not redirected automatically, <a href="/" class="underline">click here</a> to go to the home page.</p>`;
       }
       $$payload2.out += `<!--]--></div>`;
     },

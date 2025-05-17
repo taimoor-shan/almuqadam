@@ -1,4 +1,4 @@
-import { z as push, G as fallback, T as attr, M as attr_class, N as clsx, D as slot, K as bind_props, C as pop } from "./index.js";
+import { z as push, G as fallback, P as attr, O as attr_class, Q as clsx, D as slot, N as bind_props, C as pop } from "./index.js";
 import { c as classNames } from "./util.js";
 function BaseButton($$payload, $$props) {
   push();

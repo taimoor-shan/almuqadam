@@ -1,8 +1,74 @@
 import slugify from "slugify";
 import { S as SHORTCUTS } from "./constants.js";
 import { n as nanoid } from "./util.js";
-import { t as transaction, a as queryOne, q as query, b as queryMany, A as ADMIN_PASSWORD } from "./db.js";
+import { q as query, a as queryOne, t as transaction, b as queryMany, A as ADMIN_PASSWORD } from "./db.js";
 import { Blob } from "node:buffer";
+async function storeAssetInDatabase(asset_id, file) {
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    await query(
+      `INSERT INTO assets (asset_id, mime_type, updated_at, size, data)
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT (asset_id) DO UPDATE
+       SET mime_type = EXCLUDED.mime_type,
+           updated_at = EXCLUDED.updated_at,
+           size = EXCLUDED.size,
+           data = EXCLUDED.data`,
+      [asset_id, file.type, (/* @__PURE__ */ new Date()).toISOString(), file.size, buffer]
+    );
+    console.log(`Asset ${asset_id} stored successfully (${file.size} bytes)`);
+  } catch (error) {
+    console.error("Error storing asset in database:", error);
+    throw new Error(`Failed to store asset: ${error.message}`);
+  }
+}
+async function getAssetFromDatabase(asset_id) {
+  try {
+    const row = await queryOne(
+      `SELECT asset_id, mime_type, updated_at, size, data
+       FROM assets
+       WHERE asset_id = $1`,
+      [asset_id]
+    );
+    if (!row) return null;
+    return {
+      filename: row.asset_id.split("/").slice(-1)[0],
+      mimeType: row.mime_type,
+      lastModified: row.updated_at,
+      size: row.size,
+      data: new Blob([row.data], { type: row.mime_type })
+    };
+  } catch (error) {
+    console.error("Error retrieving asset from database:", error);
+    return null;
+  }
+}
+async function deleteAssetFromDatabase(asset_id) {
+  try {
+    const result = await query(
+      "DELETE FROM assets WHERE asset_id = $1",
+      [asset_id]
+    );
+    return result.rowCount > 0;
+  } catch (error) {
+    console.error("Error deleting asset from database:", error);
+    return false;
+  }
+}
+async function listAssets() {
+  try {
+    const result = await query(
+      `SELECT asset_id, mime_type, updated_at, size
+       FROM assets
+       ORDER BY updated_at DESC`
+    );
+    return result.rows;
+  } catch (error) {
+    console.error("Error listing assets:", error);
+    return [];
+  }
+}
 async function createArticle(title, content, teaser, currentUser) {
   if (!currentUser) throw new Error("Not authorized");
   let slug = slugify(title, {
@@ -96,7 +162,7 @@ async function getNextArticle(slug) {
       SELECT * FROM previous_published
       UNION
       SELECT * FROM latest_article
-    )
+    ) AS combined_results
     ORDER BY published_at ASC
     LIMIT 1;
   `, [slug]);
@@ -168,9 +234,10 @@ async function createOrUpdatePage(page_id, page, currentUser) {
 }
 async function getPage(page_id) {
   const page = await queryOne("SELECT data FROM pages WHERE page_id = $1", [page_id]);
+  console.log(`getPage(${page_id}) result:`, page);
   if (page?.data) {
     if (typeof page.data === "object") {
-      return page.data;
+      return JSON.parse(JSON.stringify(page.data));
     } else {
       try {
         return JSON.parse(page.data);
@@ -207,49 +274,111 @@ async function createOrUpdateCounter(counter_id) {
   });
 }
 async function storeAsset(asset_id, file) {
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-  await query(
-    `INSERT INTO assets (asset_id, mime_type, updated_at, size, data)
-     VALUES ($1, $2, $3, $4, $5)
-     ON CONFLICT (asset_id) DO UPDATE
-     SET mime_type = EXCLUDED.mime_type,
-         updated_at = EXCLUDED.updated_at,
-         size = EXCLUDED.size,
-         data = EXCLUDED.data`,
-    [asset_id, file.type, (/* @__PURE__ */ new Date()).toISOString(), file.size, buffer]
-  );
+  return await storeAssetInDatabase(asset_id, file);
 }
 async function getAsset(asset_id) {
-  const row = await queryOne(
-    `SELECT asset_id, mime_type, updated_at, size, data
-     FROM assets
-     WHERE asset_id = $1`,
-    [asset_id]
+  return await getAssetFromDatabase(asset_id);
+}
+async function deleteAsset(asset_id, currentUser) {
+  if (!currentUser) throw new Error("Not authorized");
+  return await deleteAssetFromDatabase(asset_id);
+}
+async function getAllAssets(currentUser) {
+  if (!currentUser) throw new Error("Not authorized");
+  return await listAssets();
+}
+async function createCountry(title, content, teaser, featured_image, flag, currentUser) {
+  if (!currentUser) throw new Error("Not authorized");
+  let slug = slugify(title, {
+    lower: true,
+    strict: true
+  });
+  const countryExists = await queryOne("SELECT slug FROM countries WHERE slug = $1", [slug]);
+  if (countryExists) {
+    slug = slug + "-" + nanoid();
+  }
+  const result = await query(
+    `INSERT INTO countries (slug, title, content, teaser, featured_image, flag, published_at)
+     VALUES($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP)
+     RETURNING slug, created_at`,
+    [slug, title, content, teaser, featured_image, flag]
   );
-  if (!row) return null;
-  return {
-    filename: row.asset_id.split("/").slice(-1),
-    mimeType: row.mime_type,
-    lastModified: row.updated_at,
-    size: row.size,
-    data: new Blob([row.data], { type: row.mime_type })
-  };
+  return result.rows[0];
+}
+async function updateCountry(slug, title, content, teaser, featured_image, flag, currentUser) {
+  if (!currentUser) throw new Error("Not authorized");
+  let newSlug = slugify(title, {
+    lower: true,
+    strict: true
+  });
+  if (newSlug !== slug) {
+    const slugExists = await queryOne("SELECT slug FROM countries WHERE slug = $1", [newSlug]);
+    if (slugExists) {
+      newSlug = newSlug + "-" + nanoid();
+    }
+    const result = await query(
+      `UPDATE countries
+       SET title = $1, content = $2, teaser = $3, featured_image = $4, flag = $5, slug = $6, updated_at = CURRENT_TIMESTAMP
+       WHERE slug = $7
+       RETURNING slug, updated_at`,
+      [title, content, teaser, featured_image, flag, newSlug, slug]
+    );
+    return result.rows[0];
+  } else {
+    const result = await query(
+      `UPDATE countries
+       SET title = $1, content = $2, teaser = $3, featured_image = $4, flag = $5, updated_at = CURRENT_TIMESTAMP
+       WHERE slug = $6
+       RETURNING slug, updated_at`,
+      [title, content, teaser, featured_image, flag, slug]
+    );
+    return result.rows[0];
+  }
+}
+async function getCountries(currentUser) {
+  if (currentUser) {
+    return await queryMany(
+      `SELECT *, COALESCE(published_at, updated_at, created_at) AS modified_at
+       FROM countries
+       ORDER BY modified_at DESC`
+    );
+  } else {
+    return await queryMany(
+      `SELECT * FROM countries
+       WHERE published_at IS NOT NULL
+       ORDER BY published_at DESC`
+    );
+  }
+}
+async function getCountryBySlug(slug) {
+  return await queryOne("SELECT * FROM countries WHERE slug = $1", [slug]);
+}
+async function deleteCountry(slug, currentUser) {
+  if (!currentUser) throw new Error("Not authorized");
+  const result = await query("DELETE FROM countries WHERE slug = $1", [slug]);
+  return result.rowCount > 0;
 }
 export {
   createArticle as a,
-  createOrUpdatePage as b,
+  createCountry as b,
   createOrUpdateCounter as c,
-  deleteArticle as d,
-  storeAsset as e,
-  getArticles as f,
-  getAsset as g,
-  getPage as h,
-  getArticleBySlug as i,
-  getNextArticle as j,
-  authenticate as k,
-  destroySession as l,
-  getCurrentUser as m,
+  deleteAsset as d,
+  deleteArticle as e,
+  deleteCountry as f,
+  getAllAssets as g,
+  createOrUpdatePage as h,
+  updateCountry as i,
+  storeAsset as j,
+  getAsset as k,
+  getArticles as l,
+  getPage as m,
+  getArticleBySlug as n,
+  getNextArticle as o,
+  getCountries as p,
+  getCountryBySlug as q,
+  authenticate as r,
   search as s,
-  updateArticle as u
+  destroySession as t,
+  updateArticle as u,
+  getCurrentUser as v
 };

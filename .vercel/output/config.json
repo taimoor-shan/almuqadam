@@ -19,6 +19,10 @@
 			"dest": "/about"
 		},
 		{
+			"src": "^/api/assets/?(?:/__data.json)?$",
+			"dest": "/api/assets"
+		},
+		{
 			"src": "^/api/counter/?(?:/__data.json)?$",
 			"dest": "/api/counter"
 		},
@@ -27,12 +31,20 @@
 			"dest": "/api/create-article"
 		},
 		{
+			"src": "^/api/create-country/?(?:/__data.json)?$",
+			"dest": "/api/create-country"
+		},
+		{
 			"src": "^/api/cron/?(?:/__data.json)?$",
 			"dest": "/api/cron"
 		},
 		{
 			"src": "^/api/delete-article/?(?:/__data.json)?$",
 			"dest": "/api/delete-article"
+		},
+		{
+			"src": "^/api/delete-country/?(?:/__data.json)?$",
+			"dest": "/api/delete-country"
 		},
 		{
 			"src": "^/api/save-global/?(?:/__data.json)?$",
@@ -51,8 +63,16 @@
 			"dest": "/api/update-article"
 		},
 		{
+			"src": "^/api/update-country/?(?:/__data.json)?$",
+			"dest": "/api/update-country"
+		},
+		{
 			"src": "^/api/upload-asset/?(?:/__data.json)?$",
 			"dest": "/api/upload-asset"
+		},
+		{
+			"src": "^/assets-manager/?(?:/__data.json)?$",
+			"dest": "/assets-manager"
 		},
 		{
 			"src": "^/assets(/.*)?/?(?:/__data.json)?$",
@@ -71,12 +91,24 @@
 			"dest": "/blog/[slug]"
 		},
 		{
-			"src": "^/global-settings/?(?:/__data.json)?$",
-			"dest": "/global-settings"
+			"src": "^/contact/?(?:/__data.json)?$",
+			"dest": "/contact"
 		},
 		{
-			"src": "^/imprint/?(?:/__data.json)?$",
-			"dest": "/imprint"
+			"src": "^/countries/?(?:/__data.json)?$",
+			"dest": "/countries"
+		},
+		{
+			"src": "^/countries/new/?(?:/__data.json)?$",
+			"dest": "/countries/new"
+		},
+		{
+			"src": "^/countries/([^/]+?)/?(?:/__data.json)?$",
+			"dest": "/countries/[slug]"
+		},
+		{
+			"src": "^/global-settings/?(?:/__data.json)?$",
+			"dest": "/global-settings"
 		},
 		{
 			"src": "^/login/?(?:/__data.json)?$",
@@ -85,6 +117,10 @@
 		{
 			"src": "^/logout/?(?:/__data.json)?$",
 			"dest": "/logout"
+		},
+		{
+			"src": "^/visas/?(?:/__data.json)?$",
+			"dest": "/visas"
 		},
 		{
 			"src": "/.*",
