@@ -1,15 +1,28 @@
 .DS_Store
 node_modules
+# Database backups
+data/pg-backup
+data/pg-backup/*
+*.dump
+*.sql.gz
+*.sql.bz2
+*.sql.zip
+# Build files
 /build
 /.svelte-kit
 /package
+# Environment variables
 .env
 .env.*
 !.env.example
+# Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+# Database
 *.sqlite*
+# Deployment
 fly.toml
 .tool-versions
 .vercel
+# Dependencies
 package-lock.json
