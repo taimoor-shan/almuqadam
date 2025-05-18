@@ -3,11 +3,15 @@
   import RichText from './RichText.svelte';
 
   // Props
-  let { title = '', content = '', isOpen = false, index = 0, toggle } = $props();
+  export let title = '';
+  export let content = '';
+  export let isOpen = false;
+  export let index = 0;
+  export let toggle;
 
   // Toggle accordion item
   function toggleAccordion() {
-    toggle?.({ index });
+    toggle({ detail: { index } });
   }
 </script>
 

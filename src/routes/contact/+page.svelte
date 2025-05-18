@@ -10,7 +10,7 @@
   import WebsiteHeader from '$lib/components/WebsiteHeader.svelte';
   import EditableWebsiteTeaser from '$lib/components/EditableWebsiteTeaser.svelte';
   import ContactForm from '$lib/components/ContactForm.svelte';
-  import Accordion from '$lib/components/Accordion.svelte';
+  import EditableAccordion from '$lib/components/EditableAccordion.svelte';
 
   export let data;
 
@@ -201,7 +201,7 @@
 </section>
 
 <!-- Faqs Section -->
-<Accordion bind:this={accordionComponent} faqsHtml={faqs} />
+<EditableAccordion bind:this={accordionComponent} faqsHtml={faqs} />
 
 <Footer counter="/contact" />
 

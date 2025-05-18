@@ -13,6 +13,7 @@
   import EditableWebsiteTeaser from '$lib/components/EditableWebsiteTeaser.svelte';
   import EditableVisaService from '$lib/components/EditableVisaService.svelte';
   import EditableVisaServices from '$lib/components/EditableVisaServices.svelte';
+  import EditableAccordion from '$lib/components/EditableAccordion.svelte';
   import Icon from '@iconify/svelte';
 
   export let data;
@@ -24,7 +25,7 @@
     $currentUser = data.currentUser;
     title = data.page?.title || 'Our Visa Services';
     subtitle = data.page?.subtitle || 'Expert guidance for your international travel needs';
-    visaIntro = data.page?.visaIntro || 
+    visaIntro = data.page?.visaIntro ||
       `<p>At Almuqadam, we specialize in providing comprehensive visa services to help you travel with confidence. Our team of experienced consultants will guide you through every step of the application process, ensuring that your documentation is complete and accurate.</p>
       <p>We offer a range of visa services tailored to your specific needs, whether you're traveling for tourism, business, education, or family visits.</p>`;
     visaServices = data.page?.visaServices || [
@@ -53,7 +54,7 @@
         features: ['Single or multiple entry', 'Valid for up to 10 years', 'Fast processing options']
       }
     ];
-    faqs = data.page?.faqs || 
+    faqs = data.page?.faqs ||
       `<h2>What documents do I need for a visa application?</h2>
       <p>Required documents typically include a valid passport, completed application form, passport-sized photos, proof of travel insurance, flight itinerary, accommodation details, proof of financial means, and a cover letter. Specific requirements vary by country and visa type.</p>
       <h2>How long does the visa application process take?</h2>
@@ -70,9 +71,17 @@
     showUserMenu = false;
   }
 
+  // Reference to the accordion component
+  let accordionComponent;
+
   async function savePage() {
     try {
       if ($currentUser) {
+        // If we have an accordion component reference, get the HTML from it
+        if (accordionComponent) {
+          faqs = accordionComponent.itemsToHtml();
+        }
+
         await fetchJSON('POST', '/api/save-page', {
           pageId: 'visas',
           page: {
@@ -152,7 +161,7 @@
       <h2>Our Services</h2>
       <p class="text-xl mt-4">Comprehensive visa solutions for your travel needs</p>
     </div>
-    
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       {#each visaServices as service, i}
         <div class="visa-service-card p-6 bg-white rounded-lg shadow-md">
@@ -196,20 +205,11 @@
 </section>
 
 <!-- FAQs Section -->
-<section class="section-spacing">
-  <div class="w-layout-blockcontainer container w-container">
-    <div class="section-title text-center mb-12">
-      <h2>Frequently Asked Questions</h2>
-      <p class="text-xl mt-4">Find answers to common visa application questions</p>
-    </div>
-    
-    <div class="faqs-content">
-      <div class="prose md:prose-xl">
-        <RichText multiLine bind:content={faqs} />
-      </div>
-    </div>
-  </div>
-</section>
+<EditableAccordion
+  bind:this={accordionComponent}
+  faqsHtml={faqs}
+  title="Frequently <span class='heading-serif'>Asked</span> Questions"
+/>
 
 <EditableWebsiteTeaser bind:cta />
 
