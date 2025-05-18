@@ -43,11 +43,9 @@
                             <a href="/about" class="hover:underline">About</a>
                         </li>
                         <li class="mb-4">
-                            <a href="/visas" class="hover:underline">Visas</a>
+                            <a href="/countries" class="hover:underline">Countries</a>
                         </li>
-                        <li class="mb-4">
-                            <a href="/blog" class="hover:underline">Blog</a>
-                        </li>
+                       
                         <li class="mb-4">
                             <a href="/contact" class="hover:underline">Contact</a>
                         </li>
