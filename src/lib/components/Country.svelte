@@ -12,7 +12,7 @@
 </script>
 
 <section class="country-detail-hero-section">
-  <div style={`background-image:url(${featured_image})`} class="country-detail-wrap">
+  <div class="country-detail-wrap" style={`background-image:url(${featured_image})`} >
     <div class="w-layout-blockcontainer container w-container">
       <div class="country-detail-hero-content">
         <h1 class="country-detail-hero-title">
@@ -23,7 +23,7 @@
         {/if}
           <div class="country-flag-container">
             <Image
-              class="country-flag--image"
+              class="country-detail-hero-image"
               maxWidth="200"
               maxHeight="200"
               quality="1"

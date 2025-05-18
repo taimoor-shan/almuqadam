@@ -73,7 +73,7 @@
       />
 
        <Image
-        class="country-image"
+        class="country-flag"
         maxWidth="100"
         maxHeight="200"
         quality="1"
