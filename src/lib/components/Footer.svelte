@@ -2,9 +2,16 @@
   import { onMount } from 'svelte';
   import { fetchJSON } from '$lib/util';
   import NotEditable from '$lib/components/NotEditable.svelte';
+  import { globalPhone, globalEmail, globalAddress } from '$lib/stores.js';
 
   export let counter;
   let count;
+
+  // Function to create a Google Maps URL from an address
+  function getGoogleMapsUrl(address) {
+    const encodedAddress = encodeURIComponent(address);
+    return `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+  }
 
   onMount(async () => {
     if (counter) {
@@ -45,7 +52,7 @@
                         <li class="mb-4">
                             <a href="/countries" class="hover:underline">Countries</a>
                         </li>
-                       
+
                         <li class="mb-4">
                             <a href="/contact" class="hover:underline">Contact</a>
                         </li>
@@ -56,14 +63,14 @@
 
                     <ul class="text-gray-500 dark:text-gray-400 font-medium">
                         <li class="mb-4">
-                            <a href="mailto:info@almuqadam.com" class="hover:underline">info@almuqadam.com</a>
+                            <a href={`mailto:${$globalEmail || 'info@almuqadam.com'}`} class="hover:underline">{$globalEmail || 'info@almuqadam.com'}</a>
                         </li>
                         <li class="mb-4">
-                            <a href="tel:+447700900123" class="hover:underline">+44 7700 900123</a>
+                            <a href={`tel:${$globalPhone || '+44 7700 900123'}`} class="hover:underline">{$globalPhone || '+44 7700 900123'}</a>
                         </li>
                         <li class="mb-4">
-                           <a href="/contact">
-                            19 Ashwood Close, Greater London, United Kingdom
+                           <a href={$globalAddress ? getGoogleMapsUrl($globalAddress) : '/contact'} target="_blank" rel="noopener noreferrer">
+                            {$globalAddress || '19 Ashwood Close, Greater London, United Kingdom'}
                            </a>
                         </li>
                     </ul>

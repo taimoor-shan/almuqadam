@@ -16,7 +16,7 @@
   import ImmigrationItem from '$lib/components/ImmigrationItem.svelte';
   import EditableVisaService from '$lib/components/EditableVisaService.svelte';
   import EditableVisaServices from '$lib/components/EditableVisaServices.svelte';
-  import { currentUser, isEditing } from '$lib/stores.js';
+  import { currentUser, isEditing, globalPhone, globalEmail, globalAddress } from '$lib/stores.js';
   import WebsiteHeader from '$lib/components/WebsiteHeader.svelte';
   import EditableWebsiteTeaser from '$lib/components/EditableWebsiteTeaser.svelte';
   import BentoGallery from '$lib/components/BentoGallery.svelte';
@@ -562,14 +562,14 @@
               <PlainText bind:content={phone1} />
             </div>
           {:else}
-            <a href="tel:{phone1}" class="hover:text-blue-600 transition-colors flex gap-2">
+            <a href={`tel:${$globalPhone || phone1}`} class="hover:text-blue-600 transition-colors flex gap-2">
               <Icon
                 class="text-blue-600"
                 icon="carbon:phone"
                 width="24"
                 height="24"
               />
-              {phone1}
+              {$globalPhone || phone1}
             </a>
           {/if}
         </div>
@@ -587,9 +587,9 @@
                 <PlainText bind:content={email} />
               </div>
             {:else}
-              <a href="mailto:{email}" class="hover:text-blue-600 transition-colors flex gap-2">
+              <a href={`mailto:${$globalEmail || email}`} class="hover:text-blue-600 transition-colors flex gap-2">
                 <Icon icon="mdi:envelope-outline" width="24" height="24" />
-                {email}
+                {$globalEmail || email}
               </a>
             {/if}
            </div>
@@ -601,13 +601,13 @@
   {:else}
     <p>
       <a
-        href={getGoogleMapsUrl(officeAddress1)}
+        href={getGoogleMapsUrl($globalAddress || officeAddress1)}
         target="_blank"
         rel="noopener noreferrer"
         class="hover:text-blue-600 transition-colors flex gap-2"
       >
       <Icon icon="akar-icons:location" width="24" height="24" />
-        {officeAddress1}
+        {$globalAddress || officeAddress1}
       </a>
     </p>
   {/if}
@@ -626,7 +626,7 @@
       <div class="contact-item">
         <ContactForm
           title="Get a Free Visa Assessment"
-          recipientEmail={EMAIL}
+          recipientEmail={$globalEmail || EMAIL}
         />
       </div>
     </div>

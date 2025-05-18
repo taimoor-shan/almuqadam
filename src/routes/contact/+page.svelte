@@ -6,7 +6,7 @@
   import Footer from '$lib/components/Footer.svelte';
   import Image from '$lib/components/Image.svelte';
   import NotEditable from '$lib/components/NotEditable.svelte';
-  import { currentUser, isEditing } from '$lib/stores.js';
+  import { currentUser, isEditing, globalPhone, globalEmail, globalAddress } from '$lib/stores.js';
   import WebsiteHeader from '$lib/components/WebsiteHeader.svelte';
   import EditableWebsiteTeaser from '$lib/components/EditableWebsiteTeaser.svelte';
   import ContactForm from '$lib/components/ContactForm.svelte';
@@ -16,7 +16,7 @@
 
   // Default content
   let title, subtitle, contactInfo, heroImage, showUserMenu, faqs;
-  let phoneSupport1, phoneSupport2, emailSupport, officeAddress1, officeHours1, officeHours2;
+  let phoneSupport1, emailSupport, officeAddress1, officeHours1, officeHours2;
 
   function initOrReset() {
     $currentUser = data.currentUser;
@@ -41,7 +41,6 @@
 
     // New contact section variables
     phoneSupport1 = data.page?.phoneSupport1 ?? '(91) 125 879 786';
-    phoneSupport2 = data.page?.phoneSupport2 ?? '(+85) 578 666 333';
     emailSupport = data.page?.emailSupport ?? 'info@almuqadam.com';
     officeAddress1 = data.page?.officeAddress1 ?? 'Las Vegas - 4th Floor, Plot No.22,145 Murphy Canyon Rd.';
     officeHours1 = data.page?.officeHours1 ?? 'Mon-Sat: 9 AM – 6 PM';
@@ -71,7 +70,6 @@
             contactInfo,
             heroImage,
             phoneSupport1,
-            phoneSupport2,
             emailSupport,
             officeAddress1,
             officeHours1,
@@ -129,41 +127,36 @@
       <div id="w-node-_63bdca00-d749-298a-957d-ccf9955bcc13-dd74d3aa">
         <ContactForm
           title="How can we help you today?"
-          recipientEmail={emailSupport}
+          recipientEmail={$globalEmail || emailSupport}
           customClass="no-margin w-form"
         />
       </div>
     </div>
     <div data-w-id="24ef07e0-c8c3-1867-6557-1a6b46113e7b" style="" class="grid-why-choose-two">
-      <div class="contact-item"><img src="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/677b762dae199ebab855a5b5_icon-12.svg" loading="eager" alt="Phone support icon" class="contact-icon" />
+      <div class="contact-item">
+        <img src="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/677b762dae199ebab855a5b5_icon-12.svg" loading="eager" alt="Phone support icon" class="contact-icon" />
         <div class="contact-info">
           <h2 class="contact-info-title">Quick phone support</h2>
           <p><PlainText bind:content={subtitle} /></p>
-          <a href={`tel:${phoneSupport1}`} class="button-link text-primary-1">
+          <a href={`tel:${$globalPhone || phoneSupport1}`} class="button-link text-primary-1">
             {#if $isEditing}
               <PlainText bind:content={phoneSupport1} />
             {:else}
-              {phoneSupport1}
+              {$globalPhone || phoneSupport1}
             {/if}
           </a>
-          <a href={`tel:${phoneSupport2}`} class="button-link text-primary-1">
-            {#if $isEditing}
-              <PlainText bind:content={phoneSupport2} />
-            {:else}
-              {phoneSupport2}
-            {/if}
-          </a>
+          
         </div>
       </div>
       <div class="contact-item"><img src="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/677b762d82e5235093fdcbfa_icon-13.svg" loading="eager" alt="Email icon" class="contact-icon" />
         <div class="contact-info">
           <h2 class="contact-info-title">Email for quick replies</h2>
           <p><PlainText bind:content={contactInfo} /></p>
-          <a href={`mailto:${emailSupport}`} class="button-link text-primary-1">
+          <a href={`mailto:${$globalEmail || emailSupport}`} class="button-link text-primary-1">
             {#if $isEditing}
               <PlainText bind:content={emailSupport} />
             {:else}
-              {emailSupport}
+              {$globalEmail || emailSupport}
             {/if}
           </a>
         </div>
@@ -176,7 +169,7 @@
               {#if $isEditing}
                 <PlainText bind:content={officeAddress1} />
               {:else}
-                {officeAddress1}
+                {$globalAddress || officeAddress1}
               {/if}
             </div>
             <div>
