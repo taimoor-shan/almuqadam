@@ -6,7 +6,7 @@
   // Import EmailJS environment variables
   import {
     PUBLIC_EMAILJS_SERVICE_ID,
-    PUBLIC_EMAILJS_TEMPLATE_ID,
+    PUBLIC_EMAILJS_COUNTRY_TEMPLATE_ID, // Country-specific template
     PUBLIC_EMAILJS_PUBLIC_KEY
   } from '$env/static/public';
 
@@ -54,7 +54,7 @@
       // Send email using EmailJS directly from the client
       const result = await emailjs.send(
         PUBLIC_EMAILJS_SERVICE_ID,
-        PUBLIC_EMAILJS_TEMPLATE_ID,
+        PUBLIC_EMAILJS_COUNTRY_TEMPLATE_ID,
         templateParams
       );
 
