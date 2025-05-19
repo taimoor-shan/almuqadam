@@ -26,7 +26,8 @@
     "copy-data": "node scripts/copy-data.js",
     "copy-local-to-live": "node scripts/copy-local-to-live.js",
     "direct-copy": "node scripts/direct-copy.js",
-    "ssl-direct-copy": "node scripts/ssl-direct-copy.js"
+    "ssl-direct-copy": "node scripts/ssl-direct-copy.js",
+    "purge-css": "node purge-css.js"
   },
   "devDependencies": {
     "@iconify/svelte": "^5.0.0",
@@ -41,6 +42,7 @@
     "postcss-import": "^16.1.0",
     "prettier": "^3.2.5",
     "prettier-plugin-svelte": "^3.2.1",
+    "purgecss": "^5.0.0",
     "svelte": "^5.0.0-next.68",
     "vite": "^5.1.6"
   },

@@ -43,7 +43,7 @@
     </div>
   </section>
 
-    <section class="countries-section section-spacing-sm">
+    <section class="countries-section section-spacing-sm pb-0">
     <div class="w-layout-blockcontainer container w-container">
       <div data-w-id="11e75272-9129-6f71-4957-3917aedcd938" class="w-dyn-list">
         <div role="list" class="grid-countries w-dyn-items">

@@ -22,11 +22,7 @@
 </script>
 
 <NotEditable>
-
-
-
-
-    <footer class="bg-accent py-12 border-t border-primary-1">
+    <footer class="bg-accent pt-8 pb-4 lg:py-12 border-t border-primary-1">
       <div class="mx-auto w-full max-w-screen-xl p-4">
           <div class="md:flex md:justify-between">
             <div class=" w-full md:w-[50%] mb-6 md:mb-0">
@@ -42,7 +38,7 @@
             <div class="grid grid-cols-2 gap-8 sm:gap-6 w-full md:w-[50%]">
                 <div>
                     <h6 class="mb-6 text-primary-1">Navigation</h6>
-                    <ul class="text-gray-500 dark:text-gray-400 font-medium">
+                    <ul class="">
                         <li class="mb-4">
                             <a href="/" class="hover:underline">Home</a>
                         </li>
@@ -61,7 +57,7 @@
                 <div>
                     <h6 class="mb-6 text-primary-1">Contact Us</h6>
 
-                    <ul class="text-gray-500 dark:text-gray-400 font-medium">
+                    <ul class="">
                         <li class="mb-4">
                             <a href={`mailto:${$globalEmail || 'info@almuqadam.com'}`} class="hover:underline">{$globalEmail || 'info@almuqadam.com'}</a>
                         </li>

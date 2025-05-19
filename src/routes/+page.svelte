@@ -23,10 +23,9 @@
   import Lightbox from '$lib/components/Lightbox.svelte';
   import Notification from '$lib/components/Notification.svelte';
   import ContactForm from '$lib/components/ContactForm.svelte';
+  import CountryTeaser from '$lib/components/CountryTeaser.svelte';
 
   import Icon from '@iconify/svelte';
-
-
 
   export let data;
 
@@ -82,12 +81,12 @@
     {
       title: 'Free Assessment',
       description:
-        "Send us a message or fill out the short form — we’ll review your case and let you know if you qualify, no strings attached."
+        'Send us a message or fill out the short form — we’ll review your case and let you know if you qualify, no strings attached.'
     },
     {
       title: 'Documentation Support',
       description:
-        "We’ll tell you exactly what documents you need, help you prepare them, and make sure everything is in order."
+        'We’ll tell you exactly what documents you need, help you prepare them, and make sure everything is in order.'
     },
     {
       title: 'Submit & Wait with Confidence',
@@ -122,7 +121,10 @@
     phone1,
     email,
     logoText,
-    visaServices;
+    visaServices,
+    countriesTitle,
+    countriesSubtitle,
+    countriesDescription;
 
   // Notification state
   let showNotification = false;
@@ -220,10 +222,18 @@
       )
     );
 
+    // Countries section
+    countriesTitle = data.page?.countriesTitle || 'Popular Visa Destinations';
+    countriesSubtitle = data.page?.countriesSubtitle || 'Destinations';
+    countriesDescription =
+      data.page?.countriesDescription ||
+      'Explore our most requested visa destinations and find your next adventure';
+
     // Contact section
     contactTitle = data.page?.contactTitle || 'Contact Us';
     contactSubtitle = data.page?.contactSubtitle || 'Get in touch with our team';
-    officeAddress1 = data.page?.officeAddress1 || '19 Ashwood Close, Greater London, United Kingdom';
+    officeAddress1 =
+      data.page?.officeAddress1 || '19 Ashwood Close, Greater London, United Kingdom';
 
     phone1 = data.page?.phone1 || '+44 7700 900123';
     email = data.page?.email || 'info@almuqadam.com';
@@ -231,22 +241,28 @@
     // Initialize visa services
     visaServices = data.page?.visaServices || [
       {
-        image: "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677e7240e3e34d7fa6783b18_service-01.avif",
-        title: "Schengen Visa",
-        description: "Travel across 25+ European countries with one visa. Perfect for tourism, business trips, or visiting family.",
-        link: "immigration/visa-application-assistance.html"
+        image:
+          'https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677e7240e3e34d7fa6783b18_service-01.avif',
+        title: 'Schengen Visa',
+        description:
+          'Travel across 25+ European countries with one visa. Perfect for tourism, business trips, or visiting family.',
+        link: 'immigration/visa-application-assistance.html'
       },
       {
-        image: "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677e724aed0c2bd50318aff5_service-02.avif",
-        title: "USA Visit Visa",
-        description: "Heading to the States? We guide you through the tricky B1/B2 process and help avoid common pitfalls.",
-        link: "immigration/permanent-residency-solutions.html"
+        image:
+          'https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677e724aed0c2bd50318aff5_service-02.avif',
+        title: 'USA Visit Visa',
+        description:
+          'Heading to the States? We guide you through the tricky B1/B2 process and help avoid common pitfalls.',
+        link: 'immigration/permanent-residency-solutions.html'
       },
       {
-        image: "https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677e72530d4acb3027e0ab80_service-03.avif",
-        title: "Australia Visit Visa",
-        description: "From holidays to short business trips, we'll help you apply with confidence and avoid delays.",
-        link: "immigration/citizenship-applications.html"
+        image:
+          'https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b3bf/677e72530d4acb3027e0ab80_service-03.avif',
+        title: 'Australia Visit Visa',
+        description:
+          "From holidays to short business trips, we'll help you apply with confidence and avoid delays.",
+        link: 'immigration/citizenship-applications.html'
       }
     ];
 
@@ -325,8 +341,6 @@
     counters = counters; // trigger update
   }
 
-
-
   // No need for event handlers anymore, we're using direct binding
 
   async function savePage() {
@@ -365,7 +379,11 @@
             officeAddress1,
             phone1,
             email,
-            visaServices: visaServicesCopy
+            visaServices: visaServicesCopy,
+            // Countries section
+            countriesTitle,
+            countriesSubtitle,
+            countriesDescription
           }
         });
       }
@@ -403,7 +421,7 @@
         <!-- <a href="tel:{phone1}" class="button-secondary-2-outline w-inline-block"
           >
           <Icon
-            class="text-blue-600"
+            class="text-prime"
             icon="carbon:phone"
             width="24"
             height="24"
@@ -430,46 +448,52 @@
 <!-- about -->
 <section class="about-section section-spacing-bottom">
   <div class="w-layout-blockcontainer container w-container">
-      <div class="about-content-right">
+    <div class="about-content-right">
       <span class="text-primary-1">About Us</span>
 
-        <div>
-
-          <h2 class="about-title-right"><PlainText bind:content={aboutBlurb} /></h2>
-        </div>
-        <div class="grid-about-counter">
-          {#each counters as counter, i}
-            <Counter
-              bind:counter
-              firstEntry={i === 0}
-              lastEntry={i === counters.length - 1}
-              on:delete={() => deleteCounter(i)}
-              on:up={() => moveCounter(i, 'up')}
-              on:down={() => moveCounter(i, 'down')}
-            />
-          {/each}
-
-          {#if $isEditing}
-            <div class="text-center mt-4">
-              <SecondaryButton on:click={addCounter}>Add counter</SecondaryButton>
-            </div>
-          {/if}
-        </div>
+      <div>
+        <h2 class="about-title-right mt-6"><PlainText bind:content={aboutBlurb} /></h2>
       </div>
+      <div class="grid-about-counter">
+        {#each counters as counter, i}
+          <Counter
+            bind:counter
+            firstEntry={i === 0}
+            lastEntry={i === counters.length - 1}
+            on:delete={() => deleteCounter(i)}
+            on:up={() => moveCounter(i, 'up')}
+            on:down={() => moveCounter(i, 'down')}
+          />
+        {/each}
 
+        {#if $isEditing}
+          <div class="text-center mt-4">
+            <SecondaryButton on:click={addCounter}>Add counter</SecondaryButton>
+          </div>
+        {/if}
+      </div>
+    </div>
   </div>
-  <div data-w-id="1bf37b48-b442-9317-453e-3e872ec208bd" class="vector-01"><img src="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778d61303bfc2abf8a13ab9_vector-01.avif" loading="lazy" sizes="(max-width: 628px) 100vw, 628px" srcset="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778d61303bfc2abf8a13ab9_vector-01-p-500.png 500w, https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778d61303bfc2abf8a13ab9_vector-01.avif 628w" alt="Vector 01" class="vector-01-image" /></div>
-
+  <div data-w-id="1bf37b48-b442-9317-453e-3e872ec208bd" class="vector-01">
+    <img
+      src="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778d61303bfc2abf8a13ab9_vector-01.avif"
+      loading="lazy"
+      sizes="(max-width: 628px) 100vw, 628px"
+      srcset="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778d61303bfc2abf8a13ab9_vector-01-p-500.png 500w, https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778d61303bfc2abf8a13ab9_vector-01.avif 628w"
+      alt="Vector 01"
+      class="vector-01-image"
+    />
+  </div>
 </section>
 
 <!-- Services -->
-<section class="immigration-section">
+<!-- <section class="immigration-section">
   <div class="w-layout-blockcontainer container w-container">
     <div data-w-id="943f276d-10dd-ea22-23fd-05ec45819578" style="" class="immigration-wrap">
       <div class="section-title immigration-section-title">
       <span class="text-primary-1">Our Services</span>
 
-        <h2>Countries We Serve</h2>
+        <h2>Our Services</h2>
       </div>
       <div class="">
         <div class="">
@@ -478,6 +502,30 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section> -->
+
+<!-- Countries we serve -->
+
+<section class="countries-section section-spacing">
+  <div class="w-layout-blockcontainer container w-container">
+    <div data-w-id="countries-section-title" class="section-title text-center mb-12">
+      <span class="text-primary-1"><PlainText bind:content={countriesSubtitle} /></span>
+      <h2><PlainText bind:content={countriesTitle} /></h2>
+      <p class="mt-4"><PlainText bind:content={countriesDescription} /></p>
+    </div>
+    <div class="w-dyn-list">
+      <div role="list" class="grid-countries w-dyn-items">
+        {#each data.countries as country, i}
+          <CountryTeaser {country} firstEntry={i === 0} />
+        {/each}
+      </div>
+      <!-- <div class="text-center mt-8">
+        <a href="/countries" class="button-secondary-2-outline w-inline-block">
+          <div>View All Destinations</div>
+        </a>
+      </div> -->
     </div>
   </div>
 </section>
@@ -489,7 +537,7 @@
       <h2><PlainText bind:content={stepsTitle} /></h2>
     </div>
   </div>
-  <div  style="" class="step-wrap">
+  <div style="" class="step-wrap">
     <img
       src="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778e316e8221903bac49617_vector-02.svg"
       loading="eager"
@@ -524,25 +572,10 @@
   </div>
 </section>
 
-
-
-<!-- FAQs -->
-<!-- <div class="bg-white">
-  <div class="max-w-screen-md mx-auto px-6">
-    <div class="font-bold text-sm sm:text-base pt-12 sm:pt-24 -mb-6 md:-mb-12">FAQs</div>
-    <div class="prose md:prose-xl pb-12 sm:pb-24">
-      <RichText multiLine bind:content={faqs} />
-    </div>
-  </div>
-</div> -->
-
 <!-- Contact Section -->
 <section id="contactSec" class="section-spacing" style="padding-top: 0;">
   <div class="w-layout-blockcontainer container w-container">
-
-
     <div class="grid-contact-split items-center">
-
       <!-- Contact Information -->
       <div class="contact-info">
         <div class="section-title text-start mb-12">
@@ -550,90 +583,70 @@
           <p class="text-xl mt-4"><PlainText bind:content={contactSubtitle} /></p>
         </div>
         <div class="phone">
-          <h6 class="text-blue-600 mb-3">Phone</h6>
+          <h6 class="text-dark mb-3">Phone</h6>
           {#if $isEditing}
             <div class="flex gap-2">
-              <Icon
-                class="text-blue-600"
-                icon="carbon:phone"
-                width="24"
-                height="24"
-              />
+              <Icon class="text-prime" icon="carbon:phone" width="24" height="24" />
               <PlainText bind:content={phone1} />
             </div>
           {:else}
-            <a href={`tel:${$globalPhone || phone1}`} class="hover:text-blue-600 transition-colors flex gap-2">
-              <Icon
-                class="text-blue-600"
-                icon="carbon:phone"
-                width="24"
-                height="24"
-              />
+            <a
+              href={`tel:${$globalPhone || phone1}`}
+              class="hover:text-prime transition-colors flex gap-2"
+            >
+              <Icon class="text-prime" icon="carbon:phone" width="24" height="24" />
               {$globalPhone || phone1}
             </a>
           {/if}
         </div>
 
-           <div class="email">
-            <h6 class="text-blue-600 mb-3">Email</h6>
-            {#if $isEditing}
-              <div class="flex gap-2">
-                <Icon
-                  class="text-blue-600"
-                  icon="ic:baseline-email"
-                  width="24"
-                  height="24"
-                />
-                <PlainText bind:content={email} />
-              </div>
-            {:else}
-              <a href={`mailto:${$globalEmail || email}`} class="hover:text-blue-600 transition-colors flex gap-2">
-                <Icon icon="mdi:envelope-outline" width="24" height="24" />
-                {$globalEmail || email}
-              </a>
-            {/if}
-           </div>
-
-<div class="address">
-  <h6 class="text-blue-600 mb-3">Address</h6>
-  {#if $isEditing}
-    <p><RichText bind:content={officeAddress1} /></p>
-  {:else}
-    <p>
-      <a
-        href={getGoogleMapsUrl($globalAddress || officeAddress1)}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="hover:text-blue-600 transition-colors flex gap-2"
-      >
-      <Icon icon="akar-icons:location" width="24" height="24" />
-        {$globalAddress || officeAddress1}
-      </a>
-    </p>
-  {/if}
-</div>
-
-
-
-            <div>
-
+        <div class="email">
+          <h6 class="text-dark mb-3">Email</h6>
+          {#if $isEditing}
+            <div class="flex gap-2">
+              <Icon class="text-prime" icon="ic:baseline-email" width="24" height="24" />
+              <PlainText bind:content={email} />
             </div>
-
+          {:else}
+            <a
+              href={`mailto:${$globalEmail || email}`}
+              class="hover:text-prime transition-colors flex gap-2"
+            >
+              <Icon class="text-prime" icon="mdi:envelope-outline" width="24" height="24" />
+              {$globalEmail || email}
+            </a>
+          {/if}
         </div>
 
+        <div class="address">
+          <h6 class="text-dark mb-3">Address</h6>
+          {#if $isEditing}
+            <p><RichText bind:content={officeAddress1} /></p>
+          {:else}
+            <p>
+              <a
+                href={getGoogleMapsUrl($globalAddress || officeAddress1)}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hover:text-prime transition-colors flex gap-2"
+              >
+                <Icon class="text-prime" icon="akar-icons:location" width="24" height="24" />
+                {$globalAddress || officeAddress1}
+              </a>
+            </p>
+          {/if}
+        </div>
+
+        <div></div>
+      </div>
 
       <!-- Contact Form -->
       <div class="contact-item">
-        <ContactForm
-          title="Get a Free Visa Assessment"
-          recipientEmail={$globalEmail || EMAIL}
-        />
+        <ContactForm title="Get a Free Visa Assessment" recipientEmail={$globalEmail || EMAIL} />
       </div>
     </div>
   </div>
 </section>
-
-
 
 <Footer counter="/" />
 

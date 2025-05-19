@@ -23,9 +23,9 @@
         {/if}
           <div class="country-flag-container">
             <Image
-              class="country-detail-hero-image"
-              maxWidth="200"
-              maxHeight="200"
+              class="country-detail-hero-image rounded-full"
+              maxWidth="100"
+              maxHeight="100"
               quality="1"
               src={flag}
               alt={title}
@@ -38,7 +38,7 @@
   </div>
 </section>
 
-<section class="country-section section-spacing-top">
+<section class="country-section section-spacing">
   <div class="w-layout-blockcontainer container w-container">
     <div class="grid-country-detail">
       <div>

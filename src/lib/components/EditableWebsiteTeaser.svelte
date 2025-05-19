@@ -69,7 +69,7 @@
 
 <section class="cta-section section-spacing">
   <div class="w-layout-blockcontainer container w-container">
-    <div class="cta-wrap bg-black">
+    <div class="cta-wrap bg-dark">
       <div class="cta-content-wrap">
         <h2 class="cta-title">
           <PlainText bind:content={cta.title} />

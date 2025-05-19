@@ -104,8 +104,8 @@
 {/if}
 {#if $isEditing}
 <div class="pt-12 sm:pt-24 max-w-screen-md mx-auto px-6">
-  <div class="font-bold text-sm">FEATURED IMAGE</div>
-  <div class="mt-4 mb-8">
+  <h5 class="">FEATURED IMAGE</h5>
+  <div class="">
     <Image
       bind:src={featured_image}
       alt="Featured country image"
@@ -116,24 +116,20 @@
     />
   </div>
 
-  <div class="font-bold text-sm mt-8">COUNTRY FLAG</div>
-  <div class="mt-4 mb-8">
+  <h5 class="">COUNTRY FLAG</h5>
+  <div class="">
     <Image
       bind:src={flag}
       alt="Country flag"
-      maxWidth="200"
-      maxHeight="200"
+      maxWidth="100"
+      maxHeight="100"
       quality="1"
-      class="w-auto h-auto rounded-full"
+      class="rounded-full"
     />
   </div>
 </div>
 {/if}
 
 <Country bind:title bind:content bind:featured_image bind:flag bind:published_at />
-
-<NotEditable>
-  <EditableWebsiteTeaser bind:cta />
-</NotEditable>
 
 <Footer counter={`/countries/${data.slug}`} />
