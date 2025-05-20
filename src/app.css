@@ -26,6 +26,15 @@
     --color--transparent: transparent;
     --border-radius--xs: 5px;
   }
+  
+  /* Base element styles */
+  body {
+    @apply font-sans text-[var(--color--body)] text-lg font-normal leading-relaxed;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans text-[var(--color--black)] font-medium mb-2.5 mt-0;
+  }
 }
 
 @tailwind components;
@@ -34,7 +43,7 @@
 @layer components {
   /* Country components */
   .country-item {
-    text-decoration: none !important;
+    @apply no-underline !important;
   }
 
   .country-image-wrap {
@@ -106,71 +115,37 @@
 
 @tailwind utilities;
 
+/* Custom utilities that should override everything else */
+@layer utilities {
+  .mt-0-important {
+    margin-top: 0 !important;
+  }
+  
+  .bounce {
+    animation: bounce 2s infinite;
+  }
+}
+
+/* Animations and other styles that don't fit in layers */
+@keyframes bounce {
+  0%,20%,50%,80%,100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
 /* View Transitions API styles */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 0.5s;
 }
 
-/* Customize the page transition */
-::view-transition-old(root) {
-  animation-name: fade-out;
+/* ProseMirror styles - consider moving these to @layer components */
+.ProseMirror {
+  position: relative;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  white-space: break-spaces;
 }
-
-::view-transition-new(root) {
-  animation-name: fade-in;
-}
-
-@keyframes fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-::view-transition-old(preloader),
-::view-transition-new(preloader) {
-  animation-duration: 0.5s;
-}
-
-::view-transition-old(airplane),
-::view-transition-new(airplane) {
-  animation-duration: 0.8s;
-}
-
-::view-transition-old(loading-text),
-::view-transition-new(loading-text) {
-  animation-duration: 0.8s;
-}
-
-/* Respect user's motion preferences */
-@media (prefers-reduced-motion) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
-}
-
-
-html{color: #1a202c;}
-
-/* Custom utility classes with !important to override other styles */
-.mt-0-important {
-  margin-top: 0 !important;
-}
-.bounce{animation:bounce 2s infinite;}
-@keyframes bounce{
-  0%,20%,50%,80%,100%{transform:translateY(0);}
-  40%{transform:translateY(-10px);}
-  60%{transform:translateY(-5px);}
-}
-/* Prosemirror styles */
-.ProseMirror{position:relative;}
-.ProseMirror{word-wrap:break-word; white-space:pre-wrap; white-space:break-spaces; -webkit-font-variant-ligatures:none; font-variant-ligatures:none; font-feature-settings:"liga" 0; /* the above doesn't seem to work in Edge */}
 .ProseMirror li{position:relative;}
 .ProseMirror-hideselection *::selection{background:transparent;}
 .ProseMirror-hideselection *::-moz-selection{background:transparent;}

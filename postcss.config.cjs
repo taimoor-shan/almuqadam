@@ -2,13 +2,10 @@ module.exports = {
   plugins: {
     'postcss-import': {},
     'tailwindcss/nesting': {},
-    tailwindcss: {
-      // This ensures Tailwind classes have higher specificity
-      important: true
-    },
+    tailwindcss: {},
     autoprefixer: {},
     ...(process.env.NODE_ENV === 'production' ? { cssnano: { preset: 'default' } } : {})
   },
-  // Enable sourcemap generation in PostCSS
-  map: { inline: false }
+  // Disable inline maps to prevent sourcemap warnings
+  map: false
 };

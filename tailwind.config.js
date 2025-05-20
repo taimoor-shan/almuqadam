@@ -11,7 +11,7 @@ const em = (px, base) => `${round(px / base)}em`;
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
-  // Add important flag to make Tailwind utilities always win
+  // This is already set correctly
   important: true,
   theme: {
     fontFamily: {
