@@ -129,8 +129,6 @@
           <option value="student">Student</option>
           <option value="work">Work Permit</option>
           <option value="tourist">Tourist</option>
-          <option value="none">None</option>
-          <option value="other">Other</option>
         </select>
       </div>
     </div>

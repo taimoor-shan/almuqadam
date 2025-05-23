@@ -9,3 +9,9 @@ export const currentUser = writable(null);
 export const globalPhone = writable('');
 export const globalEmail = writable('');
 export const globalAddress = writable('');
+
+// Global social media URL stores
+export const globalFacebookUrl = writable('');
+export const globalTwitterUrl = writable('');
+export const globalInstagramUrl = writable('');
+export const globalTiktokUrl = writable('');

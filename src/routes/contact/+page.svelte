@@ -4,11 +4,8 @@
   import PrimaryButton from '$lib/components/PrimaryButton.svelte';
   import LoginMenu from '$lib/components/LoginMenu.svelte';
   import Footer from '$lib/components/Footer.svelte';
-  import Image from '$lib/components/Image.svelte';
-  import NotEditable from '$lib/components/NotEditable.svelte';
   import { currentUser, isEditing, globalPhone, globalEmail, globalAddress } from '$lib/stores.js';
   import WebsiteHeader from '$lib/components/WebsiteHeader.svelte';
-  import EditableWebsiteTeaser from '$lib/components/EditableWebsiteTeaser.svelte';
   import ContactForm from '$lib/components/ContactForm.svelte';
   import EditableAccordion from '$lib/components/EditableAccordion.svelte';
 
@@ -62,6 +59,8 @@
           faqs = accordionComponent.itemsToHtml();
         }
 
+        // We still save heroImage even though we're using Google Maps now
+        // This prevents data loss if the feature is reverted in the future
         await fetchJSON('POST', '/api/save-page', {
           pageId: 'contact',
           page: {
@@ -100,6 +99,20 @@
   />
 </svelte:head>
 
+<style>
+  .map-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+    border: 2px dashed #ccc;
+    height: 100%;
+    min-height: 400px;
+    padding: 20px;
+    text-align: center;
+  }
+</style>
+
 <WebsiteHeader bind:showUserMenu on:cancel={initOrReset} on:save={savePage}>
   <PrimaryButton on:click={toggleEdit}>Edit page</PrimaryButton>
   <LoginMenu />
@@ -114,15 +127,23 @@
     </div> -->
     <div data-w-id="f7ce0d7b-34a8-f497-a911-5fde2ea123fe" style="margin-top: 0 !important;" class="grid-contact mt-0-important">
       <div class="contact-split-image-wrap border">
-        <Image
-          bind:src={heroImage}
-          loading="eager"
-          alt="Contact image"
-          class="contact-split-image"
-          maxWidth="640"
-          maxHeight="580"
-          quality="1"
-        />
+        {#if $isEditing}
+          <!-- Show placeholder during editing mode -->
+          <div class="map-placeholder">
+            <p>Google Map will be displayed here using address: {$globalAddress || officeAddress1}</p>
+          </div>
+        {:else}
+          <!-- Google Maps iframe with pin from address -->
+          <iframe
+            title="Office Location"
+            class="contact-split-image"
+            style="border:0; width:100%; height:100%; min-height:400px;"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent($globalAddress || officeAddress1)}&zoom=14`}
+            allowfullscreen>
+          </iframe>
+        {/if}
       </div>
       <div id="w-node-_63bdca00-d749-298a-957d-ccf9955bcc13-dd74d3aa">
         <ContactForm
@@ -145,7 +166,7 @@
               {$globalPhone || phoneSupport1}
             {/if}
           </a>
-          
+
         </div>
       </div>
       <div class="contact-item"><img src="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/677b762d82e5235093fdcbfa_icon-13.svg" loading="eager" alt="Email icon" class="contact-icon" />
@@ -172,20 +193,20 @@
                 {$globalAddress || officeAddress1}
               {/if}
             </div>
-            <div>
+            <div class="text-prime">
               {#if $isEditing}
                 <PlainText bind:content={officeHours1} />
               {:else}
                 {officeHours1}
               {/if}
             </div>
-            <div>
+            <!-- <div class="text-prime">
               {#if $isEditing}
                 <PlainText bind:content={officeHours2} />
               {:else}
                 {officeHours2}
               {/if}
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

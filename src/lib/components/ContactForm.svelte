@@ -148,8 +148,6 @@
           <option value="student">Student</option>
           <option value="work">Work Permit</option>
           <option value="tourist">Tourist</option>
-          <option value="none">None</option>
-          <option value="other">Other</option>
         </select>
       </div>
     </div>
@@ -164,8 +162,8 @@
         bind:value={visaNeeded}>
         <option value="" disabled selected>Which visa do you need?</option>
         <option value="schengen">Schengen</option>
-        <option value="usa">USA</option>
-        <option value="australia">Australia</option>
+        <option value="canada">Canada</option>
+        <option value="united-states">United States</option>
         <option value="other">Other</option>
       </select>
     </div>

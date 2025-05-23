@@ -117,13 +117,13 @@
           >
             Countries
           </a>
-          <!-- <a
+          <a
             href="/blog"
             class={classNames("nav-link w-nav-link", isActive('/blog') ? 'w--current' : '')}
             on:click={closeMenu}
           >
             Blog
-          </a> -->
+          </a>
         
         </nav>
         {#if $currentUser}
@@ -220,13 +220,13 @@
             About
           </a>
           
-          <!-- <a
+          <a
             href="/blog"
             class={classNames("nav-link w-nav-link w--nav-link-open", isActive('/blog') ? 'w--current' : '')}
             on:click={closeMenu}
           >
             Blog
-          </a> -->
+          </a>
           <a
             href="/countries"
             class={classNames("nav-link w-nav-link w--nav-link-open", isActive('/countries') ? 'w--current' : '')}
