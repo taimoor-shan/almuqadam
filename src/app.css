@@ -454,7 +454,7 @@ textarea.w-input,textarea.w-select{height:auto;}
 .w-richtext figure.w-richtext-align-fullwidth > div{padding-bottom:inherit; display:inline-block;}
 .w-richtext figure.w-richtext-align-floatleft{float:left; clear:none; margin-right:15px;}
 .w-richtext figure.w-richtext-align-floatright{float:right; clear:none; margin-left:15px;}
-.w-nav{z-index:1000; background:#ddd; position:relative;}
+.w-nav{z-index:10; background:#ddd; position:relative;}
 .w-nav:before,.w-nav:after{content:" "; grid-area:1 / 1 / 2 / 2; display:table;}
 .w-nav:after{clear:both;}
 .w-nav-brand{ color:#333; text-decoration:none; position:relative;display: inline-block;}
@@ -1279,6 +1279,9 @@ figure{margin-bottom:10px;}
 
 
 
+.richText img {
+        margin-block: 2em;
+}
 .richText strong {
     font-weight: 500;
     margin: 0 0 10px;

@@ -42,7 +42,7 @@
   >
     <div
       class="rounded-lg shadow-lg p-4 flex items-center justify-between"
-      class:bg-green-600={type === 'success'}
+      class:bg-dark={type === 'success'}
       class:bg-red-600={type === 'error'}
       class:bg-blue-600={type === 'info'}
       class:text-white={true}

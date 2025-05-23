@@ -117,14 +117,7 @@
           >
             Countries
           </a>
-          <a
-            href="/blog"
-            class={classNames("nav-link w-nav-link", isActive('/blog') ? 'w--current' : '')}
-            on:click={closeMenu}
-          >
-            Blog
-          </a>
-        
+          <!-- Blog link removed -->
         </nav>
         {#if $currentUser}
           <button
@@ -149,6 +142,13 @@
               />
             </svg>
           </button>
+           <a
+              href="/admin"
+              class={classNames("nav-link w-nav-link underline", isActive('/admin') ? 'w--current' : '')}
+              on:click={closeMenu}
+            >
+              Admin
+            </a>
         {/if}
         <div class="cta flex gap-4">
           <div class="nav-right">
@@ -219,14 +219,8 @@
           >
             About
           </a>
-          
-          <a
-            href="/blog"
-            class={classNames("nav-link w-nav-link w--nav-link-open", isActive('/blog') ? 'w--current' : '')}
-            on:click={closeMenu}
-          >
-            Blog
-          </a>
+
+          <!-- Blog link removed -->
           <a
             href="/countries"
             class={classNames("nav-link w-nav-link w--nav-link-open", isActive('/countries') ? 'w--current' : '')}
@@ -234,6 +228,15 @@
           >
             Countries
           </a>
+          {#if $currentUser}
+            <a
+              href="/admin"
+              class={classNames("nav-link w-nav-link underline", isActive('/admin') ? 'w--current' : '')}
+              on:click={closeMenu}
+            >
+              Admin
+            </a>
+          {/if}
           <a
             href="/contact"
             class={classNames("nav-link w-nav-link w--nav-link-open", isActive('/contact') ? 'w--current' : '')}
@@ -277,8 +280,8 @@
     top: 0;
     right: 0;
     bottom: 0;
-    width: 80%;
-    max-width: 300px;
+    width: 100%;
+    max-width: 100%;
     padding: 30px 20px;
     background-color: var(--color--white);
     overflow-y: auto;
@@ -287,6 +290,8 @@
     flex-direction: column;
     transform: translateX(100%);
     animation: slideIn 0.3s ease forwards;
+    margin: 0 !important;
+    border-radius: 0 !important;
   }
 
   .w-nav-overlay .w-nav-link {

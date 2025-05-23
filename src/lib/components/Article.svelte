@@ -16,7 +16,7 @@
         <div class="font-bold text-sm">{formatDate(published_at)}</div>
       {/if}
     </div>
-    <h1 class="text-3xl md:text-5xl font-bold pt-1">
+    <h1 class="text-3xl md:text-5xl pt-1 leading-normal">
       <PlainText bind:content={title} />
     </h1>
   </div>

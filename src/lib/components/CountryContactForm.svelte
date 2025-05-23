@@ -1,21 +1,14 @@
 <script>
   import Notification from '$lib/components/Notification.svelte';
-  import emailjs from '@emailjs/browser';
-  import { onMount } from 'svelte';
-
-  // Import EmailJS environment variables
-  import {
-    PUBLIC_EMAILJS_SERVICE_ID,
-    PUBLIC_EMAILJS_COUNTRY_TEMPLATE_ID, // Country-specific template
-    PUBLIC_EMAILJS_PUBLIC_KEY
-  } from '$env/static/public';
 
   // Props for customization
-  export let title = 'Get a Free Visa Assessment';
-  export let recipientEmail = 'info@almuqadam.com';
+  export let recipientEmail = 'info@almuqadam.uk'; // Updated to match SMTP_USER
   export let showTitle = true;
   export let customClass = '';
   export let countryName = ''; // New prop for country name
+
+  // Dynamically create title based on country name
+  $: formTitle = countryName ? `${countryName} Visa Inquiry` : 'Get a Free Visa Assessment';
 
   // Form fields
   let fullName = '';
@@ -29,36 +22,36 @@
   let showNotification = false;
   let notificationMessage = '';
 
-  // Initialize EmailJS
-  onMount(() => {
-    emailjs.init(PUBLIC_EMAILJS_PUBLIC_KEY);
-  });
-
   async function handleSubmit() {
     try {
       // Set loading state
       isSubmitting = true;
 
-      // Prepare template parameters for EmailJS
-      const templateParams = {
+      // Prepare form data
+      const formData = {
         from_name: fullName,
-        from_email: 'No email provided', // Placeholder since email field was removed
+        from_email: 'No email provided', // We don't collect email in this form
         phone: phone || 'Not provided',
         current_visa_status: currentVisaStatus || 'Not provided',
         country_name: countryName, // Include country name in the email
         message: message || 'No message provided',
         contact_consent: contactConsent ? 'Yes' : 'No',
-        to_email: recipientEmail
+        to_email: recipientEmail,
+        subject: `${countryName} Visa Inquiry from ${fullName}` // Custom subject with country name
       };
 
-      // Send email using EmailJS directly from the client
-      const result = await emailjs.send(
-        PUBLIC_EMAILJS_SERVICE_ID,
-        PUBLIC_EMAILJS_COUNTRY_TEMPLATE_ID,
-        templateParams
-      );
+      // Send to server endpoint
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
 
-      console.log('Email sent successfully:', result.text);
+      const result = await response.json();
+
+      if (!result.success) throw new Error(result.error || 'Failed to send email');
+
+      console.log('Email sent successfully!');
 
       // Reset form fields
       fullName = '';
@@ -85,7 +78,8 @@
 
 <div class={customClass}>
   {#if showTitle}
-    <h4 class="mb-6 text-prime">{title}</h4>
+    <h2 class="mb-6 sidebar-title-inline">{formTitle}</h2>
+    
   {/if}
 
   <form on:submit|preventDefault={handleSubmit} class="w-form">

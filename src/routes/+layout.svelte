@@ -6,7 +6,15 @@
   import { injectAnalytics } from '@vercel/analytics/sveltekit';
   injectAnalytics();
   import '../app.css';
-  import { globalPhone, globalEmail, globalAddress } from '$lib/stores.js';
+  import {
+    globalPhone,
+    globalEmail,
+    globalAddress,
+    globalFacebookUrl,
+    globalTwitterUrl,
+    globalInstagramUrl,
+    globalTiktokUrl
+  } from '$lib/stores.js';
   import Preloader from '$lib/components/Preloader.svelte';
   import { onNavigate } from '$app/navigation';
 
@@ -31,6 +39,10 @@
     $globalPhone = data.globalData.phone || '';
     $globalEmail = data.globalData.email || '';
     $globalAddress = data.globalData.address || '';
+    $globalFacebookUrl = data.globalData.facebookUrl || '';
+    $globalTwitterUrl = data.globalData.twitterUrl || '';
+    $globalInstagramUrl = data.globalData.instagramUrl || '';
+    $globalTiktokUrl = data.globalData.tiktokUrl || '';
   }
 </script>
 

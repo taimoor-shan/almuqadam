@@ -3,7 +3,6 @@
   import RichText from '$lib/components/RichText.svelte';
   import Image from '$lib/components/Image.svelte';
   import CountryContactForm from '$lib/components/CountryContactForm.svelte';
-  import { formatDate } from '$lib/util';
   export let title;
   export let content;
   export let featured_image;
@@ -31,7 +30,7 @@
               alt={title}
             />
           </div>
-       
+
       </div>
     </div>
     <div class="country-detail-hero-overlay"></div>
@@ -50,13 +49,8 @@
       <div class="sidebar-sticky">
         <div class="sidebar-item">
           <div class="sidebar-item-inner">
-            <div class="sidebar-title-inline-wrap">
-              <h2 class="sidebar-title-inline">Inquire about</h2>
-              <h2 class="sidebar-title-inline heading-serif text-dark"><PlainText bind:content={title} /></h2>
-            </div>
-            <div class="mt-6">
+            <div class="">
               <CountryContactForm
-                title=""
                 countryName={title}
                 showTitle={true}
               />

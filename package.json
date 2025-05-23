@@ -67,7 +67,7 @@
     "googleapis": "^148.0.0",
     "leaflet": "^1.9.4",
     "nanoid": "^5.0.6",
-    "nodemailer": "^7.0.2",
+    "nodemailer": "^7.0.3",
     "pg": "^8.15.6",
     "prosemirror-commands": "^1.5.2",
     "prosemirror-dropcursor": "^1.8.1",

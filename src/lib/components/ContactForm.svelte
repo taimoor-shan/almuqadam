@@ -1,18 +1,10 @@
 <script>
   import Notification from '$lib/components/Notification.svelte';
-  import emailjs from '@emailjs/browser';
   import { onMount } from 'svelte';
-
-  // Import EmailJS environment variables
-  import {
-    PUBLIC_EMAILJS_SERVICE_ID,
-    PUBLIC_EMAILJS_TEMPLATE_ID,
-    PUBLIC_EMAILJS_PUBLIC_KEY
-  } from '$env/static/public';
 
   // Props for customization
   export let title = 'Get a Free Visa Assessment';
-  export let recipientEmail = 'info@almuqadam.com';
+  export let recipientEmail = 'info@almuqadam.uk'; // Updated default email to match SMTP_USER
   export let showTitle = true;
   export let customClass = '';
 
@@ -30,18 +22,13 @@
   let showNotification = false;
   let notificationMessage = '';
 
-  // Initialize EmailJS
-  onMount(() => {
-    emailjs.init(PUBLIC_EMAILJS_PUBLIC_KEY);
-  });
-
   async function handleSubmit() {
     try {
       // Set loading state
       isSubmitting = true;
 
-      // Prepare template parameters for EmailJS
-      const templateParams = {
+      // Prepare form data
+      const formData = {
         from_name: fullName,
         from_email: emailInput,
         phone: phone || 'Not provided',
@@ -52,14 +39,16 @@
         to_email: recipientEmail
       };
 
-      // Send email using EmailJS directly from the client
-      const result = await emailjs.send(
-        PUBLIC_EMAILJS_SERVICE_ID,
-        PUBLIC_EMAILJS_TEMPLATE_ID,
-        templateParams
-      );
+      // Send to server endpoint instead of EmailJS
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
 
-      console.log('Email sent successfully:', result.text);
+      const result = await response.json();
+
+      if (!result.success) throw new Error(result.error || 'Failed to send email');
 
       // Reset form fields
       fullName = '';
@@ -73,14 +62,11 @@
       // Show success notification
       notificationMessage = 'Thank you! Your message has been received. We\'ll get back to you shortly.';
       showNotification = true;
-
-      // Notification will auto-hide after the duration set in the component
     } catch (error) {
       console.error('Error submitting form:', error);
       notificationMessage = 'There was an error sending your message. Please try again or contact us directly by phone.';
       showNotification = true;
     } finally {
-      // Reset loading state
       isSubmitting = false;
     }
   }
@@ -88,7 +74,7 @@
 
 <div class={customClass}>
   {#if showTitle}
-    <h4 class="mb-6 text-primary-1">{title}</h4>
+    <h4 class="mb-6 text-prime">{title}</h4>
   {/if}
 
   <form on:submit|preventDefault={handleSubmit} class="w-form">

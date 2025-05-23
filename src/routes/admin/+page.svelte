@@ -1,11 +1,8 @@
 <script>
   import { fetchJSON } from '$lib/util';
-  import PrimaryButton from '$lib/components/PrimaryButton.svelte';
   import LoginMenu from '$lib/components/LoginMenu.svelte';
   import Footer from '$lib/components/Footer.svelte';
   import EditableWebsiteTeaser from '$lib/components/EditableWebsiteTeaser.svelte';
-  import PlainText from '$lib/components/PlainText.svelte';
-  import RichText from '$lib/components/RichText.svelte';
   import {
     currentUser,
     isEditing,
@@ -46,13 +43,11 @@
     $globalInstagramUrl = globalData.instagramUrl || '';
     $globalTiktokUrl = globalData.tiktokUrl || '';
 
-    $isEditing = false;
+    // Admin page is always in edit mode by default
+    $isEditing = true;
   }
 
-  function toggleEdit() {
-    $isEditing = true;
-    showUserMenu = false;
-  }
+  // Admin page is always in edit mode by default
 
   async function saveGlobalSettings() {
     try {
@@ -78,12 +73,11 @@
 </svelte:head>
 
 <WebsiteHeader bind:showUserMenu on:cancel={initOrReset} on:save={saveGlobalSettings}>
-  <PrimaryButton on:click={toggleEdit}>Edit global settings</PrimaryButton>
   <LoginMenu />
 </WebsiteHeader>
 
 <div class="pt-12 sm:pt-20 ">
-  <div class="max-w-screen-xl mx-auto px-6">
+  <div class="w-layout-blockcontainer container w-container">
     <h1 class="text-4xl md:text-5xl font-bold pb-8">Global Settings</h1>
     <div class="mb-12">
       <h2 class="text-2xl font-bold mb-4">Global Contact Information</h2>

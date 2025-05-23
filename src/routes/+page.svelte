@@ -32,7 +32,7 @@
   // --------------------------------------------------------------------------
   // DEFAULT PAGE CONTENT - ADJUST TO YOUR NEEDS
   // --------------------------------------------------------------------------
-  const EMAIL = 'info@almuqadam.com';
+  const EMAIL = 'info@almuqadam.uk';
 
   // Can contain spaces but must not contain the + sign
   const PHONE_NUMBER = '+44 7700 900123';
@@ -414,7 +414,7 @@
 <section class="hero-section">
   <div class="w-layout-blockcontainer container-medium w-container">
     <div class="hero-content-center">
-      <h1 class="hero-title-center"><PlainText bind:content={title} /></h1>
+      <h1 class="about-hero-title mb-6"><PlainText bind:content={title} /></h1>
       <p><PlainText bind:content={subtitle} /></p>
       <div class="hero-button-list">
         <a href="#contactSec" class="button-gradient w-button">Free Visa Assessment</a>

@@ -32,7 +32,7 @@
 
 <NotEditable>
     <footer class="bg-accent pb-6 pt-8 lg:pt-10 border-t border-primary-1">
-      <div class="mx-auto w-full max-w-screen-xl">
+      <div class="w-layout-blockcontainer container w-container">
           <div class="md:flex md:justify-between">
             <div class=" w-full md:w-[50%] mb-6 md:mb-0">
               <a href="/" class="brand-wrap w-nav-brand inline-block">
@@ -57,7 +57,7 @@
                         <li class="mb-4">
                             <a href="/countries" class="hover:underline">Countries</a>
                         </li>
-
+                        <!-- Blog link removed -->
                         <li class="mb-4">
                             <a href="/contact" class="hover:underline">Contact</a>
                         </li>
