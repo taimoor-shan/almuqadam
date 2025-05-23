@@ -24,5 +24,7 @@ vite.config.ts.timestamp-*
 fly.toml
 .tool-versions
 .vercel
+.vercel/output/
 # Dependencies
 package-lock.json
+
