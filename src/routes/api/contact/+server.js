@@ -15,12 +15,14 @@ export async function POST({ request }) {
         user: SMTP_USER,
         pass: SMTP_PASS
       },
-      debug: true, // Enable debug output
-      logger: true // Log information about the mail
+      debug: process.env.DEBUG_LOGS === 'true', // Only enable debug in development when explicitly requested
+      logger: process.env.DEBUG_LOGS === 'true' // Only log when debugging
     });
 
-    // Log authentication info (without password)
-    console.log(`Attempting to connect to SMTP server with user: ${SMTP_USER}`);
+    // Only log authentication info when debugging
+    if (process.env.DEBUG_LOGS === 'true') {
+      console.log(`Attempting to connect to SMTP server with user: ${SMTP_USER}`);
+    }
 
     // Configure email options
     const mailOptions = {
@@ -41,11 +43,16 @@ export async function POST({ request }) {
       `
     };
 
-    console.log('Sending email to:', mailOptions.to);
+    if (process.env.DEBUG_LOGS === 'true') {
+      console.log('Sending email to:', mailOptions.to);
+    }
 
     // Send email
     const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent successfully! Message ID:', info.messageId);
+
+    if (process.env.DEBUG_LOGS === 'true') {
+      console.log('Email sent successfully! Message ID:', info.messageId);
+    }
 
     return json({ success: true });
   } catch (error) {

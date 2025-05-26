@@ -154,7 +154,7 @@
           <div class="nav-right">
             <a
               href="/contact"
-              class={classNames("button-black nav-button w-button", isActive('/contact') ? 'active-button' : '')}
+              class={classNames("button-gradient nav-button w-button", isActive('/contact') ? 'active-button' : '')}
               on:click={closeMenu}
             >
               Contact Us

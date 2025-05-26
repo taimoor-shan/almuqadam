@@ -5,16 +5,23 @@ import { DATABASE_URL } from '$env/static/private';
 const pool = new pg.Pool({
   connectionString: DATABASE_URL,
   ssl: process.env.NODE_ENV === 'production'
-    ? { rejectUnauthorized: false } // Enable SSL with self-signed certificates for production
-    : DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false } // Disable SSL for localhost, enable for other environments
+    ? { rejectUnauthorized: false }
+    : DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false }
 });
 
-// Log connection info (without password)
-console.log(`Connecting to PostgreSQL database: ${DATABASE_URL.replace(/:[^:]*@/, ':****@')}`);
+// Only log in non-production environments if explicitly enabled
+const DEBUG_LOGS = process.env.DEBUG_LOGS === 'true';
 
-// Log connection status
+// Log connection info (without password) only when debugging
+if (DEBUG_LOGS || process.env.NODE_ENV !== 'production') {
+  console.log(`Connecting to PostgreSQL database: ${DATABASE_URL.replace(/:[^:]*@/, ':****@')}`);
+}
+
+// Log connection status only when debugging
 pool.on('connect', () => {
-  console.log('Connected to PostgreSQL database');
+  if (DEBUG_LOGS || process.env.NODE_ENV !== 'production') {
+    console.log('Connected to PostgreSQL database');
+  }
 });
 
 pool.on('error', (err) => {
@@ -101,7 +108,12 @@ export async function query(text, params) {
 
     const res = await pool.query(modifiedText, params);
     const duration = Date.now() - start;
-    console.log('Executed query', { text: modifiedText, duration, rows: res.rowCount });
+
+    // Only log queries when DEBUG_LOGS is explicitly enabled
+    if (DEBUG_LOGS) {
+      console.log('Executed query', { text: modifiedText, duration, rows: res.rowCount });
+    }
+
     return res;
   } catch (error) {
     console.error('Error executing query', { text, error });

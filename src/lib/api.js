@@ -248,8 +248,10 @@ export async function createOrUpdatePage(page_id, page, currentUser) {
 export async function getPage(page_id) {
   const page = await queryOne('SELECT data FROM pages WHERE page_id = $1', [page_id]);
 
-  // Debug logging
-  console.log(`getPage(${page_id}) result:`, page);
+  // Only log when DEBUG_LOGS is enabled
+  if (process.env.DEBUG_LOGS === 'true') {
+    console.log(`getPage(${page_id}) result:`, page);
+  }
 
   if (page?.data) {
     // Check if data is already an object (PostgreSQL JSONB) or a string (needs parsing)
