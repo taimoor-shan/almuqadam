@@ -119,6 +119,7 @@
           id="phone"
           placeholder="Phone Number"
           aria-label="Phone Number"
+          required
           bind:value={phone}
         />
       </div>

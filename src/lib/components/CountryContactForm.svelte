@@ -108,6 +108,7 @@
           id="phone"
           placeholder="Phone Number"
           aria-label="Phone Number"
+          required
           bind:value={phone}
         />
       </div>
@@ -118,6 +119,7 @@
           name="currentVisaStatus"
           id="currentVisaStatus"
           aria-label="Current Visa Status"
+          
           bind:value={currentVisaStatus}>
           <option value="" disabled selected>Current Visa Status</option>
           <option value="psw">PSW</option>
