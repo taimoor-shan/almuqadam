@@ -131,9 +131,11 @@
           aria-label="Current Visa Status"
           bind:value={currentVisaStatus}>
           <option value="" disabled selected>Current Visa Status</option>
+          <option value="psw">PSW</option>
           <option value="student">Student</option>
-          <option value="work">Work Permit</option>
-          <option value="tourist">Tourist</option>
+          <option value="independent">Independent</option>
+          <option value="skilled-worker">Skilled Worker</option>
+        
         </select>
       </div>
     </div>
@@ -168,15 +170,16 @@
     </div>
 
     <div class="mb-5">
-      <label class="flex items-center gap-2">
+      <label class="flex items-top gap-2">
         <input
+        class="mt-1"
           type="checkbox"
           name="contactConsent"
           id="contactConsent"
           required
           bind:checked={contactConsent}
         />
-        <span>I agree to be contacted for visa assistance.</span>
+        <span >I agree to be contacted for visa assistance.</span>
       </label>
     </div>
 

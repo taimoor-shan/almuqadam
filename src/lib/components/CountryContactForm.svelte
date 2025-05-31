@@ -120,9 +120,10 @@
           aria-label="Current Visa Status"
           bind:value={currentVisaStatus}>
           <option value="" disabled selected>Current Visa Status</option>
+          <option value="psw">PSW</option>
           <option value="student">Student</option>
-          <option value="work">Work Permit</option>
-          <option value="tourist">Tourist</option>
+          <option value="independent">Independent</option>
+          <option value="skilled-worker">Skilled Worker</option>
         </select>
       </div>
     </div>
