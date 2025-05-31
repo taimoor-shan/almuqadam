@@ -143,3 +143,12 @@ export async function fetchJSON(method, url, data = undefined) {
   const result = await response.json();
   return result;
 }
+
+export function ensureAbsoluteUrl(url) {
+  if (!url) return '';
+  // Only allow http(s) URLs
+  if (/^https?:\/\//i.test(url)) return url;
+  // Block javascript: and other schemes
+  if (/^[a-zA-Z]+:/i.test(url)) return '';
+  return 'https://' + url.replace(/^\/+/, '');
+}

@@ -8,7 +8,7 @@
   export let countryName = ''; // New prop for country name
 
   // Dynamically create title based on country name
-  $: formTitle = countryName ? `${countryName} Visa Inquiry` : 'Get a Free Visa Assessment';
+  $: formTitle = countryName ? `${countryName} Inquiry` : 'Get a Free Visa Assessment';
 
   // Form fields
   let fullName = '';
@@ -37,7 +37,7 @@
         message: message || 'No message provided',
         contact_consent: contactConsent ? 'Yes' : 'No',
         to_email: recipientEmail,
-        subject: `${countryName} Visa Inquiry from ${fullName}` // Custom subject with country name
+        subject: `${countryName} Inquiry from ${fullName}` // Custom subject with country name
       };
 
       // Send to server endpoint
@@ -119,7 +119,7 @@
           name="currentVisaStatus"
           id="currentVisaStatus"
           aria-label="Current Visa Status"
-          
+
           bind:value={currentVisaStatus}>
           <option value="" disabled selected>Current Visa Status</option>
           <option value="psw">PSW</option>

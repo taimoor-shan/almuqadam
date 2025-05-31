@@ -13,6 +13,7 @@
     globalTiktokUrl
   } from '$lib/stores.js';
 
+  import { ensureAbsoluteUrl } from '$lib/util.js';
   export let counter;
   let count;
 
@@ -21,7 +22,7 @@
     const encodedAddress = encodeURIComponent(address);
     return `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
   }
-
+  
   onMount(async () => {
     if (counter) {
       const result = await fetchJSON('GET', `/api/counter?c=${counter}`);
@@ -87,32 +88,32 @@
             <span class="text-sm text-dark sm:text-center">© 2025 <a href="/" class="hover:underline text-prime">Almuqadam</a>. All Rights Reserved.
             </span>
             <div class="flex mt-4 sm:justify-center sm:mt-0">
-                {#if $globalFacebookUrl}
-                <a href={$globalFacebookUrl} class="text-dark hover:text-prime " target="_blank" rel="noopener noreferrer">
-                    <Icon icon="mdi:facebook" width="20" height="20" />
-                    <span class="sr-only">Facebook page</span>
-                </a>
+                                {#if $globalFacebookUrl}
+                    <a href={ensureAbsoluteUrl($globalFacebookUrl)} class="text-dark hover:text-prime " target="_blank" rel="noopener noreferrer">
+                        <Icon icon="mdi:facebook" width="20" height="20" />
+                        <span class="sr-only">Facebook page</span>
+                    </a>
                 {/if}
-
+                
                 {#if $globalInstagramUrl}
-                <a href={$globalInstagramUrl} class="text-dark hover:text-prime  ms-5" target="_blank" rel="noopener noreferrer">
-                    <Icon icon="mdi:instagram" width="20" height="20" />
-                    <span class="sr-only">Instagram page</span>
-                </a>
+                    <a href={ensureAbsoluteUrl($globalInstagramUrl)} class="text-dark hover:text-prime  ms-5" target="_blank" rel="noopener noreferrer">
+                        <Icon icon="mdi:instagram" width="20" height="20" />
+                        <span class="sr-only">Instagram page</span>
+                    </a>
                 {/if}
-
+                
                 {#if $globalTwitterUrl}
-                <a href={$globalTwitterUrl} class="text-dark hover:text-prime  ms-5" target="_blank" rel="noopener noreferrer">
-                    <Icon icon="mdi:twitter" width="20" height="20" />
-                    <span class="sr-only">Twitter/X page</span>
-                </a>
+                    <a href={ensureAbsoluteUrl($globalTwitterUrl)} class="text-dark hover:text-prime  ms-5" target="_blank" rel="noopener noreferrer">
+                        <Icon icon="mdi:twitter" width="20" height="20" />
+                        <span class="sr-only">Twitter/X page</span>
+                    </a>
                 {/if}
-
+                
                 {#if $globalTiktokUrl}
-                <a href={$globalTiktokUrl} class="text-dark hover:text-prime  ms-5" target="_blank" rel="noopener noreferrer">
-                    <Icon icon="ic:baseline-tiktok" width="20" height="20" />
-                    <span class="sr-only">TikTok page</span>
-                </a>
+                    <a href={ensureAbsoluteUrl($globalTiktokUrl)} class="text-dark hover:text-prime  ms-5" target="_blank" rel="noopener noreferrer">
+                        <Icon icon="ic:baseline-tiktok" width="20" height="20" />
+                        <span class="sr-only">TikTok page</span>
+                    </a>
                 {/if}
             </div>
         </div>

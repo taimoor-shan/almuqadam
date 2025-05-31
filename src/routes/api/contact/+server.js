@@ -32,7 +32,7 @@ export async function POST({ request }) {
       // Use custom subject if provided, otherwise use default
       subject: data.subject || `New contact form submission from ${data.from_name}`,
       html: `
-        <h2>${data.country_name ? `${data.country_name} Visa Inquiry` : 'New Contact Form Submission'}</h2>
+        <h2>${data.country_name ? `${data.country_name} Inquiry` : 'New Contact Form Submission'}</h2>
         <p><strong>Name:</strong> ${data.from_name}</p>
         <p><strong>Phone:</strong> ${data.phone || 'Not provided'}</p>
         ${data.current_visa_status ? `<p><strong>Current Visa Status:</strong> ${data.current_visa_status}</p>` : ''}
