@@ -134,7 +134,7 @@
           <option value="" disabled selected>Current Visa Status</option>
           <option value="psw">PSW</option>
           <option value="student">Student</option>
-          <option value="independent">Independent</option>
+          <option value="dependent">Dependent</option>
           <option value="skilled-worker">Skilled Worker</option>
         
         </select>
