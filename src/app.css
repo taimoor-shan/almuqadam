@@ -652,6 +652,8 @@ figure{margin-bottom:10px;}
 .gradient-1{background-image:linear-gradient(180deg,var(--color--primary-2),var(--color--prime));}
 .gradient-2{background-image:linear-gradient(180deg,var(--color--secondary-1),var(--color--secondary-3) 49%,var(--color--secondary-4));}
 .button-gradient{border-radius:var(--border-radius--lg); background-color:var(--color--prime); background-image:linear-gradient(180deg,var(--color--primary-2),var(--color--transparent)); color:var(--color--white); text-align:center; border-style:solid; border-width:0; padding:14px 40px; font-size:18px; font-weight:400; line-height:1.4em; transition:all .3s ease-in-out;}
+.button-gradient.arrow{padding: 14px 20px 14px 40px;}
+.button-gradient.arrow:hover{gap: 1em !important;}
 .button-gradient:hover{background-color:var(--color--primary-2); color:var(--color--white); transform:scale(.95);}
 .button-gradient.button-full{flex:none;}
 .grid-footer-link{grid-column-gap:50px; grid-row-gap:50px; grid-template-rows:auto; grid-template-columns:1fr 1fr; grid-auto-columns:1fr; display:grid;}

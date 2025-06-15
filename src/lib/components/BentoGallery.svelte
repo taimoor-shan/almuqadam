@@ -3,11 +3,54 @@
   import Image from './Image.svelte';
   import SecondaryButton from './SecondaryButton.svelte';
   import { classNames } from '$lib/util';
+  import { onMount } from 'svelte';
 
   export let images = [];
   export let title = "Image Gallery";
   export let lightboxOpen = false;
   export let lightboxIndex = 0;
+
+  let swiper;
+
+  onMount(async () => {
+    const swiperModule = await import('swiper');
+    const swiperCore = swiperModule.default;
+    const { Navigation, Pagination } = await import('swiper/modules');
+    
+    swiper = new swiperCore('.swiper-container', {
+      modules: [Navigation, Pagination],
+      slidesPerView: 3,
+      spaceBetween: 10,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 10,
+          pagination: {
+            enabled: false,
+          },
+        },
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 10,
+          navigation: {
+            enabled: false,
+          },
+        }
+      }
+    });
+
+    return () => {
+      if (swiper) swiper.destroy();
+    };
+  });
 
   // Function to add a new image
   function addImage() {
@@ -52,70 +95,79 @@
   }
 </script>
 
-<section class="bento-gallery-section py-12 md:py-24">
+<svelte:head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+</svelte:head>
+
+<section class="gallery-slider-section section-spacing">
   <div class="container mx-auto px-6">
     <div class="section-title text-center mb-8 md:mb-12">
       <h2 class="">{title}</h2>
     </div>
 
     {#if images.length > 0}
-      <div class="bento-grid grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-        {#each images as image, i}
-          <div
-            class={classNames(
-              "bento-item relative overflow-hidden rounded-lg cursor-pointer transition-all duration-300 hover:shadow-lg",
-              i === 0 ? "md:col-span-2 md:row-span-2" : "",
-              i === 3 ? "md:row-span-2" : "",
-              i === 4 ? "md:col-span-2 md:row-span-2" : "",
-              "aspect-square md:aspect-auto"
-            )}
-            on:click={() => openLightbox(i)}
-            on:keypress={(e) => e.key === 'Enter' && openLightbox(i)}
-            role="button"
-            tabindex="0"
-          >
-            <Image
-              class="w-full h-full object-cover"
-              maxWidth="1200"
-              maxHeight="800"
-              quality="0.9"
-              bind:src={image.src}
-              alt={image.alt || `Gallery image ${i+1}`}
-            />
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          {#each images as image, i}
+            <div class="swiper-slide">
+              <div 
+                class="gallery-slide relative overflow-hidden rounded-lg cursor-pointer transition-all duration-300 hover:shadow-lg aspect-[9/6]"
+                on:click={() => openLightbox(i)}
+                on:keypress={(e) => e.key === 'Enter' && openLightbox(i)}
+                role="button"
+                tabindex="0"
+              >
+                <Image
+                  class="w-full h-full object-cover"
+                  maxWidth="1024"
+                  maxHeight="512"
+                  quality="1"
+                  bind:src={image.src}
+                  alt={image.alt || `Gallery image ${i+1}`}
+                />
 
-            {#if $isEditing}
-              <div class="absolute top-2 right-2 flex flex-col space-y-2 z-10">
-                {#if i > 0}
-                  <button
-                    class="w-8 h-8 p-1 rounded-full bg-gray-900 hover:bg-gray-800 text-white"
-                    on:click|stopPropagation={() => moveImage(i, 'up')}
-                    aria-label="Move up"
-                  >
-                    ↑
-                  </button>
+                {#if $isEditing}
+                  <div class="absolute top-2 right-2 flex flex-col space-y-2 z-10">
+                    {#if i > 0}
+                      <button
+                        class="w-8 h-8 p-1 rounded-full bg-gray-900 hover:bg-gray-800 text-white"
+                        on:click|stopPropagation={() => moveImage(i, 'up')}
+                        aria-label="Move up"
+                      >
+                        ↑
+                      </button>
+                    {/if}
+
+                    {#if i < images.length - 1}
+                      <button
+                        class="w-8 h-8 p-1 rounded-full bg-gray-900 hover:bg-gray-800 text-white"
+                        on:click|stopPropagation={() => moveImage(i, 'down')}
+                        aria-label="Move down"
+                      >
+                        ↓
+                      </button>
+                    {/if}
+
+                    <button
+                      class="w-8 h-8 p-1 rounded-full bg-red-600 hover:bg-red-700 text-white"
+                      on:click|stopPropagation={() => deleteImage(i)}
+                      aria-label="Delete"
+                    >
+                      ×
+                    </button>
+                  </div>
                 {/if}
-
-                {#if i < images.length - 1}
-                  <button
-                    class="w-8 h-8 p-1 rounded-full bg-gray-900 hover:bg-gray-800 text-white"
-                    on:click|stopPropagation={() => moveImage(i, 'down')}
-                    aria-label="Move down"
-                  >
-                    ↓
-                  </button>
-                {/if}
-
-                <button
-                  class="w-8 h-8 p-1 rounded-full bg-red-600 hover:bg-red-700 text-white"
-                  on:click|stopPropagation={() => deleteImage(i)}
-                  aria-label="Delete"
-                >
-                  ×
-                </button>
               </div>
-            {/if}
-          </div>
-        {/each}
+            </div>
+          {/each}
+        </div>
+        
+        <!-- Navigation buttons -->
+        <div class="swiper-button-next custom-nav-button"></div>
+        <div class="swiper-button-prev custom-nav-button"></div>
+        
+        <!-- Pagination dots -->
+        <div class="swiper-pagination"></div>
       </div>
     {:else}
       <div class="text-center py-12 bg-gray-100 rounded-lg">
@@ -130,3 +182,43 @@
     {/if}
   </div>
 </section>
+
+<style>
+  .gallery-slide {
+    height: 100%;
+  }
+  
+  :global(.swiper-container) {
+    width: 100%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  :global(.swiper-slide) {
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  :global(.custom-nav-button) {
+    color: #ffffff!important;
+    top:56% !important;
+    background-color:var(--color--prime) !important;
+    padding: 4px;
+  }
+  
+  :global(.custom-nav-button::after) {
+    font-size: 24px !important;
+    font-weight: bold !important;
+  }
+  
+  :global(.swiper-pagination-bullet-active) {
+    background-color: var(--color--prime) !important;
+  }
+
+ :global(.swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal, .swiper-pagination-custom, .swiper-pagination-fraction) {
+    bottom: var(--swiper-pagination-bottom,30px) !important;
+}
+</style>

@@ -5,27 +5,20 @@
   import PrimaryButton from '$lib/components/PrimaryButton.svelte';
   import SecondaryButton from '$lib/components/SecondaryButton.svelte';
   import LoginMenu from '$lib/components/LoginMenu.svelte';
-  import ArticleTeaser from '$lib/components/ArticleTeaser.svelte';
-  import Testimonial from '$lib/components/Testimonial.svelte';
   import Counter from '$lib/components/Counter.svelte';
-  import IntroStep from '$lib/components/IntroStep.svelte';
   import Footer from '$lib/components/Footer.svelte';
   import Image from '$lib/components/Image.svelte';
-  import NotEditable from '$lib/components/NotEditable.svelte';
-  import RunesCounter from '$lib/components/RunesCounter.svelte';
-  import ImmigrationItem from '$lib/components/ImmigrationItem.svelte';
-  import EditableVisaService from '$lib/components/EditableVisaService.svelte';
-  import EditableVisaServices from '$lib/components/EditableVisaServices.svelte';
   import { currentUser, isEditing, globalPhone, globalEmail, globalAddress } from '$lib/stores.js';
   import WebsiteHeader from '$lib/components/WebsiteHeader.svelte';
-  import EditableWebsiteTeaser from '$lib/components/EditableWebsiteTeaser.svelte';
-  import BentoGallery from '$lib/components/BentoGallery.svelte';
-  import Lightbox from '$lib/components/Lightbox.svelte';
   import Notification from '$lib/components/Notification.svelte';
   import ContactForm from '$lib/components/ContactForm.svelte';
   import CountryTeaser from '$lib/components/CountryTeaser.svelte';
 
   import Icon from '@iconify/svelte';
+
+  // Testimonials
+  import BentoGallery from '$lib/components/BentoGallery.svelte';
+  import Lightbox from '$lib/components/Lightbox.svelte';
 
   export let data;
 
@@ -114,7 +107,9 @@
     whatWeDoTitle,
     showUserMenu,
     galleryImages,
-    galleryTitle,
+    testTitle,
+    lightboxOpen = false,
+    lightboxIndex = 0,
     contactTitle,
     contactSubtitle,
     officeAddress1,
@@ -124,7 +119,8 @@
     visaServices,
     countriesTitle,
     countriesSubtitle,
-    countriesDescription;
+    countriesDescription,
+    countries;
 
   // Notification state
   let showNotification = false;
@@ -194,7 +190,7 @@
     bio = data.page?.bio || BIO_PLACEHOLDER;
     steps = JSON.parse(JSON.stringify(data.page?.steps || STEPS_PLACEHOLDER));
     stepsTitle = data.page?.stepsTitle || 'Our Visa Process – Just 3 Simple Steps';
-    galleryTitle = data.page?.galleryTitle || 'Visa Destinations Gallery';
+    testTitle = data.page?.testTitle || 'Visa Success Stories';
     galleryImages = JSON.parse(
       JSON.stringify(
         data.page?.galleryImages || [
@@ -372,7 +368,7 @@
             steps,
             stepsTitle,
             galleryImages,
-            galleryTitle,
+            testTitle,
             // Contact section
             contactTitle,
             contactSubtitle,
@@ -417,7 +413,10 @@
       <h1 class="about-hero-title mb-6"><PlainText bind:content={title} /></h1>
       <p><PlainText bind:content={subtitle} /></p>
       <div class="hero-button-list">
-        <a href="#contactSec" class="button-gradient w-button">Free Visa Assessment</a>
+        <a href="/contact" class="button-gradient arrow w-button flex items-center gap-2 nowrap"
+          ><div class="a">Get Started</div>
+          <Icon icon="gridicons:arrow-right" width="24" height="24" /></a
+        >
         <!-- <a href="tel:{phone1}" class="button-secondary-2-outline w-inline-block"
           >
           <Icon
@@ -430,6 +429,9 @@
         </a> -->
       </div>
     </div>
+  </div>
+  <div class="bg-dark">
+    <Icon icon="mdi-light:arrow-right ms-4" width="24" height="24" />
   </div>
   <div class="hero-image-wrap">
     <Image
@@ -529,15 +531,17 @@
     </div>
   </div>
 </section>
-
-<section class="step-section section-spacing">
-  <div class="w-layout-blockcontainer container w-container">
+<!-- how it works -->
+<section class="step-section section-spacing relative">
+  <div class="absolute inset-0 bg-gradient-to-b from-orange-100 via-orange-200/80 to-orange-50/40"></div>
+  <div class="absolute inset-0 opacity-40" style="background-image: radial-gradient(circle at 1px 1px, rgba(255,165,0,0.3) 1px, transparent 0); background-size: 20px 20px;"></div>
+  <div class="w-layout-blockcontainer container w-container relative z-10">
     <div data-w-id="29680200-4a43-3181-792e-694af7a13e5b" class="section-title text-center">
       <span class="text-primary-1">How It Works</span>
       <h2><PlainText bind:content={stepsTitle} /></h2>
     </div>
   </div>
-  <div style="" class="step-wrap">
+  <div style="" class="step-wrap relative z-10">
     <img
       src="https://cdn.prod.website-files.com/6777c6ca4cd4fd1a5c59b396/6778e316e8221903bac49617_vector-02.svg"
       loading="eager"
@@ -569,6 +573,19 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- testimonials -->
+
+<section class="testSec overflow-hidden">
+  <div class="w-layout-blockcontainer container w-container">
+    <BentoGallery
+      bind:images={galleryImages}
+      bind:title={testTitle}
+      bind:lightboxOpen
+      bind:lightboxIndex
+    />
   </div>
 </section>
 
@@ -648,6 +665,12 @@
   </div>
 </section>
 
+<!-- Bento Lightbox -->
+<Lightbox
+  bind:images={galleryImages}
+  bind:currentIndex={lightboxIndex}
+  bind:isOpen={lightboxOpen}
+/>
 <Footer counter="/" />
 
 <!-- Notification component -->
